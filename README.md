@@ -1,1 +1,1 @@
-"# Concurrent Scrabble" 
+# Concurrent Scrabble 
