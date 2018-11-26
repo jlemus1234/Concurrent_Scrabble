@@ -1,0 +1,74 @@
+
+
+1. Team Name:           
+
+        Our team name is ScrabbleSolvers
+
+2. Group Members:       
+
+        Currently, our group consists of Saad Mazhar and Billy Witrock. We are 
+        still looking for a third member to join our group.
+
+3. Project Idea:       
+
+        We plan on implementing a client-driven multi-player Scrabble game
+        based on a client sever model in which players race to take turns.
+        Whoever places their word down first gets that spot. Turns are tim
+        and if no one can make a move within this certain time, the game ends.
+        At the end of the game, the winner should be announced. 
+
+4. Deliverable:         
+
+        Minimum: Each player runs a Python program where they interact with 
+        the board and the words they choose are validated. It then 
+        communicates with an Erlang server that keeps track of the 
+        master-board and then updates all the boards represented in Python 
+        whenever a player adds a new word. The server will also hold the "bag" 
+        of tiles left and should distribute the tiles amongst players so that 
+        each player has seven tiles at all times, up until the bag runs out. 
+        Users will interact with the scrabble board via the Linux terminal 
+        using the arrow keys. 
+
+        Maximum: We hope to create a graphical interface for the Scrabble 
+        board. Also allow the user to play against a computer. The computer 
+        could break up the board into different threads and check all possible 
+        moves, and plays the word with the highest score. We can even allow 
+        the user to select the difficulty such that the higher the difficulty, 
+        the more threads are created to search for words, allowing for the 
+        computer to make a word quicker. We can have a conditional variable 
+        that puts all threads not in use to sleep until there is something for
+         them to do.
+
+5. First Step:        
+
+        First try to create a one-player Scrabble game in Python. In here, we
+        will implement the Scrabble board and assume all tiles are given to 
+        us. We will also incorporate a module to validate all English words 
+        given by the user. So far, we have found two such modules: "PyEnchant" 
+        and "TWL". 
+
+        Once we have this implemented and are confident in its functionality,
+         we will implement the client-server model in Erlang. 
+
+6. Biggest Problem:     
+
+        How will Python and Erlang interact? Once a user has made a move, how 
+        will Erlang update all user's boards in Python?
+
+
+
+7. Basic Design Per User:
+
+
+         -   -   -    -   - 
+       | A | B | x3 |  |   |
+        -    -    -   -   - 
+       |   | A |    |  |   |                // Scrabble board
+        -    -    -   -   - 
+       |   | T |    |  | x4|
+        -    -    -   -   - 
+
+        _____________________
+        A   B   C   D   E   F               // User tiles to choose from
+        _____________________
+
