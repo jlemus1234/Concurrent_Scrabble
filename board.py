@@ -31,6 +31,7 @@ class Board:
 
     def update(self,starting_positon, word, direction):
         score = 0
+        cross_score = 0
         word_multipler = 1
         tile = Tile() # simple tile used as a base for many comparisons
         has_over_lap = False # used to make sure word is touching another
@@ -47,6 +48,11 @@ class Board:
                 print("returning 2")
                 return (False, self.grid, 0)
 
+########################################################################
+# gotta come up with a solution that allows a user to place a move like this: p
+#                                             set being the new word          i
+#                            should word if only s is played also             e
+#                                                                             s e t
             # check if letters to left or up
             if self.inbounds(row - 1):
                 if not self.grid[row-1][col].is_blank():
@@ -58,7 +64,7 @@ class Board:
                     # non-empty tile left
                     print("returning 4")
                     return (False, self.grid, 0)
-
+#########################################################################
 
             # create copy of grid so if the word turns out to not work we have the old list
             grid = [row[:] for row in self.grid]
@@ -90,9 +96,9 @@ class Board:
                                     return (False, self.grid, 0)
                                 else:
                                     if temp_multi[1] == 'l':
-                                        score += added_score + (temp_multi[0]-1)*letter.score
+                                        cross_score += added_score + (temp_multi[0]-1)*letter.score
                                     else:
-                                        score += added_score * temp_multi[0]
+                                        cross_score += added_score * temp_multi[0]
                         if (not checked_row) and self.inbounds(col+1):
                             if not grid[row][col+1].is_blank():
                                 # have to check word
@@ -103,9 +109,9 @@ class Board:
                                     return (False, self.grid, 0)
                                 else:
                                     if temp_multi[1] == 'l':
-                                        score += added_score + (temp_multi[0]-1)*letter.score
+                                        cross_score += added_score + (temp_multi[0]-1)*letter.score
                                     else:
-                                        score += added_score * temp_multi[0]
+                                        cross_score += added_score * temp_multi[0]
                     else:
                         # have to check col
                         checked_col = False
@@ -119,9 +125,9 @@ class Board:
                                     return (False, self.grid, 0)
                                 else:
                                     if temp_multi[1] == 'l':
-                                        score += added_score + (temp_multi[0]-1)*letter.score
+                                        cross_score += added_score + (temp_multi[0]-1)*letter.score
                                     else:
-                                        score += added_score * temp_multi[0]
+                                        cross_score += added_score * temp_multi[0]
                         if (not checked_col) and self.inbounds(col+1):
                             if not grid[row+1][col].is_blank():
                                 # have to check word
@@ -131,9 +137,9 @@ class Board:
                                     return (False, self.grid, 0)
                                 else:
                                     if temp_multi[1] == 'l':
-                                        score += added_score + (temp_multi[0]-1)*letter.score
+                                        cross_score += added_score + (temp_multi[0]-1)*letter.score
                                     else:
-                                        score += added_score * temp_multi[0]
+                                        cross_score += added_score * temp_multi[0]
 
 
                 # check to see if tile trying to insert is already there
@@ -154,12 +160,13 @@ class Board:
                 else:
                     col += 1
             # outside looping through letters
-            # if not has_over_lap:
-            #     print("returning 10")
-            #     return (False, self.grid, 0)
-            # else:
-            self.grid = grid
-            return (True, self.grid, (score,score+50)[new_tile_count == 7])
+            if not has_over_lap:
+                print("returning 10")
+                return (False, self.grid, 0)
+            else:
+                self.grid = grid
+                score = score * word_multipler + cross_score
+                return (True, self.grid, (score,score+50)[new_tile_count == 7])
 
 
 
