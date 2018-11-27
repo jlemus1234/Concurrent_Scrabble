@@ -56,7 +56,7 @@ class tile:
     def __init__(self):
         self.value =  ''
         self.score = 0
-        self.multiplier = (1,"w")
+        self.multiplier = (1,'w')
         self.id = 0
 
     def __init__(self, start_value, start_score, start_multiplier, start_id):
