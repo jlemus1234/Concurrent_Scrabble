@@ -32,6 +32,7 @@ class Board:
         word_multipler = 1
         tile = Tile() # simple tile used as a base for many comparisons
         has_over_lap = False # used to make sure word is touching another
+        new_tile_count = 0 # used to see if user placed 7 tiles so 50 point bonus can be added
         with self.lock:
             if (not twl.check(word)):
                 return (False, self.grid, 0)
@@ -59,6 +60,7 @@ class Board:
                 # check to see if a tile is already there
                 if grid[row][col].is_blank():
                     # can be inserted
+                    new_tile_count += 1
                     temp_multi = grid[row][col].multiplier
                     if temp_multi[1] == 'l':
                         score += letter.score * temp_multi[1]
@@ -75,13 +77,26 @@ class Board:
                             if not grid[row][col-1].is_blank():
                                 # have to check word
                                 checked_row = True
-                                if not self.check_word_row(row,col,grid):
+                                added_score, is_word = self.check_word_row(row,col,grid)
+                                if not is_word:
                                     return (False, self.grid, 0)
+                                else:
+                                    if temp_multi[1] = 'l':
+                                        score += added_score + (temp_multi[0]-1)*letter.score
+                                    else:
+                                        score += added_score * temp_multi[1]
                         if (not checked_row) and self.inbounds(col+1):
                             if not grid[row][col+1].is_blank():
                                 # have to check word
-                                if not self.check_word_row(row,col,grid):
+                                checked_row = True
+                                added_score, is_word = self.check_word_row(row,col,grid)
+                                if not is_word:
                                     return (False, self.grid, 0)
+                                else:
+                                    if temp_multi[1] = 'l':
+                                        score += added_score + (temp_multi[0]-1)*letter.score
+                                    else:
+                                        score += added_score * temp_multi[1]
                     else:
                         # have to check col
                         checked_col = False
@@ -89,13 +104,25 @@ class Board:
                             if not grid[row-1][col].is_blank():
                                 # have to check word
                                 checked_col = True
-                                if not self.check_word_col(row,col,grid):
+                                added_score, is_word = self.check_word_col(row,col,grid)
+                                if not is_word:
                                     return (False, self.grid, 0)
+                                else:
+                                    if temp_multi[1] = 'l':
+                                        score += added_score + (temp_multi[0]-1)*letter.score
+                                    else:
+                                        score += added_score * temp_multi[1]
                         if (not checked_col) and self.inbounds(col+1):
                             if not grid[row+1][col].is_blank():
                                 # have to check word
-                                if not self.check_word_row(row,col,grid):
+                                added_score, is_word = self.check_word_col(row,col,grid)
+                                if not is_word:
                                     return (False, self.grid, 0)
+                                else:
+                                    if temp_multi[1] = 'l':
+                                        score += added_score + (temp_multi[0]-1)*letter.score
+                                    else:
+                                        score += added_score * temp_multi[1]
 
 
                 # check to see if tile trying to insert is already there
@@ -106,19 +133,26 @@ class Board:
                     # this means we are inserting the same tile so we are now overlapping what is there
                     has_over_lap = True
 
-                if not has_over_lap:
-                    return (False, self.grid, 0)
+            # outside looping through letters
+            if not has_over_lap:
+                return (False, self.grid, 0)
+            else:
+                self.grid = grid
+                return (True, self.grid, (score,score+50)[new_tile_count == 7])
+
 
 
     def check_word_col(self,row,col,grid):
         # assuming grid[row][col] is non empty
         start_row = row
         word = []
+        score = 0
         while self.inbounds(start_row):
             if grid[start_row][col].is_blank():
                 break
             else:
                 word.append(grid[start_row][col])
+                score += grid[start_row][col].score
                 start_row -= 1
         start_row += 1
         word.reverse()
@@ -129,23 +163,26 @@ class Board:
                 break
             else:
                 word.append(grid[end_row][col])
+                score += grid[end_row][col].score
                 end_row += 1
         end_row -= 1
 
         str_word = ""
         for letter in word:
             str_word += letter.value
-        return twl.check(str_word)
+        return score, twl.check(str_word)
 
     def check_word_row(self,row,col,grid):
         # assuming grid[row][col] is non empty
         start_col = col
         word = []
+        score = 0
         while self.inbounds(start_col):
             if grid[row][start_col].is_blank():
                 break
             else:
                 word.append(grid[row][start_col])
+                score += grid[row][start_col].score
                 start_col -= 1
         start_col += 1
         word.reverse()
@@ -156,13 +193,14 @@ class Board:
                 break
             else:
                 word.append(grid[row][end_col])
+                score += grid[row][end_col].score
                 end_col += 1
         end_col -= 1
 
         str_word = ""
         for letter in word:
             str_word += letter.value
-        return twl.check(str_word)
+        return score, twl.check(str_word)
 
     def inbounds(self, i, j=1):
         return not (i < 0 or i > 14 or j < 0 or j > 14)
