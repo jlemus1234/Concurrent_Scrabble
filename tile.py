@@ -13,11 +13,17 @@
 #               type of multiplier is a char, 'w' for word, 'l' for letter
 # id -> a unique identifier given to each tile (must be set by client)
 
-def create_word(word):
+def string_to_tiles(word):
     tile_word = []
     for letter in word:
         tile_word.append(Tile(letter))
     return tile_word
+
+def tiles_to_string(tile_word):
+    word = ""
+    for letter in tile_word:
+        word += letter.value
+    return word
 
 
 class Tile:
@@ -46,7 +52,7 @@ class Tile:
     def __eq__(self, other):
         if self.value == '' or other.value == '':
             return True
-        return self.id == other.id
+        return self.id == other.id and self.value == other.value
 
     # not equal overloader
     def __ne__(self, other):
@@ -58,36 +64,36 @@ class Tile:
         # star used for center tile
         '*':0,
 
-        'E':1,
-        'A':1,
-        'I':1,
-        'O':1,
-        'N':1,
-        'R':1,
-        'T':1,
-        'L':1,
-        'S':1,
-        'U':1,
+        'e':1,
+        'a':1,
+        'i':1,
+        'o':1,
+        'n':1,
+        'r':1,
+        't':1,
+        'l':1,
+        's':1,
+        'u':1,
 
-        'D':2,
-        'G':2,
+        'd':2,
+        'g':2,
 
-        'B':3,
-        'C':3,
-        'M':3,
-        'P':3,
+        'b':3,
+        'c':3,
+        'm':3,
+        'p':3,
 
-        'F':4,
-        'H':4,
-        'V':4,
-        'W':4,
-        'Y':4,
+        'f':4,
+        'h':4,
+        'v':4,
+        'w':4,
+        'y':4,
 
-        'K':5,
+        'k':5,
 
-        'J':8,
-        'X':8,
+        'j':8,
+        'x':8,
 
-        'Q':10,
-        'Z':10
+        'q':10,
+        'z':10
     }

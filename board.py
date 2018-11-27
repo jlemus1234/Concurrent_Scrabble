@@ -2,6 +2,8 @@
 
 import threading
 from tile import Tile
+from tile import string_to_tiles
+from tile import tiles_to_string
 import twl
 
 class Board:
@@ -34,28 +36,33 @@ class Board:
         has_over_lap = False # used to make sure word is touching another
         new_tile_count = 0 # used to see if user placed 7 tiles so 50 point bonus can be added
         with self.lock:
-            if (not twl.check(word)):
+            if (not twl.check(tiles_to_string(word))):
+                print("returning 1")
                 return (False, self.grid, 0)
 
             # check if starting position is valid
             row = starting_positon[0]
             col = starting_positon[1]
             if not self.inbounds(row,col):
+                print("returning 2")
                 return (False, self.grid, 0)
 
             # check if letters to left or up
             if self.inbounds(row - 1):
                 if not self.grid[row-1][col].is_blank():
                     # non-empty tile above
+                    print("returning 3")
                     return (False, self.grid, 0)
             if self.inbounds(col - 1):
                 if not self.grid[row][col-1].is_blank():
                     # non-empty tile left
+                    print("returning 4")
                     return (False, self.grid, 0)
 
 
             # create copy of grid so if the word turns out to not work we have the old list
             grid = [row[:] for row in self.grid]
+            print(len(word))
             for letter in word:
                 # check to see if a tile is already there
                 if grid[row][col].is_blank():
@@ -63,10 +70,10 @@ class Board:
                     new_tile_count += 1
                     temp_multi = grid[row][col].multiplier
                     if temp_multi[1] == 'l':
-                        score += letter.score * temp_multi[1]
+                        score += letter.score * temp_multi[0]
                     else:
                         score += letter.score
-                        word_multipler *= temp_multi[1]
+                        word_multipler *= temp_multi[0]
 
                     grid[row][col] = letter
                     # check to see if a tile is touching thats not in the direction, and if there is make sure thats a word
@@ -79,24 +86,26 @@ class Board:
                                 checked_row = True
                                 added_score, is_word = self.check_word_row(row,col,grid)
                                 if not is_word:
+                                    print("returning 5")
                                     return (False, self.grid, 0)
                                 else:
-                                    if temp_multi[1] = 'l':
+                                    if temp_multi[1] == 'l':
                                         score += added_score + (temp_multi[0]-1)*letter.score
                                     else:
-                                        score += added_score * temp_multi[1]
+                                        score += added_score * temp_multi[0]
                         if (not checked_row) and self.inbounds(col+1):
                             if not grid[row][col+1].is_blank():
                                 # have to check word
                                 checked_row = True
                                 added_score, is_word = self.check_word_row(row,col,grid)
                                 if not is_word:
+                                    print("returning 6")
                                     return (False, self.grid, 0)
                                 else:
-                                    if temp_multi[1] = 'l':
+                                    if temp_multi[1] == 'l':
                                         score += added_score + (temp_multi[0]-1)*letter.score
                                     else:
-                                        score += added_score * temp_multi[1]
+                                        score += added_score * temp_multi[0]
                     else:
                         # have to check col
                         checked_col = False
@@ -106,39 +115,51 @@ class Board:
                                 checked_col = True
                                 added_score, is_word = self.check_word_col(row,col,grid)
                                 if not is_word:
+                                    print("returning 7")
                                     return (False, self.grid, 0)
                                 else:
-                                    if temp_multi[1] = 'l':
+                                    if temp_multi[1] == 'l':
                                         score += added_score + (temp_multi[0]-1)*letter.score
                                     else:
-                                        score += added_score * temp_multi[1]
+                                        score += added_score * temp_multi[0]
                         if (not checked_col) and self.inbounds(col+1):
                             if not grid[row+1][col].is_blank():
                                 # have to check word
                                 added_score, is_word = self.check_word_col(row,col,grid)
                                 if not is_word:
+                                    print("returning 8")
                                     return (False, self.grid, 0)
                                 else:
-                                    if temp_multi[1] = 'l':
+                                    if temp_multi[1] == 'l':
                                         score += added_score + (temp_multi[0]-1)*letter.score
                                     else:
-                                        score += added_score * temp_multi[1]
+                                        score += added_score * temp_multi[0]
 
 
                 # check to see if tile trying to insert is already there
                 elif grid[row][col] != letter:
                     # this means trying to overwrite a letter
+                    print("returning 9")
                     return (False, self.grid, 0)
                 else:
                     # this means we are inserting the same tile so we are now overlapping what is there
                     has_over_lap = True
+                    score += grid[row][col].score
 
+                print(len(word))
+
+                # update row and col
+                if direction == 'd':
+                    row += 1
+                else:
+                    col += 1
             # outside looping through letters
-            if not has_over_lap:
-                return (False, self.grid, 0)
-            else:
-                self.grid = grid
-                return (True, self.grid, (score,score+50)[new_tile_count == 7])
+            # if not has_over_lap:
+            #     print("returning 10")
+            #     return (False, self.grid, 0)
+            # else:
+            self.grid = grid
+            return (True, self.grid, (score,score+50)[new_tile_count == 7])
 
 
 
@@ -286,5 +307,5 @@ class Board:
             for col in range(0,15,7):
                 grid[row][col] = Tile('',0,(3,'w'),0)
 
-        grid[7][7] = Tile('*',0,(1,'w'),0) # center start tile
+        grid[7][7] = Tile('',0,(1,'w'),0) # center start tile
         return grid
