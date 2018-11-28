@@ -24,10 +24,6 @@ class Board:
         with self.lock:
             self.grid = new_grid
 
-    def is_valid(self,starting_positon, word, direction):
-        # TODO write all code
-        with self.lock:
-            temp
 
     def update(self,starting_positon, word, direction):
         score = 0
@@ -151,8 +147,6 @@ class Board:
                     # this means we are inserting the same tile so we are now overlapping what is there
                     has_over_lap = True
                     score += grid[row][col].score
-
-                print(len(word))
 
                 # update row and col
                 if direction == 'd':
