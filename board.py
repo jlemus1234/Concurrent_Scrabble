@@ -18,7 +18,7 @@ class Board:
     # returns deep copy of grid
     def get_board(self):
         with self.lock:
-            return self.grid
+            return [row[:] for row in self.grid]
 
     def set_board(self, new_grid):
         with self.lock:
