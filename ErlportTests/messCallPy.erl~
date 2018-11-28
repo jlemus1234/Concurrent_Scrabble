@@ -1,0 +1,8 @@
+%% Testing passing messages to python from Erlang
+%% 
+
+testing() ->
+	{ok,Pypid} = python:start([{python_path, "."}]);
+	python:call(Pypid, testErlport, hello, []);
+	python:call(Pypid, testErlport, testArray, [[1,2,3]])
+	io:format("~s~n", ["finishedTest"]).
