@@ -27,7 +27,6 @@ class Board:
 
     def update(self,starting_positon, word, direction):
         score = 0
-        cross_score = 0
         word_multipler = 1
         tile = Tile() # simple tile used as a base for many comparisons
         has_over_lap = False # used to make sure word is touching another
@@ -64,7 +63,11 @@ class Board:
 
             # create copy of grid so if the word turns out to not work we have the old list
             grid = [row[:] for row in self.grid]
-            print(len(word))
+            # used to lock cross_score and is_valid
+            mutex = threading.lock()
+            threads = []
+            cross_score = 0
+            is_valid = True
             for letter in word:
                 # check to see if a tile is already there
                 if grid[row][col].is_blank():
@@ -80,63 +83,13 @@ class Board:
                     grid[row][col] = letter
                     # check to see if a tile is touching thats not in the direction, and if there is make sure thats a word
                     if direction == 'd':
-                        # have to check row
-                        checked_row = False
-                        if self.inbounds(col-1):
-                            if not grid[row][col-1].is_blank():
-                                # have to check word
-                                checked_row = True
-                                added_score, is_word = self.check_word_row(row,col,grid)
-                                if not is_word:
-                                    print("returning 5")
-                                    return (False, self.grid, 0)
-                                else:
-                                    if temp_multi[1] == 'l':
-                                        cross_score += added_score + (temp_multi[0]-1)*letter.score
-                                    else:
-                                        cross_score += added_score * temp_multi[0]
-                        if (not checked_row) and self.inbounds(col+1):
-                            if not grid[row][col+1].is_blank():
-                                # have to check word
-                                checked_row = True
-                                added_score, is_word = self.check_word_row(row,col,grid)
-                                if not is_word:
-                                    print("returning 6")
-                                    return (False, self.grid, 0)
-                                else:
-                                    if temp_multi[1] == 'l':
-                                        cross_score += added_score + (temp_multi[0]-1)*letter.score
-                                    else:
-                                        cross_score += added_score * temp_multi[0]
+                        # to check row
+                        cur_thread = threading.Thread(target = self.check_and_score_row, args=(grid,row,col,temp_multi,cross_score,is_valid,mutex))
                     else:
-                        # have to check col
-                        checked_col = False
-                        if self.inbounds(row-1):
-                            if not grid[row-1][col].is_blank():
-                                # have to check word
-                                checked_col = True
-                                added_score, is_word = self.check_word_col(row,col,grid)
-                                if not is_word:
-                                    print("returning 7")
-                                    return (False, self.grid, 0)
-                                else:
-                                    if temp_multi[1] == 'l':
-                                        cross_score += added_score + (temp_multi[0]-1)*letter.score
-                                    else:
-                                        cross_score += added_score * temp_multi[0]
-                        if (not checked_col) and self.inbounds(col+1):
-                            if not grid[row+1][col].is_blank():
-                                # have to check word
-                                added_score, is_word = self.check_word_col(row,col,grid)
-                                if not is_word:
-                                    print("returning 8")
-                                    return (False, self.grid, 0)
-                                else:
-                                    if temp_multi[1] == 'l':
-                                        cross_score += added_score + (temp_multi[0]-1)*letter.score
-                                    else:
-                                        cross_score += added_score * temp_multi[0]
-
+                        # to check col
+                        cur_thread = threading.Thread(target = self.check_and_score_col, args=(grid,row,col,temp_multi,cross_score,is_valid,mutex))
+                    cur_thread.start()
+                    threads.append(cur_thread)
 
                 # check to see if tile trying to insert is already there
                 elif grid[row][col] != letter:
@@ -153,8 +106,12 @@ class Board:
                     row += 1
                 else:
                     col += 1
+
+            for thread in threads:
+                thread.join()
+            
             # outside looping through letters
-            if not has_over_lap:
+            if (not has_over_lap) or (not is_valid):
                 print("returning 10")
                 return (False, self.grid, 0)
             else:
@@ -162,8 +119,92 @@ class Board:
                 score = score * word_multipler + cross_score
                 return (True, self.grid, (score,score+50)[new_tile_count == 7])
 
+    def check_and_score_col(self,grid,r,c,multiplier, xtra_score, valid, mutex):
+        # checking row so col is changing
+        word = [grid[r][c]]
+        temp_score = grid[r][c].score
+        front_r = r - 1
+        # finds begining of word
+        while inbounds(front_r):
+            if grid[front_r][c].is_blank():
+                break
+            else:
+                word.append(grid[front_r][c])
+                temp_score += grid[front_r][c].score
+            front_r -= 1
+
+        word.reverse()
+        back_r = r + 1
+
+        # finds end of word
+        while inbounds(back_r):
+            if grid[back_r][c].is_blank():
+                break
+            else:
+                word.append(grid[back_r][c])
+                temp_score += grid[back_r][c].score
+            back_r += 1
+
+        if len(word) == 1:
+            # is valid but not a new word
+            return
+
+        if multiplier[1] == 'l':
+            temp_score += grid[r][c] * (multiplier[0]-1)
+        else:
+            temp_score *= multiplier[0]
+
+        str_word = tiles_to_string(word)
+        word_valid = twl.check(str_word)
+        with mutex:
+            valid = valid and word_valid
+            xtra_score += temp_score
+        return
 
 
+    def check_and_score_row(self,grid,r,c,multiplier, xtra_score, valid, mutex):
+        # checking row so col is changing
+        word = [grid[r][c]]
+        temp_score = grid[r][c].score
+        front_c = c - 1
+        # finds begining of word
+        while inbounds(front_c):
+            if grid[r][front_c].is_blank():
+                break
+            else:
+                word.append(grid[r][front_c])
+                temp_score += grid[r][front_c].score
+            front_c -= 1
+
+        word.reverse()
+        back_c = c + 1
+
+        # finds end of word
+        while inbounds(back_c):
+            if grid[r][back_c].is_blank():
+                break
+            else:
+                word.append(grid[r][back_c])
+                temp_score += grid[r][back_c].score
+            back_c += 1
+
+        if len(word) == 1:
+            # is valid but not a new word
+            return
+
+        if multiplier[1] == 'l':
+            temp_score += grid[r][c] * (multiplier[0]-1)
+        else:
+            temp_score *= multiplier[0]
+
+        str_word = tiles_to_string(word)
+        word_valid = twl.check(str_word)
+        with mutex:
+            valid = valid and word_valid
+            xtra_score += temp_score
+        return
+
+    # both not needed anymore
     def check_word_col(self,row,col,grid):
         # assuming grid[row][col] is non empty
         start_row = row
@@ -193,7 +234,6 @@ class Board:
         for letter in word:
             str_word += letter.value
         return score, twl.check(str_word)
-
     def check_word_row(self,row,col,grid):
         # assuming grid[row][col] is non empty
         start_col = col
@@ -227,7 +267,6 @@ class Board:
     def inbounds(self, i, j=1):
         return not (i < 0 or i > 14 or j < 0 or j > 14)
 
-
     def no_check_insert(self, starting_positon, word, direction):
         with self.lock:
             # create copy of grid so if the word turns out to not work we have the old list
@@ -244,7 +283,6 @@ class Board:
                     col += 1
             self.grid = grid
 
-
     def print_board(self):
         with self.lock:
             for row in self.grid:
@@ -256,7 +294,6 @@ class Board:
                         to_be_printed = "{}{}".format(tile.multiplier[0],tile.multiplier[1])
                     print(to_be_printed,end=" ")
                 print("",end="\n")
-
 
     def starting_grid(self):
         grid = [[Tile() for i in range(0,15)] for j in range(0,15)]
@@ -310,3 +347,70 @@ class Board:
 
         grid[7][7] = Tile('',0,(1,'w'),0) # center start tile
         return grid
+
+
+
+
+
+
+
+                    # old code to check for cross words
+
+                    # if direction == 'd':
+                    #     # have to check row
+                    #     checked_row = False
+                    #     if self.inbounds(col-1):
+                    #         if not grid[row][col-1].is_blank():
+                    #             # have to check word
+                    #             checked_row = True
+                    #             added_score, is_word = self.check_word_row(row,col,grid)
+                    #             if not is_word:
+                    #                 print("returning 5")
+                    #                 return (False, self.grid, 0)
+                    #             else:
+                    #                 if temp_multi[1] == 'l':
+                    #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
+                    #                 else:
+                    #                     cross_score += added_score * temp_multi[0]
+                    #     if (not checked_row) and self.inbounds(col+1):
+                    #         if not grid[row][col+1].is_blank():
+                    #             # have to check word
+                    #             checked_row = True
+                    #             added_score, is_word = self.check_word_row(row,col,grid)
+                    #             if not is_word:
+                    #                 print("returning 6")
+                    #                 return (False, self.grid, 0)
+                    #             else:
+                    #                 if temp_multi[1] == 'l':
+                    #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
+                    #                 else:
+                    #                     cross_score += added_score * temp_multi[0]
+                    #
+                    # else:
+                    #     # have to check col
+                    #     checked_col = False
+                    #     if self.inbounds(row-1):
+                    #         if not grid[row-1][col].is_blank():
+                    #             # have to check word
+                    #             checked_col = True
+                    #             added_score, is_word = self.check_word_col(row,col,grid)
+                    #             if not is_word:
+                    #                 print("returning 7")
+                    #                 return (False, self.grid, 0)
+                    #             else:
+                    #                 if temp_multi[1] == 'l':
+                    #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
+                    #                 else:
+                    #                     cross_score += added_score * temp_multi[0]
+                    #     if (not checked_col) and self.inbounds(col+1):
+                    #         if not grid[row+1][col].is_blank():
+                    #             # have to check word
+                    #             added_score, is_word = self.check_word_col(row,col,grid)
+                    #             if not is_word:
+                    #                 print("returning 8")
+                    #                 return (False, self.grid, 0)
+                    #             else:
+                    #                 if temp_multi[1] == 'l':
+                    #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
+                    #                 else:
+                    #                     cross_score += added_score * temp_multi[0]
