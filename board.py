@@ -24,7 +24,7 @@ class Board:
         with self.lock:
             self.grid = new_grid
 
-
+    # takes array of tiles as word
     def update(self,starting_positon, word, direction):
         score = 0
         word_multipler = 1
@@ -33,14 +33,14 @@ class Board:
         new_tile_count = 0 # used to see if user placed 7 tiles so 50 point bonus can be added
         with self.lock:
             if (not twl.check(tiles_to_string(word))):
-                print("returning 1")
+                # print("returning 1")
                 return (False, self.grid, 0)
 
             # check if starting position is valid
             row = starting_positon[0]
             col = starting_positon[1]
             if not self.inbounds(row,col):
-                print("returning 2")
+                # print("returning 2")
                 return (False, self.grid, 0)
 
 ########################################################################
@@ -52,12 +52,12 @@ class Board:
             # if self.inbounds(row - 1):
             #     if not self.grid[row-1][col].is_blank():
             #         # non-empty tile above
-            #         print("returning 3")
+            #        print("returning 3")
             #         return (False, self.grid, 0)
             # if self.inbounds(col - 1):
             #     if not self.grid[row][col-1].is_blank():
             #         # non-empty tile left
-            #         print("returning 4")
+            #        print("returning 4")
             #         return (False, self.grid, 0)
 #########################################################################
 
@@ -88,15 +88,15 @@ class Board:
                     else:
                         # to check col
                         cur_thread = threading.Thread(target = self.check_and_score_col, args=(grid,row,col,temp_multi,cross_score,is_valid,mutex))
-                    print("starting thread")
+                    # print("starting thread")
                     cur_thread.start()
                     threads.append(cur_thread)
 
                 # check to see if tile trying to insert is already there
                 elif grid[row][col] != letter:
                     # this means trying to overwrite a letter
-                    print("returning 9")
-                    print("{} {} {} {}".format(grid[row][col].value,letter.value,grid[row][col].id,letter.id))
+                    # print("returning 9")
+                    # print("{} {} {} {}".format(grid[row][col].value,letter.value,grid[row][col].id,letter.id))
                     return (False, self.grid, 0)
                 else:
                     # this means we are inserting the same tile so we are now overlapping what is there
@@ -111,12 +111,12 @@ class Board:
 
             for thread in threads:
                 thread.join()
-                print("thread joined")
+                # print("thread joined")
 
             # outside looping through letters
             if (not has_over_lap) or (not is_valid[0]):
-                print("returning 10")
-                print("has_over_lap {}, is_valid[0] {}".format(has_over_lap,is_valid[0]))
+                # print("returning 10")
+                # print("has_over_lap {}, is_valid[0] {}".format(has_over_lap,is_valid[0]))
                 return (False, self.grid, 0)
             else:
                 self.grid = grid
@@ -124,7 +124,7 @@ class Board:
                 return (True, self.grid, (score,score+50)[new_tile_count == 7])
 
     def check_and_score_col(self,grid,r,c,multiplier, xtra_score, valid, mutex):
-        print("in thread")
+        # print("in thread")
         # checking row so col is changing
         word = [grid[r][c]]
         temp_score = grid[r][c].score
@@ -152,7 +152,7 @@ class Board:
 
         if len(word) == 1:
             # is valid but not a new word
-            print("size is 1 starting letter = {}".format(grid[r][c].value))
+            # print("size is 1 starting letter = {}".format(grid[r][c].value))
             return
 
         if multiplier[1] == 'l':
@@ -162,7 +162,7 @@ class Board:
 
         str_word = tiles_to_string(word)
         word_valid = twl.check(str_word)
-        print("score from a thread = {}".format(temp_score))
+        # print("score from a thread = {}".format(temp_score))
         with mutex:
             valid[0] = valid[0] and word_valid
             xtra_score[0] += temp_score
@@ -170,7 +170,7 @@ class Board:
 
 
     def check_and_score_row(self,grid,r,c,multiplier, xtra_score, valid, mutex):
-        print("in thread")
+        # print("in thread")
         # checking row so col is changing
         word = [grid[r][c]]
         temp_score = grid[r][c].score
@@ -207,7 +207,7 @@ class Board:
 
         str_word = tiles_to_string(word)
         word_valid = twl.check(str_word)
-        print("score from a thread = {}".format(temp_score))
+        # print("score from a thread = {}".format(temp_score))
         with mutex:
             valid[0] = valid[0] and word_valid
             xtra_score[0] += temp_score
