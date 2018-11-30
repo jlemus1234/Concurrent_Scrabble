@@ -218,64 +218,64 @@ class Board:
         return
 
     # both not needed anymore
-    def check_word_col(self,row,col,grid):
-        # assuming grid[row][col] is non empty
-        start_row = row
-        word = []
-        score = 0
-        while self.inbounds(start_row):
-            if grid[start_row][col].is_blank():
-                break
-            else:
-                word.append(grid[start_row][col])
-                score += grid[start_row][col].score
-                start_row -= 1
-        start_row += 1
-        word.reverse()
-
-        end_row = row + 1
-        while self.inbounds(end_row):
-            if grid[end_row][col].is_blank():
-                break
-            else:
-                word.append(grid[end_row][col])
-                score += grid[end_row][col].score
-                end_row += 1
-        end_row -= 1
-
-        str_word = ""
-        for letter in word:
-            str_word += letter.value
-        return score, twl.check(str_word)
-    def check_word_row(self,row,col,grid):
-        # assuming grid[row][col] is non empty
-        start_col = col
-        word = []
-        score = 0
-        while self.inbounds(start_col):
-            if grid[row][start_col].is_blank():
-                break
-            else:
-                word.append(grid[row][start_col])
-                score += grid[row][start_col].score
-                start_col -= 1
-        start_col += 1
-        word.reverse()
-
-        end_col = col + 1
-        while self.inbounds(end_col):
-            if grid[row][end_col].is_blank():
-                break
-            else:
-                word.append(grid[row][end_col])
-                score += grid[row][end_col].score
-                end_col += 1
-        end_col -= 1
-
-        str_word = ""
-        for letter in word:
-            str_word += letter.value
-        return score, twl.check(str_word)
+    # def check_word_col(self,row,col,grid):
+    #     # assuming grid[row][col] is non empty
+    #     start_row = row
+    #     word = []
+    #     score = 0
+    #     while self.inbounds(start_row):
+    #         if grid[start_row][col].is_blank():
+    #             break
+    #         else:
+    #             word.append(grid[start_row][col])
+    #             score += grid[start_row][col].score
+    #             start_row -= 1
+    #     start_row += 1
+    #     word.reverse()
+    #
+    #     end_row = row + 1
+    #     while self.inbounds(end_row):
+    #         if grid[end_row][col].is_blank():
+    #             break
+    #         else:
+    #             word.append(grid[end_row][col])
+    #             score += grid[end_row][col].score
+    #             end_row += 1
+    #     end_row -= 1
+    #
+    #     str_word = ""
+    #     for letter in word:
+    #         str_word += letter.value
+    #     return score, twl.check(str_word)
+    # def check_word_row(self,row,col,grid):
+    #     # assuming grid[row][col] is non empty
+    #     start_col = col
+    #     word = []
+    #     score = 0
+    #     while self.inbounds(start_col):
+    #         if grid[row][start_col].is_blank():
+    #             break
+    #         else:
+    #             word.append(grid[row][start_col])
+    #             score += grid[row][start_col].score
+    #             start_col -= 1
+    #     start_col += 1
+    #     word.reverse()
+    #
+    #     end_col = col + 1
+    #     while self.inbounds(end_col):
+    #         if grid[row][end_col].is_blank():
+    #             break
+    #         else:
+    #             word.append(grid[row][end_col])
+    #             score += grid[row][end_col].score
+    #             end_col += 1
+    #     end_col -= 1
+    #
+    #     str_word = ""
+    #     for letter in word:
+    #         str_word += letter.value
+    #     return score, twl.check(str_word)
 
     def inbounds(self, i, j=1):
         return not (i < 0 or i > 14 or j < 0 or j > 14)

@@ -1,11 +1,5 @@
 # Tile Class in Python
 
-# This class contains 3 different constructors
-# 1. a default constructor that takes nothing
-# 2. one that takes all elements
-# 3. one that takes everything but the corresponding score which the class will
-#   calculate itself
-
 # The class will have 4 varialbes
 # value -> the charater representing the letter (capital letter)
 # score -> how many points it is worth
@@ -41,7 +35,7 @@ class Tile:
             self.id         = tuple_form[3]
 
     def to_tuple(self):
-        return (self.value, self.score, self.multiplier, self.id)
+        return {self.value, self.score, self.multiplier, self.id}
 
     def is_blank(self):
         return self.value == ''
