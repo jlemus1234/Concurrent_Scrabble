@@ -89,6 +89,7 @@ class Board:
                         # to check col
                         cur_thread = threading.Thread(target = self.check_and_score_col, args=(grid,row,col,temp_multi,cross_score,is_valid,mutex))
                     # print("starting thread")
+                    cur_thread.daemon = True
                     cur_thread.start()
                     threads.append(cur_thread)
 
@@ -97,6 +98,9 @@ class Board:
                     # this means trying to overwrite a letter
                     # print("returning 9")
                     # print("{} {} {} {}".format(grid[row][col].value,letter.value,grid[row][col].id,letter.id))
+
+                    # TODO: add stuff for starting tile
+
                     return (False, self.grid, 0)
                 else:
                     # this means we are inserting the same tile so we are now overlapping what is there
