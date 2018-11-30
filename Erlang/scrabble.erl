@@ -23,7 +23,7 @@
 
 join_game(NodeName) -> 
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
-	python:call(Pypid, pythonTestGame, runGame, [self]),
+	python:call(Pypid, pythonTestGame, runGame, [self,self]),
 	Receiver = spawn_link(scrabble, get_messages).
 	
 
@@ -41,5 +41,5 @@ get_messages(Pypid) ->
 %% Send your shit to this function
 %%processInput()
 
-send_messages(Pypid) ->
+send_messages(ServerPID) ->
 	io:format("~w~n", [something]).
