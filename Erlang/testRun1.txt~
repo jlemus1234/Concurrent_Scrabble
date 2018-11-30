@@ -1,0 +1,3 @@
+erl -env ERL_LIBS ~/Desktop/comp50cp/groupProject/erlport
+c(scrabble).
+scrabble:join_game(ap).
