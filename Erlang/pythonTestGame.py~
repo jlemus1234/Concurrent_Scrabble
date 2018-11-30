@@ -1,0 +1,18 @@
+
+
+import time
+def runGame():
+	time.sleep(5)
+	print("running game")
+	runGame()
+
+
+
+
+def main():
+	runGame()
+
+
+
+if __name__ == '__main__':
+	main()
