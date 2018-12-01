@@ -1,5 +1,6 @@
 
 import time, sys
+import threading
 #sys.path.insert(0, '~/Desktop/comp50cp/groupProject/erlport/')
 #sys.path.insert(0, '~/Desktop/Concurrent_Scrabble/ErlportTests/erlport/priv/python2/erlport')
 
@@ -10,7 +11,7 @@ from erlport.erlang import call
 #from ~/Desktop/comp50cp/groupProject/erlport.erlitems import call
 
 
-global erlPID, serverPID
+global erlPID, serverPID, testVar
 
 def runGame(msgErlPID, servPID):
 	global erlPID, serverPID
@@ -40,16 +41,33 @@ def callErl():
 	#res = call(Atom("erlang"), Atom("self"), [])
 	print(res)
 	
-
-def runGameServer(msgErlPID, servPID):
+################################################
+def startServer(msgErlPID, servPID):
+	global testVar
+	testVar = 0
 	erlPID = msgErlPID
 	serverPID = servPID
+	#runGameServer()
+	t = threading.Thread(target = runGameServer)
+	t.start()
+	while(1):
+		pass
+
+def updateStateTest():
+	global testVar
+	print("Called update state test")
+	testVar+=1
+	print(testVar)
+
+def runGameServer():
+	global testVar
 	count = 5
 	while(1):
 		print("Running server module")
 		if count % 5 == 0:
 			sendMoveResult()
-		time.sleep(5)
+			print(testVar)
+		time.sleep(2)
 		count += 1
 
 def sendMoveResult():
@@ -62,6 +80,7 @@ def sendMoveResult():
 	
 	res = call(Atom("scrabble"), Atom("sendMoveResult"), [tupac])
 	print(res)
+	print("Finished sending thing")
 
 
 def main():

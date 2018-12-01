@@ -15,7 +15,7 @@
 
 %% server exports
 -export([gmTest/1]).
--export([sendMoveResult/1, printMoveResult/1]).
+-export([sendMoveResult/1, printMoveResult/1, gotNewMove/0]).
 
 
 %%---------------
@@ -23,9 +23,9 @@
 %%---------------
 
 sendMoveResult(MoveResult) -> 
-	io:format("~s~n", ["got move result"]),
+	io:format("~s~n", ["got move result"]).
 	%io:format("~p~n", MoveResult).
-	printMoveResult(MoveResult).
+	%printMoveResult(MoveResult).
 
 
 printMoveResult({Result, Board, Scores, {OldTiles, NewTiles}}) ->
@@ -41,8 +41,16 @@ printMoveResult({Result, Board, Scores, {OldTiles, NewTiles}}) ->
 gmTest(NodeName) -> 
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
 	Receiver = spawn_link(scrabble, get_messages, [Pypid]),
-	python:call(Pypid, pythonTestGame, runGameServer, [self(), NodeName]).
+	python:call(Pypid, pythonTestGame, startServer, [self(), NodeName]),
+	timer:sleep(1000),
+	python:call(Pypid, pythonTestGame, updateStateTest, []),
+	timer:sleep(1000),
+	python:call(Pypid, pythonTestGame, updateStateTest, []).
 
+
+% simple test function for sending python data
+gotNewMove()->
+	io:format("~s~n", ["Got new move"]).
 
 %%---------------
 %%% Client functions
