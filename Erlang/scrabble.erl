@@ -12,8 +12,7 @@
 
 %%---------------
 %% client functions
--export([join_game/1]).
-
+-export([join_game/1, send_messages/1]).
 
 
 
@@ -42,4 +41,5 @@ get_messages(Pypid) ->
 %%processInput()
 
 send_messages(ServerPID) ->
-	io:format("~w~n", [something]).
+	io:format("~w~n", [something]),
+	1.

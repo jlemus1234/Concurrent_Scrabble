@@ -20,13 +20,18 @@ def runGame(msgErlPID, servPID):
 	while(1):
 		print("Running game")
 		if count % 5 == 0:
-			msgErl()
+			callErl()
 		time.sleep(5)
 		count += 1
 
 
-def msgErl():
+def callErl():
 	print("msgErl")
+	print(serverPID)
+	res = call(Atom("scrabble"), Atom("send_messages"), ["calledErl"])
+	#res = call(Atom("erlang"), Atom("self"), [])
+	print(res)
+	
 	
 
 
