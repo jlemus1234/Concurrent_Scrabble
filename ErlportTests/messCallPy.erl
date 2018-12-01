@@ -2,7 +2,7 @@
 %% 
 -module(messCallPy).
 
--export([testing/0, test/0]).
+-export([runs/0, callPy/0]).
 
 callPy() ->
 	{ok,Pypid} = python:start([{python_path, "."}]),
@@ -12,8 +12,8 @@ callPy() ->
 	C = [5 | B],
 	C.
 
-## Probably want the communications from client/game servers to be 
-## done with a gen server.
+% Probably want the communications from client/game servers to be 
+% done with a gen server.
 msgErl(Pid) -> 
 	gotPid.
 

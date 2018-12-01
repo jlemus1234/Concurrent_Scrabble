@@ -1,0 +1,24 @@
+%%%
+%%% File	: scrabble.erl
+%%% Author	: Jose Lemus
+%%% Description : A scrabble server that lets you host a four player gam
+%%% November 29, 2018
+%%%--------------
+-module(scrabble).
+-behaviour(gen_server).
+
+%%---------------
+%% client functions
+-export([join_game]).
+
+
+
+
+
+%%---------------
+%%% Chat functions
+%%---------------
+
+join_game(NodeName) -> 
+	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
+	python:call(Pypid, testErlport, runGame, []);
