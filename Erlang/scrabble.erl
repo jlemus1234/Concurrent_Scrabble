@@ -9,11 +9,39 @@
 
 %%---------------
 % imports
-
 %%---------------
-%% client functions
+%% client exports
 -export([join_game/1, send_messages/1, send_messages/2, get_messages/1, printMoveDump/1]).
 
+%% server exports
+-export([gmTest/1]).
+-export([sendMoveResult/1, printMoveResult/1]).
+
+
+%%---------------
+%% Server
+%%---------------
+
+sendMoveResult(MoveResult) -> 
+	io:format("~s~n", ["got move result"]),
+	%io:format("~p~n", MoveResult).
+	printMoveResult(MoveResult).
+
+
+printMoveResult({Result, Board, Scores, {OldTiles, NewTiles}}) ->
+	io:format("~s~n", ["Printing move result"]),
+	io:format("~p~n", [Result]),
+	io:format("~p~n", [Board]),
+	io:format("~p~n", [Scores]),
+	io:format("~p~n", [OldTiles]),
+	io:format("~p~n", [NewTiles]).
+
+
+
+gmTest(NodeName) -> 
+	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
+	Receiver = spawn_link(scrabble, get_messages, [Pypid]),
+	python:call(Pypid, pythonTestGame, runGameServer, [self(), NodeName]).
 
 
 %%---------------

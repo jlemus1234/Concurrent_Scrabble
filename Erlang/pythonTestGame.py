@@ -40,7 +40,28 @@ def callErl():
 	#res = call(Atom("erlang"), Atom("self"), [])
 	print(res)
 	
+
+def runGameServer(msgErlPID, servPID):
+	erlPID = msgErlPID
+	serverPID = servPID
+	count = 5
+	while(1):
+		print("Running server module")
+		if count % 5 == 0:
+			sendMoveResult()
+		time.sleep(5)
+		count += 1
+
+def sendMoveResult():
+	print("Sending move result")
+        res = "success"
+	board = [[('a', 1, 1, 1), ('b', 2, 2, 2)], [('c', 3, 3, 3), ('d', 4, 4, 4)]]
+	scores = (10, 15, 20, 30)
+	tile_old_new = ([('e', 5, 5, 5)], [()])
+	tupac = (res, board, scores, tile_old_new)
 	
+	res = call(Atom("scrabble"), Atom("sendMoveResult"), [tupac])
+	print(res)
 
 
 def main():
