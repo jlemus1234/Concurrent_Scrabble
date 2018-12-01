@@ -41,11 +41,11 @@ printMoveResult({Result, Board, Scores, {OldTiles, NewTiles}}) ->
 gmTest(NodeName) -> 
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
 	Receiver = spawn_link(scrabble, get_messages, [Pypid]),
-	python:call(Pypid, pythonTestGame, startServer, [self(), NodeName]),
-	timer:sleep(1000),
-	python:call(Pypid, pythonTestGame, updateStateTest, []),
-	timer:sleep(1000),
-	python:call(Pypid, pythonTestGame, updateStateTest, []).
+	python:call(Pypid, pythonTestGame, startServer, [self(), NodeName]).
+	%timer:sleep(1000),
+	%python:call(Pypid, pythonTestGame, updateStateTest, []),
+	%timer:sleep(1000),
+	%python:call(Pypid, pythonTestGame, updateStateTest, []).
 
 
 % simple test function for sending python data

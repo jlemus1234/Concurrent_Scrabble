@@ -1,0 +1,20 @@
+
+5> {_, Pypid2} = python:start([{python_path, "."}]).
+{ok,<0.87.0>}
+6>
+6> python:call(Pypid2, pythonTestGame, startServer, []).
+undefined
+7>
+7> python:call(Pypid2, pythonTestGame, updateStateTest, []).
+Called update state test
+1
+undefined
+8> python:call(Pypid2, pythonTestGame, updateStateTest, []).
+Called update state test
+2
+undefined
+9> python:call(Pypid2, pythonTestGame, updateStateTest, []).
+Called update state test
+3
+undefined
+10>

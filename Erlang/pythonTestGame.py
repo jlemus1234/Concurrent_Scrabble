@@ -42,16 +42,27 @@ def callErl():
 	print(res)
 	
 ################################################
-def startServer(msgErlPID, servPID):
+#def startServer(msgErlPID, servPID):
+#	global testVar
+#	testVar = 0
+#	erlPID = msgErlPID
+#	serverPID = servPID
+	#runGameServer()
+	#t = threading.Thread(target = runGameServer)
+	#t.start()
+	#while(1):
+	#	pass
+
+def startServer():
 	global testVar
 	testVar = 0
-	erlPID = msgErlPID
-	serverPID = servPID
+	#erlPID = msgErlPID
+	#serverPID = servPID
 	#runGameServer()
-	t = threading.Thread(target = runGameServer)
-	t.start()
-	while(1):
-		pass
+	#t = threading.Thread(target = runGameServer)
+	#t.start()
+	#while(1):
+	#	pass
 
 def updateStateTest():
 	global testVar
