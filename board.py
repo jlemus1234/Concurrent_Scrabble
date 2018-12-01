@@ -277,6 +277,12 @@ class Board:
     #         str_word += letter.value
     #     return score, twl.check(str_word)
 
+    def to_tuple(self):
+        with self.lock:
+            tuple_board = [[tile.to_tuple() for tile in row] for row in self.board]
+            return tuple_board
+
+
     def inbounds(self, i, j=1):
         return not (i < 0 or i > 14 or j < 0 or j > 14)
 

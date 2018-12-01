@@ -17,3 +17,7 @@ def start(Pid):
 
 
 def recieve_message():
+    dd
+
+def send_message():
+    dd
