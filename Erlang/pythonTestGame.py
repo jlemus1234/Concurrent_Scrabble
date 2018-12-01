@@ -28,7 +28,15 @@ def runGame(msgErlPID, servPID):
 def callErl():
 	print("msgErl")
 	print(serverPID)
-	res = call(Atom("scrabble"), Atom("send_messages"), [serverPID])
+
+	tileArray = [('a', 1, 1, 1), ('b', 2, 2, 2)] 
+	direction = 'r'
+	start_pos = (0, 0)
+	
+	tupac = (tileArray, direction, start_pos)
+
+	res = call(Atom("scrabble"), Atom("send_messages"), [serverPID, tupac])
+	#res = call(Atom("scrabble"), Atom("send_messages"), [serverPID])
 	#res = call(Atom("erlang"), Atom("self"), [])
 	print(res)
 	

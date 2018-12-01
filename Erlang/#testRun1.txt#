@@ -1,0 +1,18 @@
+erl -env ERL_LIBS ~/Desktop/comp50cp/groupProject/erlport   
+c(scrabble).   
+scrabble:join_game(ap).    
+
+
+
+Format of message: 
+
+
+List(
+	[
+		(
+			List([('a', 1, 1, 1), ('b', 2, 2, 2)]), 'r', (0, 0)
+
+
+		)
+	]
+)

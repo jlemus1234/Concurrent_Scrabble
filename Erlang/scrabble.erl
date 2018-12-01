@@ -12,7 +12,7 @@
 
 %%---------------
 %% client functions
--export([join_game/1, send_messages/1, get_messages/1]).
+-export([join_game/1, send_messages/1, send_messages/2, get_messages/1, printMoveDump/1]).
 
 
 
@@ -44,3 +44,15 @@ send_messages(ServerPID) ->
 	io:format("~w~n", [something]),
 	io:format("~s~n", [ServerPID]),
 	1.
+
+send_messages(ServerPID, MoveDump) ->
+	io:format("~w~n", [something2]),
+	io:format("~p~n", [MoveDump]),
+	printMoveDump(MoveDump).
+
+
+printMoveDump({TileArr, Dir, Start_pos}) ->
+	io:format("~s~n", ["printMoveDump"]),
+	io:format("~p~n", [TileArr]),
+	io:format("~p~n", [Dir]),
+	io:format("~p~n", [Start_pos]).
