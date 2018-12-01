@@ -277,6 +277,7 @@ class Board:
     #         str_word += letter.value
     #     return score, twl.check(str_word)
 
+    # untested function
     def to_tuple(self):
         with self.lock:
             tuple_board = [[tile.to_tuple() for tile in row] for row in self.board]

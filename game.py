@@ -30,6 +30,8 @@ class Game:
         send_back[winning_player] = max_score
         send_to_all_player(True, [[]], send_back, [], [])
 
+
+    # should review exactly what critical section is so can make it run faster
     def check_move(self, player_number, word, starting_positon, direction, used_tiles):
         with lock:
             valid, new_board, score = board.update(starting_positon, word, direction)
@@ -43,13 +45,14 @@ class Game:
                 self.send_to_all_player(True, new_board, self.scores, [], [])
 
     def new_player(self, player_number):
-        scores.append(0)
-        if player_number == 3:
-            self.start_game()
+        with lock:
+            scores.append(0)
+            if player_number == 3:
+                self.start_game()
 
     # to be called after the 4th player has entered
     def start_game(self):
-        for i in range(0,4):
+        for i in range(4):
             tiles = self.bag.take_n_from_bag(7)
             self.send_to_one_player(i, False, self.board.get_board(), [0,0,0,0], tiles,[])
 
@@ -67,5 +70,5 @@ class Game:
         # send(player_number, {status, tuple_board, scores, tuple_old_tiles, tuple_new_tiles})
 
     def send_to_all_player(self, status, board, scores, old_tiles, new_tiles):
-        for player_number in range(0,4):
+        for player_number in range(4):
             send_to_one_player(player_number, status, board, scores, old_tiles, new_tiles)
