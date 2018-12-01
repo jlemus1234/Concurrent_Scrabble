@@ -28,7 +28,7 @@ def runGame(msgErlPID, servPID):
 def callErl():
 	print("msgErl")
 	print(serverPID)
-	res = call(Atom("scrabble"), Atom("send_messages"), ["calledErl"])
+	res = call(Atom("scrabble"), Atom("send_messages"), [serverPID])
 	#res = call(Atom("erlang"), Atom("self"), [])
 	print(res)
 	

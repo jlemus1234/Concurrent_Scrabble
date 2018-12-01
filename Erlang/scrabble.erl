@@ -12,7 +12,7 @@
 
 %%---------------
 %% client functions
--export([join_game/1, send_messages/1]).
+-export([join_game/1, send_messages/1, get_messages/1]).
 
 
 
@@ -22,8 +22,8 @@
 
 join_game(NodeName) -> 
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
-	python:call(Pypid, pythonTestGame, runGame, [self,self]),
-	Receiver = spawn_link(scrabble, get_messages).
+	Receiver = spawn_link(scrabble, get_messages, [Pypid]),
+	python:call(Pypid, pythonTestGame, runGame, [self(), NodeName]).
 	
 
 
@@ -42,4 +42,5 @@ get_messages(Pypid) ->
 
 send_messages(ServerPID) ->
 	io:format("~w~n", [something]),
+	io:format("~s~n", [ServerPID]),
 	1.
