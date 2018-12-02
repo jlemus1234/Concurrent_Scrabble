@@ -74,7 +74,7 @@ def runGameServer():
 	global testVar
 	count = 5
 	while(1):
-		print("Running server module")
+		print("Running client module")
 		if count % 5 == 0:
 			sendMoveResult()
 			print(testVar)
