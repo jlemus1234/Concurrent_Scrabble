@@ -35,6 +35,9 @@ class Game:
 
     # should review exactly what critical section is so can make it run faster
     def check_move(self, player_number, word, starting_positon, direction, used_tiles):
+        # not converting used_tiles to Tiles
+        # switches tuple form of tiles back to Tile form
+        word = [Tile("","","","",letter) for letter in word]
         with lock:
             valid, new_board, score = board.update(starting_positon, word, direction)
             if not valid:
@@ -66,7 +69,8 @@ class Game:
     def send_to_one_player(self, player_number, staus, board, scores, old_tiles, new_tiles):
         # everything sent should be in a sendable way
         tuple_board     = [[tile.to_tuple() for tile in row] for row in board]
-        tuple_old_tiles =  [tile.to_tuple() for tile in old_tiles]
+        # not converting used_tiles to Tiles so no need to switch back
+        #tuple_old_tiles =  [tile.to_tuple() for tile in old_tiles]
         tuple_new_tiles =  [tile.to_tuple() for tile in new_tiles]
         # funciton name needs to be changed when we finish middle module
         send_message(player_number, (status, tuple_board, scores, tuple_old_tiles, tuple_new_tiles))
