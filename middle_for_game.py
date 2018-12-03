@@ -22,9 +22,10 @@ def send_message(player_number, data):
     message = (Pid_to_send + data)
     cast(PID_my, message)
 
-# INCOMPLETE
-def resigster_handler():
-
+def resigster_handler(dest):
+    global PID_my
+    PID_my = dest
+    set_message_handler(handler)
     return Atom("ok")
 
 # need to add more funcitons
