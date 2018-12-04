@@ -139,6 +139,19 @@ gmTest(NodeName) ->
 	%python:call(Pypid, pythonClient, updateStateTest, []).
 
 
+loop(Pypid) ->
+        io:format("~s~n", ["looping"]),
+        receive
+                 Something ->
+                         io:format("~s~n", ["got something"]),
+                         io:format("~p~n", [Something])
+         end,
+         io:format("~s~n", ["fin looped"]),
+         python:cast(Pypid, update), % This would be being sent from another erlang proces
+ 
+         loop(Pypid).
+
+
 % simple test function for sending python data
 gotNewMove()->
 	io:format("~s~n", ["Got new move"]).
