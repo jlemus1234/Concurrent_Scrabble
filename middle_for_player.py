@@ -12,7 +12,7 @@ global PID_server
 
 def start(my_Pid, server_Pid):
     global player, gui, Pid_my, PID_server
-    player = Player(Pid)
+    player = Player()
     gui = Gui()
     player.getGUI(gui)
     gui.getPlayer(player)
