@@ -33,8 +33,8 @@ def handler(message):
     message_type = message[0]
     switcher = {
         "new player":add_player,
-        "move":make_move,
-        "game over":game_over
+        "move":make_move
+        # "game over":game_over
     }
     switcher[message_type](message[1:])
 
@@ -42,7 +42,7 @@ def handler(message):
 def add_player(message):
     global PID_players
     game.new_player(len(PID_players))
-    PID_players.append(message[LOCATION_OF_PLAYER_PID])
+    PID_players.append(message[0])
 
 def make_move(message):
     player_number, word, starting_positon, direction, used_tiles = split_message(message)
@@ -62,7 +62,7 @@ def split_message(message):
 # word, direction, starting_positon, used tiles
 
 # message to send:
-# status, board, scores, old_tiles, new_tiles
+# keyword, board, scores, old_tiles, new_tiles
 
 # example of how erlport message passing words
 # cast(erlPID, data)

@@ -35,7 +35,7 @@ class Tile:
             self.id         = tuple_form[3]
 
     def to_tuple(self):
-        return {self.value, self.score, self.multiplier, self.id}
+        return (self.value, self.score, self.multiplier, self.id)
 
     def is_blank(self):
         return self.value == ''

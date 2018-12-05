@@ -10,6 +10,10 @@ from middle_for_game import send_message
 
 global GAME_END = -1
 
+# TODO: Make sure first move is in center
+
+
+
 class Game:
 
     def __init__(self):
