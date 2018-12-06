@@ -32,9 +32,6 @@
 %% Description: Starts the server
 %%--------------------------------------------------------------------
 start_link() ->
-    {ok, Pypid} = python:start([{python_path, "."}]), % Create python node
-    python:call(Pypid, middle_for_game, register_handler, [self()]),
-    python:call(Pypid, middle_for_game, start, [self()]),
     gen_server:start_link({local, scrabble}, scrabble, [], []).
 
 
@@ -64,9 +61,13 @@ stop() ->
 %%          {stop, Reason}
 %%--------------------------------------------------------------------
 init([]) ->
-    process_flag(trap_exit, true),
+    %process_flag(trap_exit, true),
     io:format("~s~n", ["calling init"]),
-    {ok, []}.
+    {ok, Pypid} = python:start([{python_path, "."}]), % Create python node
+    python:call(Pypid, middle_for_game, register_handler, [self()]),
+    python:call(Pypid, middle_for_game, start, [self()]),
+    {ok, {Pypid, []}}.
+%    {ok, []}.
 
 
 %%--------------------------------------------------------------------
@@ -92,10 +93,12 @@ handle_call({list}, _From, State) ->
 %%          {noreply, State, Timeout} |
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
-handle_cast({join, ClientPID, PlayerName}, State) ->
+
+handle_cast({join, ClientPID, PlayerName}, {PyPid, Players}) ->
 	io:format("~s~n", ["Got a subscription"]),
-	NewState = [{ClientPID, PlayerName} | State],
-	{noreply, NewState};
+	NewPlayers = [{ClientPID, PlayerName} | Players],
+	PyPid ! ["new player" | ClientPID],
+	{noreply, {PyPid, NewPlayers}};
 handle_cast({move, ClientPID}, State) ->
 	%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
 	{noreply, State};
