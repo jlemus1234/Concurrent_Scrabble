@@ -6,7 +6,7 @@ from tile import Tile
 from tile import string_to_tiles
 from tile import tiles_to_string
 from bag import Bag
-from middle_for_game import send_message
+#from middle_for_game import send_message
 
 #global GAME_END = -1
 global GAME_END
@@ -14,7 +14,9 @@ global GAME_END
 
 class Game:
 
-    def __init__(self):
+#    def __init__(self):
+
+    def __init__(self, PID_players, PID_my):
 	GAME_END = -1
         self.lock = threading.RLock()
         self.board = Board()
@@ -22,6 +24,10 @@ class Game:
         self.scores = []
         self.bag = Bag()
         self.first_move = True
+
+	# adding so board can use imported send_message
+	self.PID_players = PID_players
+	self.PID_my = PID_my
 
 
     def end_game(self):
@@ -90,6 +96,7 @@ class Game:
 
     # message to send:
     # status, board, scores, old_tiles, new_tiles
+
     def send_to_one_player(self, player_number, staus, board, scores, old_tiles, new_tiles):
         # everything sent should be in a sendable way
         tuple_board     = [[tile.to_tuple() for tile in row] for row in board]
@@ -97,7 +104,15 @@ class Game:
         #tuple_old_tiles =  [tile.to_tuple() for tile in old_tiles]
         tuple_new_tiles =  [tile.to_tuple() for tile in new_tiles]
         # funciton name needs to be changed when we finish middle module
-        send_message(player_number, (status, tuple_board, scores, tuple_old_tiles, tuple_new_tiles))
+        #send_message(player_number, (status, tuple_board, scores, tuple_old_tiles, tuple_new_tiles))
+        send_message(self.PID_players, self.PID_my, player_number, (status, tuple_board, scores, tuple_old_tiles, tuple_new_tiles))
+
+
+    def send_message(pid_list, my_pid ,player_number, data):
+    	Pid_to_send = pid_list[player_number]
+    	message = (Pid_to_send + data)
+    	cast(my_pid, message)
+	
 
     def send_to_all_player(self, status, board, scores, old_tiles, new_tiles):
         for player_number in range(4):

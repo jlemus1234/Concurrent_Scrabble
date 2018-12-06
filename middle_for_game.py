@@ -13,16 +13,25 @@ global PID_players
 
 def start(Pid):
     global game, PID_my, PID_players
-    game = Game()
     PID_my = Pid
-    PID_players = []
+    # You can't pass around empty arrays in python so make the first entry your own PID
+    PID_players = [PID_my]
+    # Change game so it accepts an array of players
+    game = Game(PID_players, PID_my)
+
     
 
-def send_message(player_number, data):
-    global PID_players, PID_my
-    Pid_to_send = PID_players[player_number]
+#def send_message(player_number, data):
+#    global PID_players, PID_my
+#    Pid_to_send = PID_players[player_number]
+#    message = (Pid_to_send + data)
+#    cast(PID_my, message)
+
+
+def send_message(pid_list, my_pid ,player_number, data):
+    Pid_to_send = pid_list[player_number]
     message = (Pid_to_send + data)
-    cast(PID_my, message)
+    cast(my_pid, message)
 
 def register_handler(dest):
     # no need to hold on to dest (the PID from which the message was sent)
@@ -68,3 +77,6 @@ def split_message(message):
 
 # example of how erlport message passing words
 # cast(erlPID, data)
+
+
+

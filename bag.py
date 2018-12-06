@@ -21,7 +21,7 @@ class Bag:
         """ Call initialize_bag to add the default 98 tiles to bag """
         self.bag = []
         self.initialize_bag()
-        self.lock = threading.lock()
+        self.lock = threading.Lock()
 
     def initialize_bag(self):
         """ Add the default 98 tiles to bag """
