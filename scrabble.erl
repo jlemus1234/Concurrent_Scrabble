@@ -76,9 +76,10 @@ init([]) ->
 %%          {stop, Reason, Reply, State}   | (terminate/2 is called)
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
-handle_call(Request, From, State) ->
-	io:format("~s~n", ["got a call"]),
-	{reply, gotSubscribe, State}.
+%handle_call(Request, From, State) ->
+handle_call({list}, _From, State) ->
+	io:format("~s~n", ["got a list call"]),
+	{reply, gotList, State}.
 
 
 %%--------------------------------------------------------------------
@@ -88,8 +89,17 @@ handle_call(Request, From, State) ->
 %%          {noreply, State, Timeout} |
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
-handle_cast(Message, State) ->
-	io:format("~s~n", ["got a cast"]),
+handle_cast({subscribe, ClientPID, PlayerName}, State) ->
+	io:format("~s~n", ["Got a subscription"]),
+	NewState = [{ClientPID, PlayerName} | State],
+	{noreply, NewState};
+handle_cast({move, ClientPID}) ->
+%% CALL THE GAME MODULE HERE	 
+	{noreply, NewState};
+handle_cast(stop, State) ->
+	{stop, shutdown, State};
+handle_cast(_X, State) ->
+	io:format("~s~n", ["Got unmatched message"]),
 	{noreply, State}.
 
 
@@ -187,8 +197,8 @@ get_client_messages(Pypid) ->
 			io:format("~s~n", ["got something"]),
 			io:format("~p~n", [Something])
 	end,
-	io:format("~s~n", ["fin looped"]),
-	python:cast(Pypid, update), % This would be being sent from another erlang process
+	%io:format("~s~n", ["fin looped"]),
+	%python:cast(Pypid, update), % This would be being sent from another erlang process
 	get_client_messages(Pypid).
 
 
