@@ -2,19 +2,20 @@
 
 
 from player import Player
-from gui import Gui
+from GUI import Gui
 from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, call, cast
 from tile import Tile
 
 global player
 global gui
-global PID_my
-global PID_server
+global PID_my # python instance's pid
+global PID_server # pid of erlport instance that launched this
 
 
 def start(my_Pid, server_Pid):
     global player, gui, Pid_my, PID_server
+    print("calling player start")
     player = Player()
     gui = Gui()
     player.getGUI(gui)
@@ -24,12 +25,14 @@ def start(my_Pid, server_Pid):
     PID_my = my_Pid
     PID_server = server_Pid
     send_message(("new player", PID_my))
+    print("player start finished")
     # need to now send message to server registering me
 
 
-def resigster_handler(dest):
+def register_handler(dest):
     # no need to hold on to dest (the PID from which the message was sent)
     # because it will stay const and was set in start
+    print("setting client handler")
     set_message_handler(handler)
     return Atom("ok")
 
@@ -58,7 +61,7 @@ def split_message_player_side(message):
     old_tiles   = message[2]
     new_tiles   = message[3]
     return status, board, scores, old_tiles,
-     new_tiles
+#new_tiles
 
 def refresh_func(message):
     board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)

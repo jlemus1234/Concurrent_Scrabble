@@ -11,7 +11,7 @@
 % imports
 %%---------------
 %% client
--export([join_game/1, send_messages/1, send_messages/2, get_server_messages/1, printMoveDump/1]).
+-export([join_game/2, send_messages/1, send_messages/2, get_server_messages/1, printMoveDump/1]).
 
 %% External exports
 -export([start_link/0, stop/0]).
@@ -89,13 +89,13 @@ handle_call({list}, _From, State) ->
 %%          {noreply, State, Timeout} |
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
-handle_cast({subscribe, ClientPID, PlayerName}, State) ->
+handle_cast({join, ClientPID, PlayerName}, State) ->
 	io:format("~s~n", ["Got a subscription"]),
 	NewState = [{ClientPID, PlayerName} | State],
 	{noreply, NewState};
-handle_cast({move, ClientPID}) ->
-%% CALL THE GAME MODULE HERE	 
-	{noreply, NewState};
+handle_cast({move, ClientPID}, State) ->
+%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
+	{noreply, State};
 handle_cast(stop, State) ->
 	{stop, shutdown, State};
 handle_cast(_X, State) ->
@@ -173,16 +173,21 @@ gotNewMove()->
 %% Client functions
 %%====================================================================
 
-join_game(NodeName) -> 
+join_game(NodeName, PlayerName) -> 
 %% Set up the python client module
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
 	Receiver = spawn_link(scrabble, get_server_messages, [Pypid]),
-	python:call(Pypid, pythonClient, register_handler, [self()]),
-	python:call(Pypid, pythonClient, startServer, [self(), NodeName]), %% Change name from startServer
+%% Set up the python message handler
+	%python:call(Pypid, pythonClient, register_handler, [self()]),
+	python:call(Pypid, middle_for_player, register_handler, [self()]),
+%% Begin running the client
+	%python:call(Pypid, pythonClient, startServer, [self(), NodeName]), %% Change name from startServer
+	python:call(Pypid, middle_for_player, start, [self(), NodeName]),
 %% Sending msg to join game
 	GameServer = {scrabble, NodeName},
-	JoinMsg = {join, Receiver, self()},
-	gen_server:cast(GameServer, randommsg),
+	%JoinMsg = {join, Receiver, self()},
+	JoinMsg = {join, Receiver, PlayerName},
+	gen_server:cast(GameServer, JoinMsg),
 %% Test run code
 	%timer:sleep(1000),
 	python:cast(Pypid, update), % This would be being sent from another erlang process
