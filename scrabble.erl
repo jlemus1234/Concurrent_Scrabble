@@ -62,6 +62,7 @@ stop() ->
 %%--------------------------------------------------------------------
 init([]) ->
     process_flag(trap_exit, true),
+    io:format("~s~n", ["calling init"]),
     {ok, []}.
 
 
@@ -76,7 +77,8 @@ init([]) ->
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
 handle_call(Request, From, State) ->
-	io:format("~s~n", ["got a call"]).
+	io:format("~s~n", ["got a call"]),
+	{reply, gotSubscribe, State}.
 
 
 %%--------------------------------------------------------------------
@@ -87,7 +89,8 @@ handle_call(Request, From, State) ->
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
 handle_cast(Message, State) ->
-	io:format("~s~n", ["got a cast"]).
+	io:format("~s~n", ["got a cast"]),
+	{noreply, State}.
 
 
 
@@ -165,11 +168,11 @@ join_game(NodeName) ->
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
 	Receiver = spawn_link(scrabble, get_server_messages, [Pypid]),
 	python:call(Pypid, pythonClient, register_handler, [self()]),
-	python:call(Pypid, pythonTestGame, startServer, [self(), NodeName]), %% Change name from startServer
+	python:call(Pypid, pythonClient, startServer, [self(), NodeName]), %% Change name from startServer
 %% Sending msg to join game
 	GameServer = {scrabble, NodeName},
 	JoinMsg = {join, Receiver, self()},
-	gen_server:cast(GameServer, NodeName),
+	gen_server:cast(GameServer, randommsg),
 %% Test run code
 	%timer:sleep(1000),
 	python:cast(Pypid, update), % This would be being sent from another erlang process
