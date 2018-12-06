@@ -6,8 +6,6 @@ from tile import string_to_tiles
 from tile import tiles_to_string
 import twl
 
-# TODO: add multipler change when updating
-
 
 class Board:
 

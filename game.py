@@ -10,9 +10,6 @@ from middle_for_game import send_message
 
 global GAME_END = -1
 
-# TODO: Make sure first move is in center
-
-
 
 class Game:
 
@@ -22,6 +19,7 @@ class Game:
         # self.erlangPID = Pid
         self.scores = []
         self.bag = Bag()
+        self.first_move = True
 
 
     def end_game(self):
@@ -42,16 +40,36 @@ class Game:
         # not converting used_tiles to Tiles
         # switches tuple form of tiles back to Tile form
         word = [Tile("","","","",letter) for letter in word]
+
+        # check if first move is in center
+        if self.first_move:
+            if not over_lap_center(word, starting_positon, direction):
+                self.send_to_one_player(player_number, False, self.board.get_board(), self.scores, [], [])
+                return
+
         with lock:
             valid, new_board, score = board.update(starting_positon, word, direction)
             if not valid:
                 self.send_to_one_player(player_number, False, new_board, self.scores, [], [])
             else:
                 # have to send to all players new state and to one player new tiles
+                self.first_move = False
                 self.scores[player_number] += score
                 new_tiles = self.bag.take_n_from_bag(len(used_tiles))
                 self.send_to_one_player(player_number, True, [[]], [], used_tiles, new_tiles)
                 self.send_to_all_player(True, new_board, self.scores, [], [])
+
+    def over_lap_center(word, positon, direction):
+        length = len(word)
+        for i in range(length):
+            if positon == (7,7):
+                return True
+            if direction == 'd':
+                positon = (positon[0] + 1, positon[1])
+            else:
+                postion = (positon[0] , positon[1] + 1)
+        return False
+
 
     def new_player(self, player_number):
         with lock:
