@@ -31,6 +31,8 @@ def start(Pid):
 def send_message(pid_list, my_pid ,player_number, data):
     Pid_to_send = pid_list[player_number]
     message = (Pid_to_send + data)
+    print("In send_message")
+    print(message)
     cast(my_pid, message)
 
 def register_handler(dest):
