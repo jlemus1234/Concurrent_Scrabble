@@ -6,6 +6,7 @@ from GUI import Gui
 from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, call, cast
 from tile import Tile
+import threading
 
 global player
 global gui
@@ -18,19 +19,29 @@ def start(my_Pid, server_Pid):
     PID_my = my_Pid
     PID_server = server_Pid
 
+    gameThread = threading.Thread(target = start_gui)
+    gameThread.start()
+
     print("calling player start")
-    player = Player("Player1", server_Pid)
+
+
+def start_gui():
+    global player, gui
+    player = Player("Player1",PID_server)
     gui = Gui()
     player.setGUI(gui)
     gui.setPlayer(player)
     # something like this
-    ## This creates the game loop that the game doesn't return from. 
-    ## must launch this from a different thread.
     gui.doItAll()
 
-    send_message(("new player", PID_my))
+    ## This creates the game loop that the game doesn't return from. 
+    ## must launch this from a different thread.
+
+
+    #send_message(("new player", PID_my))
     print("player start finished")
     # need to now send message to server registering me
+
 
 
 def register_handler(dest):
