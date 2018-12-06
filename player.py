@@ -17,13 +17,14 @@ class Player:
     def __init__(self, name, PID):
         self.board = board.Board()
         self.score = 0
-        self.name = "Jane Doe"
+#        self.name = "Jane Doe"
+	self.name = name
         self.tiles = [tile.Tile() for _ in range(7)]
         self.erlangPID = PID
         self.gui = None
         self.lock = threading.RLock()
 
-    def getGUI(self, GUI):
+    def setGUI(self, GUI):
         self.gui = GUI
 
 

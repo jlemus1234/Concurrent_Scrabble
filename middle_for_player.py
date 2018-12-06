@@ -15,15 +15,19 @@ global PID_server # pid of erlport instance that launched this
 
 def start(my_Pid, server_Pid):
     global player, gui, Pid_my, PID_server
-    print("calling player start")
-    player = Player()
-    gui = Gui()
-    player.getGUI(gui)
-    gui.getPlayer(player)
-    # something like this
-    gui.start()
     PID_my = my_Pid
     PID_server = server_Pid
+
+    print("calling player start")
+    player = Player("Player1", server_Pid)
+    gui = Gui()
+    player.setGUI(gui)
+    gui.setPlayer(player)
+    # something like this
+    ## This creates the game loop that the game doesn't return from. 
+    ## must launch this from a different thread.
+    gui.doItAll()
+
     send_message(("new player", PID_my))
     print("player start finished")
     # need to now send message to server registering me

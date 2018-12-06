@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkFont
 from PIL import ImageTk, Image
-
+from player import Player
 
 
 class Gui:
@@ -60,17 +60,20 @@ class Gui:
 
         # Images for boards
         self.tileImg           = ImageTk.PhotoImage(
-            Image.open("assets/tile.png"))
+            Image.open("./assets/tile.png"))
         self.tripWordTileImg   = ImageTk.PhotoImage(
-            Image.open("assets/3ws.png"))
+            Image.open("./assets/3ws.png"))
         self.dubWordTileImg    = ImageTk.PhotoImage(
-            Image.open("assets/2ws.png"))
+            Image.open("./assets/2ws.png"))
         self.tripLetterTileImg = ImageTk.PhotoImage(
-            Image.open("assets/3ls.png"))
+            Image.open("./assets/3ls.png"))
         self.dubLetterTileImg  = ImageTk.PhotoImage(
-            Image.open("assets/2ls.png"))
+            Image.open("./assets/2ls.png"))
         self.centerTileImg     = ImageTk.PhotoImage(
-            Image.open("assets/center.png"))
+            Image.open("./assets/center.png"))
+
+    def setPlayer(self, Player):
+	self.player = Player
 
     #Button Pressed Funcs
     def clickSubmit(self):
@@ -211,6 +214,7 @@ class Gui:
 
 
 
+
 #tileFrame = tk.LabelFrame(window, height = 38, width = 38, bg = "brown")
 #letterLbl = tk.Label(tileFrame, text = "  A  ", font = helv16, bg = "brown")
 #pointsLbl = tk.Label(tileFrame, text = "        10", font = helv4, bg = "brown")
@@ -224,6 +228,7 @@ class Gui:
 # panel.pack(side = "left", fill = "none", expand = "no")
 # board.grid(row = 0, column = 0)
 # handFrame.grid(row = 0, column = 2)
+
 
 #main for testing
 def main():
