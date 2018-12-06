@@ -8,13 +8,15 @@ from erlport.erlang import set_message_handler, call, cast
 
 global game
 global PID_my
-global PID_players = []
-
+global PID_players
+#global PID_players = []
 
 def start(Pid):
-    global game, PID_my
+    global game, PID_my, PID_players
     game = Game()
     PID_my = Pid
+    PID_players = []
+    
 
 def send_message(player_number, data):
     global PID_players, PID_my
@@ -22,7 +24,7 @@ def send_message(player_number, data):
     message = (Pid_to_send + data)
     cast(PID_my, message)
 
-def resigster_handler(dest):
+def register_handler(dest):
     # no need to hold on to dest (the PID from which the message was sent)
     # because it will stay const and was set in start
     set_message_handler(handler)

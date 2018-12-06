@@ -8,12 +8,14 @@ from tile import tiles_to_string
 from bag import Bag
 from middle_for_game import send_message
 
-global GAME_END = -1
+#global GAME_END = -1
+global GAME_END
 
 
 class Game:
 
     def __init__(self):
+	GAME_END = -1
         self.lock = threading.RLock()
         self.board = Board()
         # self.erlangPID = Pid
@@ -27,7 +29,7 @@ class Game:
         max_score = max(scores)
         winning_player = GAME_END
         for i in range(0,4):
-            if scores[i] == max_score
+            if (scores[i] == max_score):
                 winning_player = i
                 break
         send_back = [GAME_END for i in range(4)]

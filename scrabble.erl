@@ -18,7 +18,7 @@
 
 %% server_test_functions
 -export([gmTest/1]).
--export([sendMoveResult/1, printMoveResult/1, gotNewMove/0]).
+-export([broadcastMoveResult/1, printMoveResult/1, gotNewMove/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, terminate/2]).
@@ -32,6 +32,9 @@
 %% Description: Starts the server
 %%--------------------------------------------------------------------
 start_link() ->
+    {ok, Pypid} = python:start([{python_path, "."}]), % Create python node
+    python:call(Pypid, middle_for_game, register_handler, [self()]),
+    python:call(Pypid, middle_for_game, start, [self()]),
     gen_server:start_link({local, scrabble}, scrabble, [], []).
 
 
@@ -94,7 +97,7 @@ handle_cast({join, ClientPID, PlayerName}, State) ->
 	NewState = [{ClientPID, PlayerName} | State],
 	{noreply, NewState};
 handle_cast({move, ClientPID}, State) ->
-%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
+	%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
 	{noreply, State};
 handle_cast(stop, State) ->
 	{stop, shutdown, State};
@@ -121,11 +124,14 @@ shutdown_msg(Subscriptions) ->
                             Client ! {message, "Game server has gone down"} end,
     lists:foreach(ShutdownAlert, Subscriptions).
 
-sendMoveResult(MoveResult) -> 
-	io:format("~s~n", ["got move result"]).
+broadcastMoveResult(MoveResult) -> 
+	io:format("~s~n", ["sending move result"]).
 	%io:format("~p~n", MoveResult).
 	%printMoveResult(MoveResult).
 
+
+receiveMoveResult(MoveResult) ->
+	io:format("~s~n", ["received move result"]).
 
 printMoveResult({Result, Board, Scores, {OldTiles, NewTiles}}) ->
 	io:format("~s~n", ["Printing move result"]),
