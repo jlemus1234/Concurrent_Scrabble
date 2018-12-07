@@ -81,7 +81,7 @@ class Gui:
             Image.open("./assets/center.png"))
 
     def setPlayer(self, Player):
-    self.player = Player
+        self.player = Player
 
     #Button Pressed Funcs ===========-=-=-======================================-=-=-=-=-=-=-=-=-=-
     #Needs to send:
