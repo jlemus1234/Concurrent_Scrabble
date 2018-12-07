@@ -1,4 +1,4 @@
-import tkinter as tk
+from mtTkinter import mtTkinter as tk
 import tkFont
 from PIL import ImageTk, Image
 
@@ -99,7 +99,8 @@ class Gui:
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
-        #player.made_move(self.tileGrid[7], 'r', (7,7), self.currPlacedTiles)
+        #if self.direction == 'd':t
+        player.made_move(self.tileGrid[7], 'r', (7,7), self.currPlacedTiles)
         print 'You clicked Submit'
 
     def clickExchange(self):
