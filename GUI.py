@@ -248,7 +248,7 @@ class Gui:
         print 'before mainloop'
         # move loop start to main, in final version the caller will need
         # to start loop after calling .start()
-        #self.window.mainloop()
+        self.window.mainloop()
         print 'after mainloop'
 
 

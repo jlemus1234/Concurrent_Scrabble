@@ -19,23 +19,28 @@ def start(my_Pid, server_Pid):
     PID_my = my_Pid
     PID_server = server_Pid
 
-    gameThread = threading.Thread(target = start_gui)
+
+    start_lock = threading.Semaphore(0)
+    gameThread = threading.Thread(target = start_gui, args = (start_lock))
     gameThread.start()
     # send start message
     #send_message((PID_server, "new player"))
+    start_lock.acquire()
     send_message(PID_server, (selfPID(), "new player")) # Sending the python instance's pid right now
     #cast(PID
     print("calling player start")
 
 
-def start_gui():
+def start_gui(start_lock):
     global player, gui
     player = Player("Player",PID_server)
     gui = Gui()
     player.setGUI(gui)
+    start_lock.release()
     gui.setPlayer(player)
     # something like this
     gui.start()
+
 
     ## This creates the game loop that the game doesn't return from.
     ## must launch this from a different thread.
