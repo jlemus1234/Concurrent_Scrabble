@@ -8,6 +8,7 @@
 
 """ Purpose: This module holds the implementation of the class Player"""
 
+#from board import Board
 from board import Board
 from tile import Tile
 import threading
@@ -18,7 +19,8 @@ from middle_for_game import send_message
 
 class Player:
     def __init__(self, name, PID):
-        self.board = board.Board()
+#        self.board = board.Board()
+	self.board = Board()
         self.score = 0
         self.name  = name
         self.tiles = []
