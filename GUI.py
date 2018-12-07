@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkFont
 from PIL import ImageTk, Image
-from player import Player
+
 from tile import Tile
 from tile import string_to_tiles
 from board import Board
@@ -287,3 +287,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+from player import Player

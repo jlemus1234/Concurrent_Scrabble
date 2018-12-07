@@ -1,6 +1,9 @@
 # middle module for game
 
-from game import Game
+<<<<<<< HEAD
+=======
+
+>>>>>>> a78a90054fb22b4cdcb90f34a4a889877b170c56
 from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, call, cast
 
@@ -79,6 +82,8 @@ def split_message(message):
     used_tiles          = message[5]
     return player_number, word, direction, starting_positon, used_tiles
 
+from game import Game
+
 # messge recieve
 # player_PID, keyword, word, direction, starting_positon, used tiles
 
@@ -87,3 +92,6 @@ def split_message(message):
 
 # example of how erlport message passing words
 # cast(erlPID, data)
+
+
+from game import Game
