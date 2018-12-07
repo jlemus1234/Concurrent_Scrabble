@@ -53,27 +53,27 @@ class Player:
             # refresh display
             self.gui.refresh(new_grid, self.tiles, self.scores)
 
-    def refresh(tile_board, scores):
+    def refresh(self, tile_board, scores):
         with self.lock:
             self.board.set_board(tile_board)
             self.scores = scores
             self.gui.refresh(tile_board, self.tiles, scores)
 
-    def get_new_tiles(old_tiles, new_tiles):
+    def get_new_tiles(self, old_tiles, new_tiles):
         with self.lock:
             for tile in old_tiles:
                 self.tiles.remove(tile)
             self.tiles.extend(new_tiles)
             self.gui.refresh(self.board.get_board(), self.tiles, self.scores)
 
-    def send_to_server(word, direction, start_pos, used_tiles):
+    def send_to_server(self, word, direction, start_pos, used_tiles):
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
 	## What is this send function?
         send_message(("move", word_tuple, direction, start_pos, used_tiles))
 
 
-    def get_word(tile_ray, start_pos):
+    def get_word(self, tile_ray, start_pos):
         word = []
         front = start_pos
         # finds begining of word
