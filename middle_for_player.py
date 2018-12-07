@@ -15,14 +15,14 @@ global PID_server # pid of erlport instance that launched this
 
 
 def start(my_Pid, server_Pid):
-    global player, gui, Pid_my, PID_server
+    global player, gui, PID_my, PID_server
     PID_my = my_Pid
     PID_server = server_Pid
 
     gameThread = threading.Thread(target = start_gui)
     gameThread.start()
     # send start message
-    send_message((Pid_my, "new player"))
+    send_message((PID_my, "new player"))
     print("calling player start")
 
 
@@ -67,9 +67,7 @@ def handler(message):
 
 def send_message(message):
     global PID_my, PID_server
-    cast(Pid_my, (PID_server) + (PID_my) + message)
-
-
+    cast(PID_my, (PID_server, PID_my, message))
 
 
 def split_message_player_side(message):
