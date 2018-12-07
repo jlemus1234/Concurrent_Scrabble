@@ -75,7 +75,7 @@ class Gui:
         self.firstTilePlaced = ''
 
         self.window = Tk()
-        self.handFrame = tk.LabelFrame(self.window, padx = 5)
+        self.handFrame = LabelFrame(self.window, padx = 5)
         # Fonts for tiles
         self.helv16 = tkFont.Font(self.window, family='Helvetica', size=15,
             weight=tkFont.BOLD)
@@ -181,8 +181,8 @@ class Gui:
 
     # Helper func for making tile labels
     def makeTile(self, letter):
-        return tk.Label(self.handFrame, image = self.tileImg, text = letter,
-            font = self.helv16, compound = tk.CENTER, relief = tk.FLAT)
+        return Label(self.handFrame, image = self.tileImg, text = letter,
+            font = self.helv16, compound = CENTER, relief = FLAT)
 
     def makeBoardGrid(self):
         tileDict = {
@@ -196,8 +196,8 @@ class Gui:
 
         for x in range(15):
             for y in range(15):
-                currTile = tk.Label(self.window, image = tileDict[self.initGrid[x][y]],
-                    text = '', font = self.helv16, compound = tk.CENTER)
+                currTile = Label(self.window, image = tileDict[self.initGrid[x][y]],
+                    text = '', font = self.helv16, compound = CENTER)
                 currTile.bind("<Button-1>", self.boardClicked)
                 currTile.bind("<Button-3>", self.boardRightClicked)
                 #currTile.bind("<Button-1>", lambda event: lamClick(event, currLetter))
@@ -214,35 +214,35 @@ class Gui:
         self.window.configure(background='grey')
 
         #Score Labels
-        scoreFrame = tk.LabelFrame(self.window, text="Scores")
+        scoreFrame = LabelFrame(self.window, text="Scores")
         for score in self.scores:
-            scoreLabel = tk.Label(scoreFrame, text = '')
+            scoreLabel = Label(scoreFrame, text = '')
             scoreLabel.pack()
             self.scoreLabels.append(scoreLabel)
 
         #Submit Buttons - Submit, Exchange, Pass
-        buttonFrame = tk.Frame(self.window)
-        submitBtn = tk.Button(buttonFrame, text = "Submit",
+        buttonFrame = Frame(self.window)
+        submitBtn = Button(buttonFrame, text = "Submit",
             command = self.clickSubmit)
-        exchangeBtn = tk.Button(buttonFrame, text = "Exhange",
+        exchangeBtn = Button(buttonFrame, text = "Exhange",
             command = self.clickExchange)
-        passBtn = tk.Button(buttonFrame, text = "Pass",
+        passBtn = Button(buttonFrame, text = "Pass",
             command = self.clickPass)
-        submitBtn.pack(side = tk.LEFT)
-        exchangeBtn.pack(side = tk.LEFT)
-        passBtn.pack(side = tk.LEFT)
+        submitBtn.pack(side = LEFT)
+        exchangeBtn.pack(side = LEFT)
+        passBtn.pack(side = LEFT)
 
         #Tiles in hand
         for i in range(7):
             singleTile = self.makeTile('')
             singleTile.bind("<Button-1>", self.handClicked)
-            singleTile.pack(side = tk.LEFT)
+            singleTile.pack(side = LEFT)
             self.hand.append(singleTile)
 
         self.makeBoardGrid()
-        buttonFrame.place(relx = .55, rely = 1, anchor = tk.SW)
+        buttonFrame.place(relx = .55, rely = 1, anchor = SW)
         self.handFrame.place(relx = .60, rely = .5,)
-        scoreFrame.place(relx = 1, rely = 0, anchor = tk.NE)
+        scoreFrame.place(relx = 1, rely = 0, anchor = NE)
 
         #Start the GUI
         print 'before mainloop'
