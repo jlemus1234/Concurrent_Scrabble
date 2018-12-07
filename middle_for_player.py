@@ -25,7 +25,7 @@ def start(my_Pid, server_Pid):
     gameThread.start()
     # send start message
     #send_message((PID_server, "new player"))
-    start_lock[0].acquire()
+    # start_lock[0].acquire()
     send_message(PID_server, (selfPID(), "new player")) # Sending the python instance's pid right now
     #cast(PID
     print("calling player start")
