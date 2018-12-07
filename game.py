@@ -101,7 +101,7 @@ class Game:
         tuple_new_tiles =  [tile.to_tuple() for tile in new_tiles]
         # funciton name needs to be changed when we finish middle module
         #send_message(player_number, (status, tuple_board, scores, tuple_old_tiles, tuple_new_tiles))
-        send_message(self.PID_players, self.PID_my, player_number, (status, tuple_board, scores, old_tiles, tuple_new_tiles))
+        send_message(player_number, (keyword, tuple_board, scores, old_tiles, tuple_new_tiles))
 
 
 

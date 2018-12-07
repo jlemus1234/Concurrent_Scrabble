@@ -28,8 +28,8 @@ def start(Pid):
 #    cast(PID_my, message)
 
 def send_message(player_number, message):
-    global PID_my
-    cast(PID_my, message)
+    global PID_my, PID_players
+    cast(PID_my, (PID_players[player_number]) + message)
 
 
 # def send_message(pid_list, my_pid ,player_number, data):
@@ -55,7 +55,7 @@ def handler(message):
         "move":make_move
         # "game over":game_over
     }
-    switcher[message_type](message[])
+    switcher[message_type](message)
 
 # INCOMPLETE need to know what the message looks like
 def add_player(message):

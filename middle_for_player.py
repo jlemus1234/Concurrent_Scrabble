@@ -22,7 +22,7 @@ def start(my_Pid, server_Pid):
     gameThread = threading.Thread(target = start_gui)
     gameThread.start()
     # send start message
-    send_message(("new_player", Pid_my))
+    send_message((Pid_my, "new player"))
     print("calling player start")
 
 
