@@ -5,6 +5,8 @@ else:
     from tkinter import *
 from mttkinter import mtTkinter
 
+
+import threading
 import tkFont
 from PIL import ImageTk, Image
 
@@ -264,7 +266,9 @@ class Gui:
         print 'before mainloop'
         # move loop start to main, in final version the caller will need
         # to start loop after calling .start()
-        self.window.mainloop()
+        thread = threading.Thread(target = self.window.mainloop)
+        thread.daemon = True
+        thread.start()
         print 'after mainloop'
         
         from player import Player
@@ -320,7 +324,9 @@ class Gui:
         self.direction = ''
         self.firstTilePlaced = []
         self.window.quit()
-        self.window.mainloop()
+        thread = threading.Thread(target = self.window.mainloop)
+        thread.daemon = True
+        thread.start()
 
 #main for testing
 def main():
