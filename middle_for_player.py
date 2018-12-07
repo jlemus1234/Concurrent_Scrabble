@@ -58,6 +58,7 @@ def register_handler(dest):
 def handler(message):
     # getting rid of PID of destination
     print("inside middle_for_player handler")
+    print("This is the original message: {}".format(message))
     message = message[1:]
     message_type = message[0]
     switcher = {
@@ -66,7 +67,9 @@ def handler(message):
         # "report_winner":winner,
         # "end":end_game
     }
-    switcher[message_type](message[1:])
+    new_message = message[1:]
+    print("this is the new message: {}".format(new_message))
+    switcher[message_type](new_message)
 
 def send_message(dest_pid, message):
     global PID_my, PID_server
