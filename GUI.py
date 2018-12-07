@@ -29,10 +29,10 @@ class Gui:
         ]
 
     def __init__(self, grid = '', hand = '', scores = ''):
-        
-        
+
+
         from player import Player
-        
+
         # Labels of the board for GUI
         self.grid = [
             ['','','','','','','','','','','','','','',''],
@@ -133,7 +133,7 @@ class Gui:
                 validMove = False
             elif self.currPlacedXYs[0][1] == col and self.direction == 'd':
                 validMove = False
-        
+
         #below only executed when placing in proper spot
         if validMove == True:
             print 'validMove = True'
