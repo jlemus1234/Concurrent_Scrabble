@@ -66,7 +66,7 @@ init([]) ->
     {ok, Pypid} = python:start([{python_path, "."}]), % Create python node
     python:call(Pypid, middle_for_game, register_handler, [self()]),
     python:call(Pypid, middle_for_game, start, [self()]),
-    {ok, {Pypid, []}}.
+    {ok, Pypid}.
 
 
 %%--------------------------------------------------------------------
@@ -93,9 +93,10 @@ handle_call({list}, _From, State) ->
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
 
-handle_cast(Anything, State) ->
+handle_cast(Anything, PyPid) ->
 	io:format("~s~n", ["Server received some cast"]),
-	{noreply, State};
+	
+	{noreply, PyPid};
 handle_cast({move, ClientPID}, State) ->
 	%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
 	{noreply, State};
@@ -218,7 +219,6 @@ get_server_messages(Pypid) ->
 
 %% might be useful for processing input
 %% Send your shit to this function
-%%processInput()
 
 send_messages(ServerPID) ->
 	io:format("~w~n", [something]),
