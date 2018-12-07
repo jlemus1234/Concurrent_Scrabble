@@ -77,6 +77,7 @@ class Player:
         front = start_pos
         # finds begining of word
         while (front >= 0 and front <= 14):
+
             if grid[front].is_blank():
                 break
             else:

@@ -22,7 +22,7 @@ def start(my_Pid, server_Pid):
     gameThread = threading.Thread(target = start_gui)
     gameThread.start()
     # send start message
-    send_message(("new_player", Pid_my))
+    send_message((Pid_my, "new player"))
     print("calling player start")
 
 
@@ -54,6 +54,8 @@ def register_handler(dest):
 
 # need to add more funcitons
 def handler(message):
+    # getting rid of PID of destination
+    message = message[1:]
     message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,
@@ -64,8 +66,8 @@ def handler(message):
     switcher[message_type](message[1:])
 
 def send_message(message):
-    global PID_my
-    cast(Pid_my, message)
+    global PID_my, PID_server
+    cast(Pid_my, (PID_server) + (PID_my) + message)
 
 
 
