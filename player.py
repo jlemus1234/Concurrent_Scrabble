@@ -37,7 +37,7 @@ class Player:
             if direction == 'r':
                 start_index = start_pos[1]
 
-            word = self.get_word(tile_ray, start_pos);
+            word = self.get_word(tile_ray, start_index);
 
             valid, new_grid, new_score = self.board.update(start_pos, word, direction)
 
