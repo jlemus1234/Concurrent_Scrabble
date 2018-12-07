@@ -1,9 +1,6 @@
 # middle module for game
 
-<<<<<<< HEAD
-=======
 
->>>>>>> a78a90054fb22b4cdcb90f34a4a889877b170c56
 from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, call, cast
 
