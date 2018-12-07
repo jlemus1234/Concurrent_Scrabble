@@ -94,11 +94,18 @@ handle_call({list}, _From, State) ->
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
 
-handle_cast({join, ClientPID, PlayerName}, {PyPid, Players}) ->
-	io:format("~s~n", ["Got a subscription"]),
-	NewPlayers = [{ClientPID, PlayerName} | Players],
-	PyPid ! ["new player" | ClientPID],
-	{noreply, {PyPid, NewPlayers}};
+%handle_cast({join, ClientPID, PlayerName}, {PyPid , Players}) ->
+%	io:format("~s~n", ["Got a subscription"]),
+	%NewPlayers = [{ClientPID, PlayerName} | Players],
+	%python:cast(PyPid, {, ClientPID}),
+	%python:cast(PyPid, "new player"),
+	%PyPid ! ["new player" | ClientPID],
+	%io:format("~s~n", ["Sent message"]),
+%	{noreply, {PyPid, NewPlayers}};
+
+handle_cast(Anything, State) ->
+	io:format("~s~n", ["Server received some cast"]);
+
 handle_cast({move, ClientPID}, State) ->
 	%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
 	{noreply, State};
@@ -188,10 +195,11 @@ join_game(NodeName, PlayerName) ->
 %% Set up a listener
 	Receiver = spawn_link(scrabble, get_server_messages, [Pypid]),
 %% Sending msg to join game
+%% Going to send this from inside the client
 	GameServer = {scrabble, NodeName},
 	%JoinMsg = {join, Receiver, self()},
-	JoinMsg = {join, Receiver, PlayerName},
-	gen_server:cast(GameServer, JoinMsg),
+%	JoinMsg = {join, Receiver, PlayerName},
+%	gen_server:cast(GameServer, JoinMsg),
 
 %% Set up the python message handler
 	%python:call(Pypid, pythonClient, register_handler, [self()]),

@@ -76,7 +76,7 @@ class Player:
         word = []
         front = start_pos
         # finds begining of word
-        while front >= 0 and front <= 14:
+        while (front >= 0 and front <= 14):
             if grid[front].is_blank():
                 break
             else:
@@ -87,7 +87,7 @@ class Player:
         back = start_pos + 1
 
         # finds end of word
-        while back >= 0 and back <= 14:
+        while (back >= 0 and back <= 14):
             if grid[back].is_blank():
                 break
             else:
