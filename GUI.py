@@ -1,4 +1,10 @@
-import mttkinter as tk
+import sys
+if sys.version_info[0] == 2:
+    from Tkinter import *
+else:
+    from tkinter import *
+from mttkinter import mtTkinter
+
 import tkFont
 from PIL import ImageTk, Image
 
