@@ -28,7 +28,7 @@ def start(my_Pid, server_Pid):
 
 def start_gui():
     global player, gui
-    player = Player("Player1",PID_server)
+    player = Player("Player",PID_server)
     gui = Gui()
     player.setGUI(gui)
     gui.setPlayer(player)

@@ -11,7 +11,7 @@
 % imports
 %%---------------
 %% client
--export([join_game/2, send_messages/1, send_messages/2, get_server_messages/1, printMoveDump/1]).
+-export([join_game/1, send_messages/1, send_messages/2, get_server_messages/1, printMoveDump/1]).
 
 %% External exports
 -export([start_link/0, stop/0]).
@@ -104,8 +104,8 @@ handle_call({list}, _From, State) ->
 %	{noreply, {PyPid, NewPlayers}};
 
 handle_cast(Anything, State) ->
-	io:format("~s~n", ["Server received some cast"]);
-
+	io:format("~s~n", ["Server received some cast"]),
+	{noreply, State};
 handle_cast({move, ClientPID}, State) ->
 	%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
 	{noreply, State};
@@ -189,7 +189,8 @@ gotNewMove()->
 %% Client functions
 %%====================================================================
 
-join_game(NodeName, PlayerName) -> 
+%join_game(NodeName, PlayerName) -> 
+join_game(NodeName) ->
 %% Set up the python process
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
 %% Set up a listener
@@ -211,20 +212,21 @@ join_game(NodeName, PlayerName) ->
 %% Test run code -- this won't run when python:call is being used.
 	%timer:sleep(1000),
 	%python:cast(Pypid, update), % This would be being sent from another erlang process
-	get_client_messages(Pypid),
+	get_client_messages(GameServer, Pypid),
 	io:format("~s~n", ["finished gmTest"]).
 
 
-get_client_messages(Pypid) ->
+get_client_messages(GameServer, Pypid) ->
 	io:format("~s~n", ["looping"]),
 	receive 
 		Something ->
 			io:format("~s~n", ["got something"]),
-			io:format("~p~n", [Something])
+			io:format("~p~n", [Something]),
+			gen_server:cast(GameServer, message)
 	end,
-	%io:format("~s~n", ["fin looped"]),
+	io:format("~s~n", ["fin looped"]),
 	%python:cast(Pypid, update), % This would be being sent from another erlang process
-	get_client_messages(Pypid).
+	get_client_messages(GameServer, Pypid).
 
 
 
