@@ -1,6 +1,6 @@
 # Tile Class in Python
 
-# The class will have 4 varialbes
+# The class will have 4 variables
 # value -> the charater representing the letter (capital letter)
 # score -> how many points it is worth
 # multiplier -> a tuple, (multiplier_amount, type of multiplier)
