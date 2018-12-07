@@ -33,7 +33,7 @@ def start_gui():
     player.setGUI(gui)
     gui.setPlayer(player)
     # something like this
-    gui.doItAll()
+    gui.start()
 
     ## This creates the game loop that the game doesn't return from.
     ## must launch this from a different thread.
