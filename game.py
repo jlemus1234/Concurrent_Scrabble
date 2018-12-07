@@ -51,8 +51,8 @@ class Game:
                 self.first_move = False
                 self.scores[player_number] += score
                 new_tiles = self.bag.take_n_from_bag(len(used_tiles))
-                self.send_to_one_player(player_number, True, [[]], [], used_tiles, new_tiles)
-                self.send_to_all_player(True, new_board, self.scores, [], [])
+                self.send_to_one_player(player_number, [[]], [], used_tiles, new_tiles)
+                self.send_to_all_player(new_board, self.scores, [], [])
 
     def over_lap_center(word, positon, direction):
         length = len(word)
@@ -79,8 +79,8 @@ class Game:
         for i in range(4):
             tiles = self.bag.take_n_from_bag(7)
             tile_tuples = [tile.to_tuple() for tile in tiles]
-            self.send_to_one_player("tiles", i, True, [[]], [], [], tiles)
-            self.send_to_one_player("refresh", i, True, self.board.get_board(), [0,0,0,0],[],[])
+            self.send_to_one_player("tiles", i, [[]], [], [], tiles)
+            self.send_to_one_player("refresh", i, self.board.get_board(), [0,0,0,0],[],[])
 
     #
     # def send_message(pid_list, my_pid ,player_number, data):

@@ -84,7 +84,7 @@ def split_message_player_side(message):
     scores      = message[1]
     old_tiles   = message[2]
     new_tiles   = message[3]
-    return status, board, scores, old_tiles
+    return board, scores, old_tiles, new_tiles
 #new_tiles
 
 def refresh_func(message):
