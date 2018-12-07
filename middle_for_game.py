@@ -67,8 +67,8 @@ def handler(message):
 # INCOMPLETE need to know what the message looks like
 def add_player(message):
     global PID_players
-    game.new_player(len(PID_players))
     PID_players.append(message[0])
+    game.new_player(len(PID_players))
 
 def make_move(message):
     player_number, word, direction, starting_positon, used_tiles = split_message(message)
