@@ -25,32 +25,41 @@ class Bag:
 
     def initialize_bag(self):
         """ Add the default 98 tiles to bag """
-        self.bag.append(Tile("a"))
-        self.bag.append(Tile("b"))
-        self.bag.append(Tile("c"))
-        self.bag.append(Tile("d"))
-        self.bag.append(Tile("e"))
-        self.bag.append(Tile("f"))
-        self.bag.append(Tile("g"))
-        self.bag.append(Tile("h"))
-        self.bag.append(Tile("i"))
-        self.bag.append(Tile("j"))
-        self.bag.append(Tile("k"))
-        self.bag.append(Tile("l"))
-        self.bag.append(Tile("m"))
-        self.bag.append(Tile("n"))
-        self.bag.append(Tile("o"))
-        self.bag.append(Tile("p"))
-        self.bag.append(Tile("q"))
-        self.bag.append(Tile("r"))
-        self.bag.append(Tile("s"))
-        self.bag.append(Tile("t"))
-        self.bag.append(Tile("u"))
-        self.bag.append(Tile("v"))
-        self.bag.append(Tile("w"))
-        self.bag.append(Tile("x"))
-        self.bag.append(Tile("y"))
-        self.bag.append(Tile("z"))
+        id = 0
+        for id in range(id, id + 9):
+            self.bag.append(Tile("a", start_id=id))
+        for id in range(id, id + 2):
+            self.bag.append(Tile("b", start_id=id))
+        for id in range(id, id + 2):
+            self.bag.append(Tile("c", start_id=id))
+        for id in range(id, id + 4):
+            self.bag.append(Tile("d", start_id=id))
+        for id in range(id, id + 12):
+            self.bag.append(Tile("e", start_id=id))
+        for id in range(id, id + 2):
+            self.bag.append(Tile("f", start_id=id))
+        for id in range(id, id + 3):
+            self.bag.append(Tile("g", start_id=id))
+#        for id in range(id, id + 2):
+        self.bag.append(Tile("h", start_id=id))
+        self.bag.append(Tile("i", start_id=id))
+        self.bag.append(Tile("j", start_id=id))
+        self.bag.append(Tile("k", start_id=id))
+        self.bag.append(Tile("l", start_id=id))
+        self.bag.append(Tile("m", start_id=id))
+        self.bag.append(Tile("n", start_id=id))
+        self.bag.append(Tile("o", start_id=id))
+        self.bag.append(Tile("p", start_id=id))
+        self.bag.append(Tile("q", start_id=id))
+        self.bag.append(Tile("r", start_id=id))
+        self.bag.append(Tile("s", start_id=id))
+        self.bag.append(Tile("t", start_id=id))
+        self.bag.append(Tile("u", start_id=id))
+        self.bag.append(Tile("v", start_id=id))
+        self.bag.append(Tile("w", start_id=id))
+        self.bag.append(Tile("x", start_id=id))
+        self.bag.append(Tile("y", start_id=id))
+        self.bag.append(Tile("z", start_id=id))
         random.shuffle(self.bag)
 
     def take_n_from_bag(self, n):
