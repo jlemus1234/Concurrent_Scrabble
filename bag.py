@@ -15,7 +15,7 @@ import threading
 
 
 class Bag:
-    """ Creates the bag of tiles needed to ditribute and reimburse players. 
+    """ Creates the bag of tiles needed to ditribute and reimburse players.
         Contains 98 letters """
     def __init__(self):
         """ Call initialize_bag to add the default 98 tiles to bag """
@@ -25,36 +25,36 @@ class Bag:
 
     def initialize_bag(self):
         """ Add the default 98 tiles to bag """
-        self.bag.append("a")
-        self.bag.append("b")
-        self.bag.append("c")
-        self.bag.append("d")
-        self.bag.append("e")
-        self.bag.append("f")
-        self.bag.append("g")
-        self.bag.append("h")
-        self.bag.append("i")
-        self.bag.append("j")
-        self.bag.append("k")
-        self.bag.append("l")
-        self.bag.append("m")
-        self.bag.append("n")
-        self.bag.append("o")
-        self.bag.append("p")
-        self.bag.append("q")
-        self.bag.append("r")
-        self.bag.append("s")
-        self.bag.append("t")
-        self.bag.append("u")
-        self.bag.append("v")
-        self.bag.append("w")
-        self.bag.append("x")
-        self.bag.append("y")
-        self.bag.append("z")
+        self.bag.append(Tile("a"))
+        self.bag.append(Tile("b"))
+        self.bag.append(Tile("c"))
+        self.bag.append(Tile("d"))
+        self.bag.append(Tile("e"))
+        self.bag.append(Tile("f"))
+        self.bag.append(Tile("g"))
+        self.bag.append(Tile("h"))
+        self.bag.append(Tile("i"))
+        self.bag.append(Tile("j"))
+        self.bag.append(Tile("k"))
+        self.bag.append(Tile("l"))
+        self.bag.append(Tile("m"))
+        self.bag.append(Tile("n"))
+        self.bag.append(Tile("o"))
+        self.bag.append(Tile("p"))
+        self.bag.append(Tile("q"))
+        self.bag.append(Tile("r"))
+        self.bag.append(Tile("s"))
+        self.bag.append(Tile("t"))
+        self.bag.append(Tile("u"))
+        self.bag.append(Tile("v"))
+        self.bag.append(Tile("w"))
+        self.bag.append(Tile("x"))
+        self.bag.append(Tile("y"))
+        self.bag.append(Tile("z"))
         random.shuffle(self.bag)
 
     def take_n_from_bag(self, n):
-        """ Remove tile from bag and returns it. Used for replenishing player 
+        """ Remove tile from bag and returns it. Used for replenishing player
             tile rack. """
         arr = []
         for i in range(n):
