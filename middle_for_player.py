@@ -57,6 +57,7 @@ def register_handler(dest):
 # need to add more funcitons
 def handler(message):
     # getting rid of PID of destination
+    print("inside middle_for_player handler")
     message = message[1:]
     message_type = message[0]
     switcher = {
@@ -69,6 +70,7 @@ def handler(message):
 
 def send_message(dest_pid, message):
     global PID_my, PID_server
+    print("Sending message from middle_for_player")
     call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
     print("Sent message from m_f_p")
     #cast(PID_server, message) # does send to the game server, but not through gen server (unhandled)

@@ -29,6 +29,7 @@ def start(Pid):
 
 def send_message(player_number, message):
     global PID_my, PID_players
+    print("In middle for game's send message")
     dest = PID_players[player_number]
     call(Atom("scrabble"), Atom("send_to_pyclient"), [dest, message])
     #cast(PID_my, (PID_players[player_number], message))
@@ -49,7 +50,7 @@ def register_handler(dest):
 
 # need to add more funcitons
 def handler(message):
-    print("In python handler")
+    print("In python handler for middle_for_game")
     print(message)
     # getting rid of PID of destination
     #message = message[1:]

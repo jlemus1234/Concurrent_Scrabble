@@ -69,11 +69,13 @@ class Game:
     def new_player(self, player_number):
         with self.lock:
             self.scores.append(0)
+            print("This is the player number:{}".format(player_number))
             if player_number == 4:
                 self.start_game()
 
     # to be called after the 4th player has entered
     def start_game(self):
+	print("In start_game of game.py")
         for i in range(4):
             tiles = self.bag.take_n_from_bag(7)
             tile_tuples = [tile.to_tuple() for tile in tiles]
