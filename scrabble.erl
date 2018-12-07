@@ -94,15 +94,12 @@ handle_call({list}, _From, State) ->
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
 
+handle_cast(stop, State) ->
+	{stop, shutdown, State};
 handle_cast(Anything, PyPid) ->
 	io:format("~s~n", ["Server received some cast"]),
 	python:cast(PyPid, Anything),
 	{noreply, PyPid};
-handle_cast({move, ClientPID}, State) ->
-	%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
-	{noreply, State};
-handle_cast(stop, State) ->
-	{stop, shutdown, State};
 handle_cast(_X, State) ->
 	io:format("~s~n", ["Got unmatched message"]),
 	{noreply, State}.
@@ -192,7 +189,8 @@ join_game(NodeName) ->
 	python:call(Pypid, middle_for_player, register_handler, [self()]),
 	python:call(Pypid, middle_for_player, start, [self(), GameServer]),
 %% Listen to client
-	get_client_messages(GameServer, Pypid),
+	%get_client_messages(GameServer, Pypid),
+	get_server_messages(Pypid),
 	io:format("~s~n", ["finished gmTest"]).
 
 
@@ -212,9 +210,11 @@ get_client_messages(GameServer, Pypid) ->
 
 
 get_server_messages(Pypid) ->
-	receive {message, MessageText} ->
-		io:format("~s~n", [MessageText]);
-	_X -> io:format("~w~n", [something])
+	%receive {message, MessageText} ->
+	receive Something ->
+		io:format("~s~n", ["got something from server"]),
+		io:format("~p~n", [Something]),
+		Pypid ! Something
 	end,
 	get_server_messages(Pypid).
 
