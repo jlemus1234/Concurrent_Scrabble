@@ -2,7 +2,8 @@ import tkinter as tk
 import tkFont
 from PIL import ImageTk, Image
 from player import Player
-
+from tile import Tile
+#python 2.712
 
 class Gui:
 
@@ -44,12 +45,18 @@ class Gui:
             [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
         ]        
 
-        self.hand = [' ', ' ', ' ', ' ', ' ', ' ', ' ']
+        self.tileGrid = []
+        
+        self.hand = []
+        self.tileHand = []
         self.scores = [0, 0, 0, 0]
+        self.scoreLabels = [0, 0, 0, 0]
         self.currLetter = ' '
+        self.currPlacedTiles = []
 
-        self.playedTiles = []
-        self.lastPlacedTile = '0'
+        self.lastPlacedTile = ''
+        self.direction = ''
+        self.firstTilePlaced = ''
 
         self.window = tk.Tk()
         self.handFrame = tk.LabelFrame(self.window, padx = 5)
@@ -75,7 +82,12 @@ class Gui:
     def setPlayer(self, Player):
 	self.player = Player
 
-    #Button Pressed Funcs
+    #Button Pressed Funcs ===========-=-=-======================================-=-=-=-=-=-=-=-=-=-
+    #Needs to send:
+    #     char_ray  = entire row or column being played TILES
+    #     direction = 'd' or 'r'
+    #     start     = (x, y) of first tile placed
+    #     usedTiles = Array of used TILES
     def clickSubmit(self):
         print 'You clicked Submit'
 
@@ -90,12 +102,13 @@ class Gui:
 
     # Clicking on the board
     def boardClicked(self, event):
-        if event.widget.config()['text'][4] == ' ':
+        if event.widget.config()['text'][4] == '':
             event.widget.config(text = self.currLetter, image = self.tileImg)
-            currLetter = ' '
+            currLetter = ''
         
         #code to extract mouse click x,y. Unneeded
-        print 'mouse click  on board x, y = ', event.x, event.y
+        #print 'mouse click  on board x, y = ', event.x, event.y
+        
         #code to extract x,y
         for x in range(15):
             for y in range(15):
@@ -113,9 +126,13 @@ class Gui:
     # Clicking on a tile in hand
     def handClicked(self, event):
         print 'mouse click  on handTile x, y = ', event.x, event.y
-        self.currLetter = event.widget.config()['text'][4]
-        print 'letter was: ', self.currLetter
-        event.widget.config(text = ' ')
+        for tile in self.hand:
+            if tile.value == event.widget.config()['text'][4]:
+                list.remove(tile)
+                self.currLetter = tile
+                print 'letter was: ', self.currLetter.value
+                event.widget.config(text = '')
+                break
 
     # Helper func for making tile labels
     def makeTile(self, letter):
@@ -152,29 +169,19 @@ class Gui:
                 print self.grid[x][y]
                 
                 #currTile.bind("<Button-1>", boardClicked)
-    def doItAll(self):
+    def start(self):
         #Main self.window of an application
         self.window.title("Scrabble")
         self.window.geometry("1100x650")
         self.window.configure(background='grey')
 
-
-
-
-        
-        # Old single board code
-        #boardPath         = "assets/board.png"
-        #boardImg = ImageTk.PhotoImage(Image.open(boardPath))
-        #board = tk.Label(self.window, image = boardImg)
-        #board.bind("<Button-1>", boardClicked)
-
         #Score Labels
         scoreFrame = tk.LabelFrame(self.window, text="Scores")
-        myScore = tk.Label(scoreFrame, text = "Score: 0")
-        myScore.pack()
-        enemyScore = tk.Label(scoreFrame, text = "Score: 0")
-        enemyScore.pack()
-
+        for score in self.scoreLabels:
+            myScore = tk.Label(scoreFrame, text = '')
+            myScore.pack()
+            score = myScore
+            
         #Submit Buttons - Submit, Exchange, Pass
         buttonFrame = tk.Frame(self.window)
         submitBtn = tk.Button(buttonFrame, text = "Submit", 
@@ -188,17 +195,11 @@ class Gui:
         passBtn.pack(side = tk.LEFT)
 
         #Tiles in hand
-        for i in range(5):
-            singleTile = self.makeTile('o')
+        for i in range(7):
+            singleTile = self.makeTile('')
             singleTile.bind("<Button-1>", self.handClicked)    
             singleTile.pack(side = tk.LEFT)
-
-        singleTile = self.makeTile('d')
-        singleTile.pack(side = tk.LEFT)
-        singleTile.bind("<Button-1>", self.handClicked)
-        singleTile = self.makeTile('g')
-        singleTile.pack(side = tk.LEFT)
-        singleTile.bind("<Button-1>", self.handClicked)
+            self.hand.append(singleTile)
 
         self.makeBoardGrid()
         buttonFrame.place(relx = .55, rely = 1, anchor = tk.SW)
@@ -208,32 +209,59 @@ class Gui:
 
         #Start the GUI
         self.window.mainloop()
-        print 'doItAll'
+        print 'start finished'
+
+    
+    def drawTileGrid(self):
+        tileDict = {
+            '3l': self.tripLetterTileImg,
+            '2l': self.dubLetterTileImg,
+            '3w': self.tripWordTileImg,
+            '2w': self.dubWordTileImg,
+            'c' : self.centerTileImg,
+            'x' : self.tileImg
+        }
+        
+        for row in range(15):
+            for col in range(15):
+                if self.tileGrid[row][col].value == '':
+                    tileBack = tileDict[self.tileGrid[row][col].value]
+                else:
+                    tileBack = self.tileImg
+                self.grid[row][col].config(text = self.tileGrid[row][col].value, image = tileBack)
+                
+    def drawHandTiles(self):
+        for tile in self.tileHand:
+            self.hand.config(text = tile.value)
             
+    def drawScores(self):
+        player = 1
+        for score in self.scores:
+            textString = 'Player ' + player + ': ' + score
+            scoreLabels.config(text = textString)
+            player = player + 1
             
 
-
-
-
-#tileFrame = tk.LabelFrame(window, height = 38, width = 38, bg = "brown")
-#letterLbl = tk.Label(tileFrame, text = "  A  ", font = helv16, bg = "brown")
-#pointsLbl = tk.Label(tileFrame, text = "        10", font = helv4, bg = "brown")
-#letterLbl.grid(row = 0, column = 0)
-#pointsLbl.grid(row = 1, column = 1)
-#letterLbl.pack()
-#pointsLbl.pack()
-
-
-#Placing widgets on the window.
-# panel.pack(side = "left", fill = "none", expand = "no")
-# board.grid(row = 0, column = 0)
-# handFrame.grid(row = 0, column = 2)
-
+    def refresh(self, board, hand, scores):
+        self.tileGrid = board
+        self.drawTileGrid()#done
+        
+        self.tileHand = hand
+        self.drawHandTiles()#done
+        
+        self.scores   = scores
+        self.drawScores()#done
+        
+        #reset everything for this turn
+        self.currPlacedTiles = []
+        self.lastPlacedTile = ''
+        self.direction = ''
+        self.firstTilePlaced = []
 
 #main for testing
 def main():
     player1Screen = Gui()
-    player1Screen.doItAll()
+    player1Screen.start()
 
 
 if __name__ == '__main__':
