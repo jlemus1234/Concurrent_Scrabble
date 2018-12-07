@@ -19,7 +19,7 @@ from middle_for_game import send_message
 class Player:
     def __init__(self, name, PID):
 	self.board = Board()
-        self.score = 0
+        self.scores = [0,0,0,0]
         self.name  = name
         self.tiles = []
         self.erlangPID = PID
