@@ -8,7 +8,6 @@
 
 """ Purpose: This module holds the implementation of the class Player"""
 
-#from board import Board
 from board import Board
 from tile import Tile
 import threading
@@ -19,7 +18,6 @@ from middle_for_game import send_message
 
 class Player:
     def __init__(self, name, PID):
-#        self.board = board.Board()
 	self.board = Board()
         self.score = 0
         self.name  = name
@@ -29,12 +27,12 @@ class Player:
         self.lock = threading.RLock()
 
     def setGUI(self, GUI):
-        with self.lock():
+        with self.lock:
             self.gui = GUI
 
 
     def made_move(self, tile_ray, direction, start_pos, used_tiles):
-        with self.lock():
+        with self.lock:
             start_index = start_pos[0] # if direction = 'd'
             if direction == 'r':
                 start_index = start_pos[1]
@@ -56,13 +54,13 @@ class Player:
             self.gui.refresh(new_grid, self.tiles, self.scores)
 
     def refresh(tile_board, scores):
-        with self.lock():
+        with self.lock:
             self.board.set_board(tile_board)
             self.scores = scores
             self.gui.refresh(tile_board, self.tiles, scores)
 
     def get_new_tiles(old_tiles, new_tiles):
-        with self.lock():
+        with self.lock:
             for tile in old_tiles:
                 self.tiles.remove(tile)
             self.tiles.extend(new_tiles)
