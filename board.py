@@ -307,17 +307,15 @@ class Board:
     def print_board(self):
         with self.lock:
             for row in self.grid:
+                buffer = ""
                 for tile in row:
                     to_be_printed = "__"
                     if tile.value != '':
                         to_be_printed = "{} ".format(tile.value)
                     elif tile.multiplier[0] != 1:
                         to_be_printed = "{}{}".format(tile.multiplier[0],tile.multiplier[1])
-                    print(to_be_printed),
-        print(" ")
-
-                    #print(to_be_printed,end=" ")
-                #print("",end="\n")
+                    buffer = buffer + to_be_printed + " "
+                print(buffer)
 
     def starting_grid(self):
         grid = [[Tile() for i in range(0,15)] for j in range(0,15)]

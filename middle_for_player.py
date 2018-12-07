@@ -57,7 +57,8 @@ def register_handler(dest):
 # need to add more funcitons
 def handler(message):
     # getting rid of PID of destination
-    message = message[1:]
+    print("inside middle_for_player handler")
+    print("this is the message: {}".format(message))
     message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,
@@ -69,6 +70,7 @@ def handler(message):
 
 def send_message(dest_pid, message):
     global PID_my, PID_server
+    print("Sending message from middle_for_player")
     call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
     print("Sent message from m_f_p")
     #cast(PID_server, message) # does send to the game server, but not through gen server (unhandled)
@@ -80,7 +82,7 @@ def split_message_player_side(message):
     scores      = message[1]
     old_tiles   = message[2]
     new_tiles   = message[3]
-    return status, board, scores, old_tiles
+    return board, scores, old_tiles, new_tiles
 #new_tiles
 
 def refresh_func(message):
@@ -89,7 +91,7 @@ def refresh_func(message):
     global player
     tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
 
-    player.refresh(tile_board, score)
+    player.refresh(tile_board, scores)
 
 def new_tiles_func(message):
     board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
