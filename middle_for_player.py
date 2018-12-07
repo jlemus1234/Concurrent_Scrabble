@@ -10,8 +10,8 @@ import threading
 
 global player
 global gui
-global PID_my # python instance's pid
-global PID_server # pid of erlport instance that launched this
+global PID_my # python instance's parent pid
+global PID_server # pid of game server
 
 
 def start(my_Pid, server_Pid):
@@ -22,7 +22,9 @@ def start(my_Pid, server_Pid):
     gameThread = threading.Thread(target = start_gui)
     gameThread.start()
     # send start message
-    send_message((PID_my, "new player"))
+    #send_message((PID_server, "new player"))
+    send_message(PID_server, (self(), "new player"))
+    #cast(PID
     print("calling player start")
 
 
@@ -65,9 +67,12 @@ def handler(message):
     }
     switcher[message_type](message[1:])
 
-def send_message(message):
+def send_message(dest_pid, message):
     global PID_my, PID_server
-    cast(PID_my, (PID_server, PID_my, message))
+    call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
+    print("Sent message from m_f_p")
+    #cast(PID_server, message) # does send to the game server, but not through gen server (unhandled)
+    #cast(PID_my, (PID_server, PID_my, message)) #original
 
 
 def split_message_player_side(message):

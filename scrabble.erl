@@ -11,7 +11,8 @@
 % imports
 %%---------------
 %% client
--export([join_game/1, send_messages/1, send_messages/2, get_server_messages/1, printMoveDump/1]).
+%send_messages/1
+-export([join_game/1, send_messages/2, get_server_messages/1, printMoveDump/1]).
 
 %% External exports
 -export([start_link/0, stop/0]).
@@ -189,7 +190,7 @@ join_game(NodeName) ->
 	GameServer = {scrabble, NodeName},
 %% Set up the python message handler
 	python:call(Pypid, middle_for_player, register_handler, [self()]),
-	python:call(Pypid, middle_for_player, start, [self(), NodeName]),
+	python:call(Pypid, middle_for_player, start, [self(), GameServer]),
 %% Listen to client
 	get_client_messages(GameServer, Pypid),
 	io:format("~s~n", ["finished gmTest"]).
@@ -201,7 +202,8 @@ get_client_messages(GameServer, Pypid) ->
 		Something ->
 			io:format("~s~n", ["got something"]),
 			io:format("~p~n", [Something]),
-			gen_server:cast(GameServer, message)
+			%gen_server:cast(GameServer, message)
+			gen_server:cast(GameServer, Something)
 	end,
 	io:format("~s~n", ["fin looped"]),
 	%python:cast(Pypid, update), % This would be being sent from another erlang process
@@ -216,21 +218,25 @@ get_server_messages(Pypid) ->
 	end,
 	get_server_messages(Pypid).
 
-
 %% might be useful for processing input
 %% Send your shit to this function
 
-send_messages(ServerPID) ->
-	io:format("~w~n", [something]),
-	io:format("~s~n", [ServerPID]),
-	1.
+send_messages(PID, Message) ->
+	io:format("~s~n", ["Trying to send message"]),
+	gen_server:cast(PID, Message),
+	sent.
+%	io:format("~s~n", [ServerPID]),
+%	1.
 
 
+%send_messages(Anything) ->
+%	io:format("~w~n", ["trying to send with 1 argument"]).
 
-send_messages(ServerPID, MoveDump) ->
-	io:format("~w~n", [something2]),
-	io:format("~p~n", [MoveDump]),
-	printMoveDump(MoveDump).
+
+%send_messages(ServerPID, MoveDump) ->
+%	io:format("~w~n", [something2]),
+%	io:format("~p~n", [MoveDump]),
+%	printMoveDump(MoveDump).
 
 
 printMoveDump({TileArr, Dir, Start_pos}) ->

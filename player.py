@@ -69,6 +69,7 @@ class Player:
     def send_to_server(word, direction, start_pos, used_tiles):
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
+	## What is this send function?
         send(("move", word_tuple, direction, start_pos, used_tiles))
 
 

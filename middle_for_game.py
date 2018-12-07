@@ -29,7 +29,8 @@ def start(Pid):
 
 def send_message(player_number, message):
     global PID_my, PID_players
-    cast(PID_my, (PID_players[player_number]) + message)
+#    cast(PID_my, (PID_players[player_number]) + message)
+    cast(PID_my, (PID_players[player_number], message))
 
 
 # def send_message(pid_list, my_pid ,player_number, data):
@@ -47,6 +48,8 @@ def register_handler(dest):
 
 # need to add more funcitons
 def handler(message):
+    print("In python handler")
+    print(message)
     # getting rid of PID of destination
     message = message[1:]
     message_type = message[1]
