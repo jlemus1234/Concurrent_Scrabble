@@ -4,7 +4,7 @@
 from player import Player
 from GUI import Gui
 from erlport.erlterms import Atom
-from erlport.erlang import set_message_handler, call, cast
+from erlport.erlang import set_message_handler, call, cast, self as selfPID
 from tile import Tile
 import threading
 
@@ -23,7 +23,7 @@ def start(my_Pid, server_Pid):
     gameThread.start()
     # send start message
     #send_message((PID_server, "new player"))
-    send_message(PID_server, (self(), "new player"))
+    send_message(PID_server, (selfPID(), "new player"))
     #cast(PID
     print("calling player start")
 

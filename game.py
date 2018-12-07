@@ -42,7 +42,7 @@ class Game:
                 self.send_to_one_player(player_number, False, self.board.get_board(), self.scores, [], [])
                 return
 
-        with lock:
+        with self.lock:
             valid, new_board, score = board.update(starting_positon, word, direction)
             if not valid:
                 self.send_to_one_player("refresh", player_number, False, new_board, self.scores, [], [])
@@ -67,8 +67,8 @@ class Game:
 
 
     def new_player(self, player_number):
-        with lock:
-            scores.append(0)
+        with self.lock:
+            self.scores.append(0)
             if player_number == 3:
                 self.start_game()
 

@@ -51,7 +51,9 @@ def handler(message):
     print("In python handler")
     print(message)
     # getting rid of PID of destination
-    message = message[1:]
+    #message = message[1:]
+    #message_type = message[1]
+
     message_type = message[1]
     switcher = {
         "new player":add_player,
