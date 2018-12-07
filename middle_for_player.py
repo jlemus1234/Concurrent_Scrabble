@@ -54,6 +54,8 @@ def register_handler(dest):
 
 # need to add more funcitons
 def handler(message):
+    # getting rid of PID of destination
+    message = message[1:]
     message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,
@@ -64,8 +66,8 @@ def handler(message):
     switcher[message_type](message[1:])
 
 def send_message(message):
-    global PID_my
-    cast(Pid_my, message)
+    global PID_my, PID_server
+    cast(Pid_my, (PID_server) + (PID_my) + message)
 
 
 
