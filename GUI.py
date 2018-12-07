@@ -99,7 +99,7 @@ class Gui:
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
-        player.made_move(self.tileGrid[7], 'r', (7,7), self.currPlacedTiles)
+        #player.made_move(self.tileGrid[7], 'r', (7,7), self.currPlacedTiles)
         print 'You clicked Submit'
 
     def clickExchange(self):
@@ -198,9 +198,6 @@ class Gui:
                 self.grid[x][y] = currTile
 
 
-        for x in range(15):
-            for y in range(15):
-                print self.grid[x][y]
 
                 #currTile.bind("<Button-1>", boardClicked)
     def start(self):
@@ -297,7 +294,9 @@ class Gui:
         self.lastPlacedTile = ''
         self.direction = ''
         self.firstTilePlaced = []
+        self.window.mainloop()
         self.window.quit()
+        self.window.mainloop()
 
 #main for testing
 def main():
@@ -310,7 +309,7 @@ def main():
         #player1Screen.drawScores(dummyScores)
         print 'calling player1Screen'
         player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
-        player1Screen.window.mainloop()
+        #player1Screen.window.mainloop()
         testHand  = string_to_tiles('turtler')
         dummyScores = [2, 3, 4, 5]
         player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
@@ -318,4 +317,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
