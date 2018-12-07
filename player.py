@@ -58,7 +58,7 @@ class Player:
             self.board.set_board(tile_board)
             self.scores = scores
             self.board.print_board()
-            # self.gui.refresh(tile_board, self.tiles, scores)
+            self.gui.refresh(tile_board, self.tiles, scores)
 
     def get_new_tiles(self, old_tiles, new_tiles):
         with self.lock:
@@ -68,7 +68,7 @@ class Player:
             for tile in self.tiles:
                 print(tile.to_tuple())
 
-            #self.gui.refresh(self.board.get_board(), self.tiles, self.scores)
+            self.gui.refresh(self.board.get_board(), self.tiles, self.scores)
 
     def send_to_server(self, word, direction, start_pos, used_tiles):
         word_tuple = [letter.to_tuple() for letter in word]
