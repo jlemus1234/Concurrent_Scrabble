@@ -94,14 +94,18 @@ handle_call({list}, _From, State) ->
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
 
-handle_cast({join, ClientPID, PlayerName}, {PyPid , Players}) ->
-	io:format("~s~n", ["Got a subscription"]),
-	NewPlayers = [{ClientPID, PlayerName} | Players],
+%handle_cast({join, ClientPID, PlayerName}, {PyPid , Players}) ->
+%	io:format("~s~n", ["Got a subscription"]),
+	%NewPlayers = [{ClientPID, PlayerName} | Players],
 	%python:cast(PyPid, {, ClientPID}),
-	python:cast(PyPid, "new player"),
+	%python:cast(PyPid, "new player"),
 	%PyPid ! ["new player" | ClientPID],
-	io:format("~s~n", ["Sent message"]),
-	{noreply, {PyPid, NewPlayers}};
+	%io:format("~s~n", ["Sent message"]),
+%	{noreply, {PyPid, NewPlayers}};
+
+handle_cast(Anything, State) ->
+	io:format("~s~n", ["Server received some cast"]);
+
 handle_cast({move, ClientPID}, State) ->
 	%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
 	{noreply, State};

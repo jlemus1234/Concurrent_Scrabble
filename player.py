@@ -20,7 +20,7 @@ class Player:
     def __init__(self, name, PID):
         self.board = board.Board()
         self.score = 0
-	    self.name = name
+        self.name = name
         self.tiles = []
         self.erlangPID = PID
         self.gui = None
@@ -37,7 +37,7 @@ class Player:
             if direction == 'r':
                 start_index = start_pos[1]
 
-            word = self.get_word(tile_ray, start_pos);
+            word = self.get_word(tile_ray, start_index);
 
             valid, new_grid, new_score = self.board.update(start_pos, word, direction)
 
@@ -76,7 +76,7 @@ class Player:
         word = []
         front = start_pos
         # finds begining of word
-        while front >= 0 and front =< 14:
+        while (front >= 0 and front <= 14):
             if grid[front].is_blank():
                 break
             else:
@@ -87,7 +87,7 @@ class Player:
         back = start_pos + 1
 
         # finds end of word
-        while back >= 0 and back =< 14:
+        while back >= 0 and back <= 14:
             if grid[back].is_blank():
                 break
             else:
