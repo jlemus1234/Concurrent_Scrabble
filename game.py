@@ -15,7 +15,7 @@ class Game:
 
 #    def __init__(self):
 
-    def __init__(self, PID_players=[], PID_my):
+    def __init__(self, PID_players=[], PID_my=[]):
 
     	GAME_END = -1
         self.lock = threading.RLock()

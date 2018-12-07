@@ -20,30 +20,7 @@ class Bag:
     def __init__(self):
         """ Call initialize_bag to add the default 98 tiles to bag """
         self.bag = []
-        self.initialize_bag()
-        self.lock = threading.Lock()
-
-    def initialize_bag(self):
-        """ Add the default 98 tiles to bag """
-        for i in range(len(start_tiles)):
-            self.bag.append(Tile(start_tiles[i], start_id=i))
-        random.shuffle(self.bag)
-
-    def take_n_from_bag(self, n):
-        """ Remove tile from bag and returns it. Used for replenishing player
-            tile rack. """
-        arr = []
-        for i in range(n):
-            if len(self.bag) == 0:
-                break
-            arr.append(self.bag.pop())
-        return arr
-
-    def size_of_bag(self):
-        """ Return number of tiles left in bag"""
-        return len(self.bag)
-
-    start_tiles = (['a'] * 12 +
+	self.start_tiles = (['a'] * 12 +
                    ['b'] *  2 +
                    ['c'] *  2 +
                    ['d'] *  4 +
@@ -68,3 +45,28 @@ class Bag:
                    ['x'] *  1 +
                    ['y'] *  2 +
                    ['z'] *  1)
+        self.initialize_bag()
+        self.lock = threading.Lock()
+
+
+    def initialize_bag(self):
+        """ Add the default 98 tiles to bag """
+        for i in range(len(self.start_tiles)):
+            self.bag.append(Tile(self.start_tiles[i], start_id=i))
+        random.shuffle(self.bag)
+
+    def take_n_from_bag(self, n):
+        """ Remove tile from bag and returns it. Used for replenishing player
+            tile rack. """
+        arr = []
+        for i in range(n):
+            if len(self.bag) == 0:
+                break
+            arr.append(self.bag.pop())
+        return arr
+
+    def size_of_bag(self):
+        """ Return number of tiles left in bag"""
+        return len(self.bag)
+
+    
