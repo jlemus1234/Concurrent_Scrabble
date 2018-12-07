@@ -3,6 +3,7 @@ import tkFont
 from PIL import ImageTk, Image
 from player import Player
 from tile import Tile
+from board import Board
 #python 2.712
 
 class Gui:
@@ -28,30 +29,30 @@ class Gui:
 
     def __init__(self, grid = '', hand = '', scores = ''):
         self.grid = [
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-        ]
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','',''],
+            ['','','','','','','','','','','','','','','']
+        ]        
 
         self.tileGrid = []
-
+        
         self.hand = []
         self.tileHand = []
         self.scores = [0, 0, 0, 0]
         self.scoreLabels = [0, 0, 0, 0]
-        self.currLetter = ' '
+        self.currLetter = ''
         self.currPlacedTiles = []
 
         self.lastPlacedTile = ''
@@ -61,7 +62,7 @@ class Gui:
         self.window = tk.Tk()
         self.handFrame = tk.LabelFrame(self.window, padx = 5)
         # Fonts for tiles
-        self.helv16 = tkFont.Font(self.window, family='Helvetica', size=15,
+        self.helv16 = tkFont.Font(self.window, family='Helvetica', size=15, 
             weight=tkFont.BOLD)
         self.helv8 = tkFont.Font(self.window, family='Helvetica', size=8)
 
@@ -80,7 +81,7 @@ class Gui:
             Image.open("./assets/center.png"))
 
     def setPlayer(self, Player):
-        self.player = Player
+	self.player = Player
 
     #Button Pressed Funcs ===========-=-=-======================================-=-=-=-=-=-=-=-=-=-
     #Needs to send:
@@ -105,10 +106,10 @@ class Gui:
         if event.widget.config()['text'][4] == '':
             event.widget.config(text = self.currLetter, image = self.tileImg)
             currLetter = ''
-
+        
         #code to extract mouse click x,y. Unneeded
         #print 'mouse click  on board x, y = ', event.x, event.y
-
+        
         #code to extract x,y
         for x in range(15):
             for y in range(15):
@@ -118,10 +119,10 @@ class Gui:
     def boardRightClicked(self, event):
         print 'we in boardRightClicked'
         clickedLetter = event.widget.config()['text'][4]
-        if clickedLetter != ' ':
+        if clickedLetter != '':
             self.addToHand(clickedLetter)
-            event.widget.config(text = ' ', image = self.tileImg)
-            self.currLetter = ' '
+            event.widget.config(text = '', image = self.tileImg)
+            self.currLetter = ''
 
     # Clicking on a tile in hand
     def handClicked(self, event):
@@ -155,8 +156,8 @@ class Gui:
 
         for x in range(15):
             for y in range(15):
-                currTile = tk.Label(self.window, image = tileDict[self.initGrid[x][y]],
-                    text = ' ', font = self.helv16, compound = tk.CENTER)
+                currTile = tk.Label(self.window, image = tileDict[self.initGrid[x][y]], 
+                    text = '', font = self.helv16, compound = tk.CENTER)
                 currTile.bind("<Button-1>", self.boardClicked)
                 currTile.bind("<Button-3>", self.boardRightClicked)
                 #currTile.bind("<Button-1>", lambda event: lamClick(event, currLetter))
@@ -167,7 +168,7 @@ class Gui:
         for x in range(15):
             for y in range(15):
                 print self.grid[x][y]
-
+                
                 #currTile.bind("<Button-1>", boardClicked)
     def start(self):
         #Main self.window of an application
@@ -181,14 +182,14 @@ class Gui:
             myScore = tk.Label(scoreFrame, text = '')
             myScore.pack()
             score = myScore
-
+            
         #Submit Buttons - Submit, Exchange, Pass
         buttonFrame = tk.Frame(self.window)
-        submitBtn = tk.Button(buttonFrame, text = "Submit",
+        submitBtn = tk.Button(buttonFrame, text = "Submit", 
             command = self.clickSubmit)
-        exchangeBtn = tk.Button(buttonFrame, text = "Exhange",
+        exchangeBtn = tk.Button(buttonFrame, text = "Exhange", 
             command = self.clickExchange)
-        passBtn = tk.Button(buttonFrame, text = "Pass",
+        passBtn = tk.Button(buttonFrame, text = "Pass", 
             command = self.clickPass)
         submitBtn.pack(side = tk.LEFT)
         exchangeBtn.pack(side = tk.LEFT)
@@ -197,7 +198,7 @@ class Gui:
         #Tiles in hand
         for i in range(7):
             singleTile = self.makeTile('')
-            singleTile.bind("<Button-1>", self.handClicked)
+            singleTile.bind("<Button-1>", self.handClicked)    
             singleTile.pack(side = tk.LEFT)
             self.hand.append(singleTile)
 
@@ -211,7 +212,7 @@ class Gui:
         self.window.mainloop()
         print 'start finished'
 
-
+    
     def drawTileGrid(self):
         tileDict = {
             '3l': self.tripLetterTileImg,
@@ -221,7 +222,7 @@ class Gui:
             'c' : self.centerTileImg,
             'x' : self.tileImg
         }
-
+        
         for row in range(15):
             for col in range(15):
                 if self.tileGrid[row][col].value == '':
@@ -229,29 +230,29 @@ class Gui:
                 else:
                     tileBack = self.tileImg
                 self.grid[row][col].config(text = self.tileGrid[row][col].value, image = tileBack)
-
+                
     def drawHandTiles(self):
         for tile in self.tileHand:
             self.hand.config(text = tile.value)
-
+            
     def drawScores(self):
         player = 1
         for score in self.scores:
             textString = 'Player ' + player + ': ' + score
             scoreLabels.config(text = textString)
             player = player + 1
-
+            
 
     def refresh(self, board, hand, scores):
         self.tileGrid = board
         self.drawTileGrid()#done
-
+        
         self.tileHand = hand
         self.drawHandTiles()#done
-
+        
         self.scores   = scores
         self.drawScores()#done
-
+        
         #reset everything for this turn
         self.currPlacedTiles = []
         self.lastPlacedTile = ''
@@ -262,6 +263,12 @@ class Gui:
 def main():
     player1Screen = Gui()
     player1Screen.start()
+    testBoard = Board()
+    testHand  = tile.string_to_tiles('rabbitr')
+    dummyScores = [100, 12, 34, 56]
+    
+    #drawScores(dummyScores)
+    player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
 
 
 if __name__ == '__main__':
