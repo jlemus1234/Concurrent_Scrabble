@@ -214,7 +214,7 @@ class Gui:
 
         #Start the GUI
         print 'before mainloop'
-        #self.window.mainloop()
+        self.window.mainloop()
         print 'after mainloop'
 
 
