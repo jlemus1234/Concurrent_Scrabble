@@ -43,6 +43,7 @@ def register_handler(dest):
 
 # need to add more funcitons
 def handler(message):
+    print(message)
     message_type = message[0]
     switcher = {
         "new player":add_player,
