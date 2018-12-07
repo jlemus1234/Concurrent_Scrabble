@@ -58,7 +58,7 @@ def register_handler(dest):
 def handler(message):
     # getting rid of PID of destination
     print("inside middle_for_player handler")
-    print("This is the original message: {}".format(message))
+    print("this is the message: {}".format(message))
     message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,
@@ -66,8 +66,6 @@ def handler(message):
         # "report_winner":winner,
         # "end":end_game
     }
-    new_message = message[1:]
-    print("this is the new message: {}".format(new_message))
     switcher[message_type](message[1:])
 
 def send_message(dest_pid, message):
@@ -93,7 +91,7 @@ def refresh_func(message):
     global player
     tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
 
-    player.refresh(tile_board, score)
+    player.refresh(tile_board, scores)
 
 def new_tiles_func(message):
     board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
