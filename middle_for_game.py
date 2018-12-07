@@ -29,8 +29,9 @@ def start(Pid):
 
 def send_message(player_number, message):
     global PID_my, PID_players
-#    cast(PID_my, (PID_players[player_number]) + message)
-    cast(PID_my, (PID_players[player_number], message))
+    dest = PID_players[player_number]
+    call(Atom("scrabble"), Atom("send_to_pyclient"), [dest, message])
+    #cast(PID_my, (PID_players[player_number], message))
 
 
 # def send_message(pid_list, my_pid ,player_number, data):

@@ -12,7 +12,7 @@
 %%---------------
 %% client
 %send_messages/1
--export([join_game/1, send_messages/2, get_server_messages/1, printMoveDump/1]).
+-export([join_game/1, send_messages/2, get_server_messages/1, printMoveDump/1, send_to_pyclient/2]).
 
 %% External exports
 -export([start_link/0, stop/0]).
@@ -228,7 +228,10 @@ send_messages(PID, Message) ->
 %	io:format("~s~n", [ServerPID]),
 %	1.
 
-%send_to_pyclient(
+send_to_pyclient(PyPid, Message) ->
+	io:format("~s~n", ["Trying to send message to pyclient"]),
+	python:cast(PyPid, Message).
+		
 
 %send_messages(Anything) ->
 %	io:format("~w~n", ["trying to send with 1 argument"]).
