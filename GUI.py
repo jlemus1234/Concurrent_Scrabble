@@ -1,4 +1,4 @@
-import mttkinter as Tk
+import mttkinter as tk
 import tkFont
 from PIL import ImageTk, Image
 
