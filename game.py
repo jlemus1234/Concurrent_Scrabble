@@ -76,7 +76,8 @@ class Game:
     def start_game(self):
         for i in range(4):
             tiles = self.bag.take_n_from_bag(7)
-            self.send_to_one_player(i, False, self.board.get_board(), [0,0,0,0], tiles,[])
+            self.send_to_one_player("tiles", i, True, [[]], [], tiles,tiles)
+            self.send_to_one_player("refresh", i, True, self.board.get_board(), [0,0,0,0],[],[])
 
     #
     # def send_message(pid_list, my_pid ,player_number, data):
