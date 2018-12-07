@@ -251,7 +251,6 @@ class Gui:
         # move loop start to main, in final version the caller will need
         # to start loop after calling .start()
         thread = threading.Thread(target = self.window.mainloop())
-        thread.daemon = True
         thread.start()
         print 'after mainloop'
 
@@ -307,7 +306,6 @@ class Gui:
         self.firstTilePlaced = []
         self.window.quit()
         thread = threading.Thread(target = self.window.mainloop())
-        thread.daemon = True
         thread.start()
 
 #main for testing
