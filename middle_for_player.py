@@ -21,7 +21,8 @@ def start(my_Pid, server_Pid):
 
     gameThread = threading.Thread(target = start_gui)
     gameThread.start()
-
+    # send start message
+    send_message((Pid_my))
     print("calling player start")
 
 
@@ -63,8 +64,7 @@ def handler(message):
     switcher[message_type](message[1:])
 
 def send_message(message):
-    global PID_players, PID_my
-    message = (Pid_to_send + data)
+    global PID_my
     cast(Pid_my, message)
 
 
