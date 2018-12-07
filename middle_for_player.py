@@ -20,8 +20,8 @@ def start(my_Pid, server_Pid):
     PID_server = server_Pid
 
 
-    start_lock = [threading.Semaphore(0)]
-    gameThread = threading.Thread(target = start_gui, args = (start_lock))
+    # start_lock = [threading.Semaphore(0)]
+    gameThread = threading.Thread(target = start_gui)
     gameThread.start()
     # send start message
     #send_message((PID_server, "new player"))
@@ -31,12 +31,12 @@ def start(my_Pid, server_Pid):
     print("calling player start")
 
 
-def start_gui(start_lock):
+def start_gui():
     global player, gui
     player = Player("Player",PID_server)
     gui = Gui()
     player.setGUI(gui)
-    start_lock[0].release()
+    # start_lock[0].release()
     gui.setPlayer(player)
     # something like this
     gui.start()
