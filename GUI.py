@@ -74,7 +74,7 @@ class Gui:
         self.direction = ''
         self.firstTilePlaced = ''
 
-        self.window = tk.Tk()
+        self.window = Tk()
         self.handFrame = tk.LabelFrame(self.window, padx = 5)
         # Fonts for tiles
         self.helv16 = tkFont.Font(self.window, family='Helvetica', size=15,
