@@ -3,6 +3,7 @@ import tkFont
 from PIL import ImageTk, Image
 from player import Player
 from tile import Tile
+from tile import string_to_tiles
 from board import Board
 #python 2.712
 
@@ -51,7 +52,7 @@ class Gui:
         self.hand = []
         self.tileHand = []
         self.scores = [0, 0, 0, 0]
-        self.scoreLabels = [0, 0, 0, 0]
+        self.scoreLabels = []
         self.currLetter = ''
         self.currPlacedTiles = []
 
@@ -85,12 +86,15 @@ class Gui:
 
     #Button Pressed Funcs ===========-=-=-======================================-=-=-=-=-=-=-=-=-=-
     #Needs to send:
-    #     char_ray  = entire row or column being played TILES
+    #     tile_ray  = entire row or column being played TILES
     #     direction = 'd' or 'r'
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
+        player.make_move(tile_ray = self.tileGrid[7], direction = 'r', 
+                         start = (0,0), usedTiles = string_to_tiles('rabb'))
         print 'You clicked Submit'
+        self.window.quit()
 
     def clickExchange(self):
         print 'You clicked Exchange'
@@ -129,7 +133,7 @@ class Gui:
         print 'mouse click  on handTile x, y = ', event.x, event.y
         for tile in self.hand:
             if tile.value == event.widget.config()['text'][4]:
-                list.remove(tile)
+                self.hand.remove(tile)
                 self.currLetter = tile
                 print 'letter was: ', self.currLetter.value
                 event.widget.config(text = '')
@@ -178,10 +182,10 @@ class Gui:
 
         #Score Labels
         scoreFrame = tk.LabelFrame(self.window, text="Scores")
-        for score in self.scoreLabels:
-            myScore = tk.Label(scoreFrame, text = '')
-            myScore.pack()
-            score = myScore
+        for score in self.scores:
+            scoreLabel = tk.Label(scoreFrame, text = '')
+            scoreLabel.pack()
+            self.scoreLabels.append(scoreLabel)
 
         #Submit Buttons - Submit, Exchange, Pass
         buttonFrame = tk.Frame(self.window)
@@ -209,8 +213,9 @@ class Gui:
 
 
         #Start the GUI
-        self.window.mainloop()
-        print 'start finished'
+        print 'before mainloop'
+        #self.window.mainloop()
+        print 'after mainloop'
 
 
     def drawTileGrid(self):
@@ -226,21 +231,25 @@ class Gui:
         for row in range(15):
             for col in range(15):
                 if self.tileGrid[row][col].value == '':
-                    tileBack = tileDict[self.tileGrid[row][col].value]
+                    tileBack = tileDict[self.initGrid[row][col]]
                 else:
                     tileBack = self.tileImg
                 self.grid[row][col].config(text = self.tileGrid[row][col].value, image = tileBack)
 
     def drawHandTiles(self):
+        i = 0
         for tile in self.tileHand:
-            self.hand.config(text = tile.value)
+            self.hand[i].config(text = tile.value)
+            i = i + 1
 
     def drawScores(self):
         player = 1
+        i = 0
         for score in self.scores:
-            textString = 'Player ' + player + ': ' + score
-            scoreLabels.config(text = textString)
+            textString = 'Player ' + str(player) + ': ' + str(score)
+            self.scoreLabels[i].config(text = textString)
             player = player + 1
+            i = i + 1
 
 
     def refresh(self, board, hand, scores):
@@ -264,11 +273,16 @@ def main():
     player1Screen = Gui()
     player1Screen.start()
     testBoard = Board()
-    testHand  = tile.string_to_tiles('rabbitr')
+    testHand  = string_to_tiles('rabbitr')
     dummyScores = [100, 12, 34, 56]
-
-    #drawScores(dummyScores)
-    player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
+    while True:
+        #player1Screen.drawScores(dummyScores)
+        print 'calling player1Screen'
+        player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
+        player1Screen.window.mainloop()
+        testHand  = string_to_tiles('turtler')
+        dummyScores = [2, 3, 4, 5]
+        player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
 
 
 if __name__ == '__main__':
