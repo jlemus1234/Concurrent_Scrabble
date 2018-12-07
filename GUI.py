@@ -29,6 +29,11 @@ class Gui:
         ]
 
     def __init__(self, grid = '', hand = '', scores = ''):
+        
+        
+        from player import Player
+        
+        # Labels of the board for GUI
         self.grid = [
             ['','','','','','','','','','','','','','',''],
             ['','','','','','','','','','','','','','',''],
@@ -47,14 +52,17 @@ class Gui:
             ['','','','','','','','','','','','','','','']
         ]
 
+        # Tile representation of the GUI board
         self.tileGrid = []
 
         self.hand = []
         self.tileHand = []
         self.scores = [0, 0, 0, 0]
         self.scoreLabels = []
-        self.currLetter = ''
+        self.currLetterChar = ''
+        self.currLetterTile = ''
         self.currPlacedTiles = []
+        self.currPlacedXYs = []
 
         self.lastPlacedTile = ''
         self.direction = ''
@@ -91,10 +99,8 @@ class Gui:
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
-        player.make_move(tile_ray = self.tileGrid[7], direction = 'r', 
-                         start = (0,0), usedTiles = string_to_tiles('rabb'))
+        player.made_move(self.tileGrid[7], 'r', (7,7), self.currPlacedTiles)
         print 'You clicked Submit'
-        self.window.quit()
 
     def clickExchange(self):
         print 'You clicked Exchange'
@@ -107,18 +113,46 @@ class Gui:
 
     # Clicking on the board
     def boardClicked(self, event):
-        if event.widget.config()['text'][4] == '':
-            event.widget.config(text = self.currLetter, image = self.tileImg)
-            currLetter = ''
+        validMove = True
+        #find current x,y
+        row = 0
+        col = 0
+        for row in range(15):
+            for col in range(15):
+                if self.grid[row][col] == event.widget:
+                    break;
+        if len(self.currPlacedXYs) == 1:
+            print self.currPlacedXYs[0]
+            if self.currPlacedXYs[0][0] == row:
+                self.direction = 'r'
+            elif self.currPlacedXYs[0][1] == col:
+                self.direction = 'd'
+        elif len(self.currPlacedXYs) > 1:
+            print self.currPlacedXYs[0]
+            if self.currPlacedXYs[0][0] == row and self.direction == 'r':
+                validMove = False
+            elif self.currPlacedXYs[0][1] == col and self.direction == 'd':
+                validMove = False
+        
+        #below only executed when placing in proper spot
+        if validMove == True:
+            print 'validMove = True'
+            if event.widget.config()['text'][4] == '':
+                event.widget.config(text = self.currLetterTile.value, image = self.tileImg)
+                #self.currLetterChar = ''
 
-        #code to extract mouse click x,y. Unneeded
-        #print 'mouse click  on board x, y = ', event.x, event.y
+            #code to extract mouse click x,y. Unneeded
+            #print 'mouse click  on board x, y = ', event.x, event.y
 
-        #code to extract x,y
-        for x in range(15):
-            for y in range(15):
-                if self.grid[x][y] == event.widget:
-                    print '(x, y) = (', x, ',', y, ')'
+            #code to extract row, col
+            for row in range(15):
+                for col in range(15):
+                    if self.grid[row][col] == event.widget:
+                        print '(row, col) = (', row, ',', col, ')'
+                        self.currPlacedTiles.append(self.currLetterTile)
+                        self.currPlacedXYs.append([row ,col])
+                        self.tileGrid[row][col] = self.currLetterTile
+                        self.currLetterTile = ''
 
     def boardRightClicked(self, event):
         print 'we in boardRightClicked'
@@ -126,27 +160,22 @@ class Gui:
         if clickedLetter != '':
             self.addToHand(clickedLetter)
             event.widget.config(text = '', image = self.tileImg)
-            self.currLetter = ''
+            self.currLetterChar = ''
 
     # Clicking on a tile in hand
     def handClicked(self, event):
-        print 'mouse click  on handTile x, y = ', event.x, event.y
-        for tile in self.hand:
-            if tile.value == event.widget.config()['text'][4]:
-                self.hand.remove(tile)
-                self.currLetter = tile
-                print 'letter was: ', self.currLetter.value
+        for i in range(len(self.hand)):
+            if self.tileHand[i].value == event.widget.config()['text'][4]:
+                self.currLetterTile = self.tileHand[i]
+                print 'letter was: ', self.currLetterTile.value
                 event.widget.config(text = '')
+                self.tileHand.pop(i)
                 break
 
     # Helper func for making tile labels
     def makeTile(self, letter):
         return tk.Label(self.handFrame, image = self.tileImg, text = letter,
             font = self.helv16, compound = tk.CENTER, relief = tk.FLAT)
-
-    def lamClick(self, event = None, letter = 's'):
-        print 'mouse click  on board x, y = ', event.x, event.y
-        #event.widget.config(text = currLetter, image = tileImg)
 
     def makeBoardGrid(self):
         tileDict = {
@@ -211,10 +240,11 @@ class Gui:
         self.handFrame.place(relx = .60, rely = .5,)
         scoreFrame.place(relx = 1, rely = 0, anchor = tk.NE)
 
-
         #Start the GUI
         print 'before mainloop'
-        self.window.mainloop()
+        # move loop start to main, in final version the caller will need
+        # to start loop after calling .start()
+        #self.window.mainloop()
         print 'after mainloop'
 
 
@@ -267,6 +297,7 @@ class Gui:
         self.lastPlacedTile = ''
         self.direction = ''
         self.firstTilePlaced = []
+        self.window.quit()
 
 #main for testing
 def main():
@@ -288,5 +319,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-from player import Player
