@@ -61,7 +61,7 @@ stop() ->
 %%          {stop, Reason}
 %%--------------------------------------------------------------------
 init([]) ->
-    process_flag(trap_exit, true),
+    %process_flag(trap_exit, true),
     io:format("~s~n", ["calling init"]),
     {ok, Pypid} = python:start([{python_path, "."}]), % Create python node
     python:call(Pypid, middle_for_game, register_handler, [self()]),
@@ -95,7 +95,7 @@ handle_call({list}, _From, State) ->
 
 handle_cast(Anything, PyPid) ->
 	io:format("~s~n", ["Server received some cast"]),
-	
+	python:cast(PyPid, Anything),
 	{noreply, PyPid};
 handle_cast({move, ClientPID}, State) ->
 	%% CALL THE GAME MODULE HERE TO DETERMINE THE NEW GAME STATE
