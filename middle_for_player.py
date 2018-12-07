@@ -59,7 +59,6 @@ def handler(message):
     # getting rid of PID of destination
     print("inside middle_for_player handler")
     print("This is the original message: {}".format(message))
-    message = message[1:]
     message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,
@@ -69,7 +68,7 @@ def handler(message):
     }
     new_message = message[1:]
     print("this is the new message: {}".format(new_message))
-    switcher[message_type](new_message)
+    switcher[message_type](message[1:])
 
 def send_message(dest_pid, message):
     global PID_my, PID_server
