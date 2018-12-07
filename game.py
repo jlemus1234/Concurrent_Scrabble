@@ -70,7 +70,7 @@ class Game:
         with self.lock:
             self.scores.append(0)
             print("This is the player number:{}".format(player_number))
-            if player_number == 4:
+            if player_number == 3:
                 self.start_game()
 
     # to be called after the 4th player has entered
