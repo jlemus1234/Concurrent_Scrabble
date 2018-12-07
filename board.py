@@ -6,6 +6,7 @@ from tile import string_to_tiles
 from tile import tiles_to_string
 import twl
 
+
 class Board:
 
     def __init__(self, grid=''):
@@ -277,6 +278,13 @@ class Board:
     #         str_word += letter.value
     #     return score, twl.check(str_word)
 
+    # untested function
+    def to_tuple(self):
+        with self.lock:
+            tuple_board = [[tile.to_tuple() for tile in row] for row in self.board]
+            return tuple_board
+
+
     def inbounds(self, i, j=1):
         return not (i < 0 or i > 14 or j < 0 or j > 14)
 
@@ -305,8 +313,11 @@ class Board:
                         to_be_printed = "{} ".format(tile.value)
                     elif tile.multiplier[0] != 1:
                         to_be_printed = "{}{}".format(tile.multiplier[0],tile.multiplier[1])
-                    print(to_be_printed,end=" ")
-                print("",end="\n")
+                    print(to_be_printed),
+		print(" ")
+
+                    #print(to_be_printed,end=" ")
+                #print("",end="\n")
 
     def starting_grid(self):
         grid = [[Tile() for i in range(0,15)] for j in range(0,15)]
