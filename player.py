@@ -20,7 +20,7 @@ class Player:
     def __init__(self, name, PID):
         self.board = board.Board()
         self.score = 0
-	    self.name = name
+        self.name  = name
         self.tiles = []
         self.erlangPID = PID
         self.gui = None

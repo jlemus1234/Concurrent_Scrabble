@@ -314,7 +314,7 @@ class Board:
                     elif tile.multiplier[0] != 1:
                         to_be_printed = "{}{}".format(tile.multiplier[0],tile.multiplier[1])
                     print(to_be_printed),
-		print(" ")
+        print(" ")
 
                     #print(to_be_printed,end=" ")
                 #print("",end="\n")

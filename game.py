@@ -17,16 +17,16 @@ class Game:
 #    def __init__(self):
 
     def __init__(self, PID_players, PID_my):
-	GAME_END = -1
+    GAME_END = -1
         self.lock = threading.RLock()
         self.board = Board()
         # self.erlangPID = Pid
         self.scores = []
         self.bag = Bag()
         self.first_move = True
-    	# adding so board can use imported send_message
-    	self.PID_players = PID_players
-    	self.PID_my = PID_my
+        # adding so board can use imported send_message
+        self.PID_players = PID_players
+        self.PID_my = PID_my
 
 
 
@@ -80,9 +80,9 @@ class Game:
 
     #
     # def send_message(pid_list, my_pid ,player_number, data):
-    # 	Pid_to_send = pid_list[player_number]
-    # 	message = (Pid_to_send + data)
-    # 	cast(my_pid, message)
+    #     Pid_to_send = pid_list[player_number]
+    #     message = (Pid_to_send + data)
+    #     cast(my_pid, message)
 
 
 
