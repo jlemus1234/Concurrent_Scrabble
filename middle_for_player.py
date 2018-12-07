@@ -21,7 +21,8 @@ def start(my_Pid, server_Pid):
 
     gameThread = threading.Thread(target = start_gui)
     gameThread.start()
-
+    # send start message
+    send_message(("new_player", Pid_my))
     print("calling player start")
 
 
@@ -34,7 +35,7 @@ def start_gui():
     # something like this
     gui.doItAll()
 
-    ## This creates the game loop that the game doesn't return from. 
+    ## This creates the game loop that the game doesn't return from.
     ## must launch this from a different thread.
 
 
@@ -55,17 +56,16 @@ def register_handler(dest):
 def handler(message):
     message_type = message[0]
     switcher = {
-        "success":success_func,
+        "tiles":new_tiles_func,
         "refresh":refresh_func
         # "report_winner":winner,
         # "end":end_game
     }
     switcher[message_type](message[1:])
 
-def send_message(data):
-    global PID_players, PID_my
-    message = (Pid_to_send + data)
-    cast(PID_server, message)
+def send_message(message):
+    global PID_my
+    cast(Pid_my, message)
 
 
 
@@ -84,16 +84,21 @@ def refresh_func(message):
     global player
     tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
 
-    player.refresh_failure(tile_board, score)
+    player.refresh(tile_board, score)
 
-def success_func(message):
+def new_tiles_func(message):
     board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
 
     global player
 
-    tiles = []
+    new_tiles = []
     for tile_tup in new_tiles_tup:
-         tiles.append(Tile("","","","",tile_tup))
-    tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
+         new_tiles.append(Tile("","","","",tile_tup))
 
-    player.refresh(tile_board, score, tiles)
+    old_tiles = []
+    for tile_tup_old in old_tiles_tup:
+        old_tiles.append(Tile("","","","",tile_tup_old))
+
+    #tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
+
+    player.get_new_tiles(old_tiles, new_tiles)

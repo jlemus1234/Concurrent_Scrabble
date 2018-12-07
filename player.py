@@ -8,51 +8,94 @@
 
 """ Purpose: This module holds the implementation of the class Player"""
 
-import board
-import tile
+from board import Board
+from tile import Tile
 import threading
+from GUI import Gui
+from middle_for_game import send_message
+
 
 
 class Player:
     def __init__(self, name, PID):
         self.board = board.Board()
         self.score = 0
-#        self.name = "Jane Doe"
-	self.name = name
-        self.tiles = [tile.Tile() for _ in range(7)]
+	    self.name = name
+        self.tiles = []
         self.erlangPID = PID
         self.gui = None
         self.lock = threading.RLock()
 
     def setGUI(self, GUI):
-        self.gui = GUI
+        with self.lock():
+            self.gui = GUI
 
 
     def made_move(self, tile_ray, direction, start_pos, used_tiles):
-        valid = True
+        with self.lock():
+            start_index = start_pos[0] # if direction = 'd'
+            if direction == 'r':
+                start_index = start_pos[1]
 
-        # Determine if space found in word. If found, boolean set to False
-        for tile in tile_ray:
-            if tile.value == '':
-                valid = False
+            word = self.get_word(tile_ray, start_pos);
 
-        # Remember to 
+            valid, new_grid, new_score = self.board.update(start_pos, word, direction)
 
-        # If tiles places are all sequential ...
-        if valid:
-            # Board class takes in different values for direction. "d" for row
-            direction = "d" if direction == "r" else "nd"
-            # Update board with tiles and 
-            status, new_grid, new_score = self.board.update(start_pos, 
-                                                        tile_ray, direction)
-            if status == True:
-                # Send message to Erlport
-                status = True
-                # After message received form Erlport ...
-                # Remove tiles used and update to new if successful. Update grid
+            if valid:
+                # send to server
+                self.send_to_server(word, direction, start_pos, used_tiles)
 
-                # self.board.grid = new_grid
-                # self.score = new_score
+                # dont want to remove tiles anymore
+                # # remove tiles from rack
+                # for tile in used_tiles:
+                #     self.tiles.remove(tile)
+
+            # refresh display
+            self.gui.refresh(new_grid, self.tiles, self.scores)
+
+    def refresh(tile_board, scores):
+        with self.lock():
+            self.board.set_board(tile_board)
+            self.scores = scores
+            self.gui.refresh(tile_board, self.tiles, scores)
+
+    def get_new_tiles(old_tiles, new_tiles):
+        with self.lock():
+            for tile in old_tiles:
+                self.tiles.remove(tile)
+            self.tiles.extend(new_tiles)
+            self.gui.refresh(self.board.get_board(), self.tiles, self.scores)
+
+    def send_to_server(word, direction, start_pos, used_tiles):
+        word_tuple = [letter.to_tuple() for letter in word]
+        used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
+        send(("move", word_tuple, direction, start_pos, used_tiles))
+
+
+    def get_word(tile_ray, start_pos):
+        word = []
+        front = start_pos
+        # finds begining of word
+        while front >= 0 and front =< 14:
+            if grid[front].is_blank():
+                break
+            else:
+                word.append(tile_ray[front])
+            front -= 1
+
+        word.reverse()
+        back = start_pos + 1
+
+        # finds end of word
+        while back >= 0 and back =< 14:
+            if grid[back].is_blank():
+                break
+            else:
+                word.append(tile_ray[back])
+            back += 1
+        return word
+
+
 
 
     # def sendMessageToErlang(self, tile_ray, direction, start_pos, used_tiles):
@@ -71,10 +114,13 @@ class Player:
 
 
 
-    # Validate to get start_pos of word, not first tile put down, and the 
+
+
+
+    # Validate to get start_pos of word, not first tile put down, and the
     # array of tiles to represent word
 
-    # import middle module and send stuff to it via function call. Convert 
+    # import middle module and send stuff to it via function call. Convert
     # everything to tuples
 
     # Have a function to get new board and new score, then call GUI update
@@ -82,4 +128,3 @@ class Player:
     # Have function to call GUI fucntion to report winner
 
     # For each class written, convert to Tuuple (to_tuple)
-
