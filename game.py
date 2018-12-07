@@ -6,7 +6,6 @@ from tile import Tile
 from tile import string_to_tiles
 from tile import tiles_to_string
 from bag import Bag
-from middle_for_game import send_message
 
 #global GAME_END = -1
 global GAME_END
@@ -17,7 +16,7 @@ class Game:
 #    def __init__(self):
 
     def __init__(self, PID_players, PID_my):
-    GAME_END = -1
+    	GAME_END = -1
         self.lock = threading.RLock()
         self.board = Board()
         # self.erlangPID = Pid
@@ -121,3 +120,6 @@ class Game:
         send_back = [GAME_END for i in range(4)]
         send_back[winning_player] = max_score
         send_to_all_player(True, [[]], send_back, [], [])
+
+
+from middle_for_game import send_message
