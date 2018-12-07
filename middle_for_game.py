@@ -15,9 +15,9 @@ def start(Pid):
     global game, PID_my, PID_players
     PID_my = Pid
     # You can't pass around empty arrays in python so make the first entry your own PID
-    PID_players = [PID_my]
+    PID_players = []
     # Change game so it accepts an array of players
-    game = Game(PID_players, PID_my)
+    game = Game(PID_my=PID_my)
 
 
 

@@ -15,7 +15,7 @@ class Game:
 
 #    def __init__(self):
 
-    def __init__(self, PID_players, PID_my):
+    def __init__(self, PID_players=[], PID_my):
 
     	GAME_END = -1
         self.lock = threading.RLock()
@@ -69,14 +69,15 @@ class Game:
     def new_player(self, player_number):
         with self.lock:
             self.scores.append(0)
-            if player_number == 3:
+            if player_number == 4:
                 self.start_game()
 
     # to be called after the 4th player has entered
     def start_game(self):
-        for i in range(3):
+        for i in range(4):
             tiles = self.bag.take_n_from_bag(7)
-            self.send_to_one_player("tiles", i, True, [[]], [], tiles,tiles)
+            tile_tuples = [tile.to_tuple() for tile in tiles]
+            self.send_to_one_player("tiles", i, True, [[]], [], [], tiles)
             self.send_to_one_player("refresh", i, True, self.board.get_board(), [0,0,0,0],[],[])
 
     #

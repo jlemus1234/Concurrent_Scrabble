@@ -25,47 +25,8 @@ class Bag:
 
     def initialize_bag(self):
         """ Add the default 98 tiles to bag """
-        id = 0
-
-
-
-
-
-
-        for id in range(id, id + 9):
-            self.bag.append(Tile("a", start_id=id))
-        for id in range(id, id + 2):
-            self.bag.append(Tile("b", start_id=id))
-        for id in range(id, id + 2):
-            self.bag.append(Tile("c", start_id=id))
-        for id in range(id, id + 4):
-            self.bag.append(Tile("d", start_id=id))
-        for id in range(id, id + 12):
-            self.bag.append(Tile("e", start_id=id))
-        for id in range(id, id + 2):
-            self.bag.append(Tile("f", start_id=id))
-        for id in range(id, id + 3):
-            self.bag.append(Tile("g", start_id=id))
-    #    for id in range(id, id + 2):
-        self.bag.append(Tile("h", start_id=id))
-        self.bag.append(Tile("i", start_id=id))
-        self.bag.append(Tile("j", start_id=id))
-        self.bag.append(Tile("k", start_id=id))
-        self.bag.append(Tile("l", start_id=id))
-        self.bag.append(Tile("m", start_id=id))
-        self.bag.append(Tile("n", start_id=id))
-        self.bag.append(Tile("o", start_id=id))
-        self.bag.append(Tile("p", start_id=id))
-        self.bag.append(Tile("q", start_id=id))
-        self.bag.append(Tile("r", start_id=id))
-        self.bag.append(Tile("s", start_id=id))
-        self.bag.append(Tile("t", start_id=id))
-        self.bag.append(Tile("u", start_id=id))
-        self.bag.append(Tile("v", start_id=id))
-        self.bag.append(Tile("w", start_id=id))
-        self.bag.append(Tile("x", start_id=id))
-        self.bag.append(Tile("y", start_id=id))
-        self.bag.append(Tile("z", start_id=id))
+        for i in range(len(start_tiles)):
+            self.bag.append(Tile(start_tiles[i], start_id=i))
         random.shuffle(self.bag)
 
     def take_n_from_bag(self, n):
@@ -82,4 +43,28 @@ class Bag:
         """ Return number of tiles left in bag"""
         return len(self.bag)
 
-    #start_tiles = ['a'] * 12 + ['b'] *
+    start_tiles = (['a'] * 12 +
+                   ['b'] *  2 +
+                   ['c'] *  2 +
+                   ['d'] *  4 +
+                   ['e'] * 12 +
+                   ['f'] *  2 +
+                   ['g'] *  3 +
+                   ['h'] *  2 +
+                   ['i'] *  9 +
+                   ['j'] *  1 +
+                   ['k'] *  1 +
+                   ['m'] *  2 +
+                   ['n'] *  6 +
+                   ['o'] *  8 +
+                   ['p'] *  2 +
+                   ['q'] *  1 +
+                   ['r'] *  6 +
+                   ['s'] *  4 +
+                   ['t'] *  6 +
+                   ['u'] *  4 +
+                   ['v'] *  2 +
+                   ['w'] *  2 +
+                   ['x'] *  1 +
+                   ['y'] *  2 +
+                   ['z'] *  1)
