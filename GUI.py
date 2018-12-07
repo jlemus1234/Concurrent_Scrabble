@@ -37,8 +37,7 @@ class Gui:
     def __init__(self, grid = '', hand = '', scores = ''):
 
 
-        from player import Player
-
+        
         # Labels of the board for GUI
         self.grid = [
             ['','','','','','','','','','','','','','',''],
@@ -97,6 +96,12 @@ class Gui:
 
     def setPlayer(self, Player):
         self.player = Player
+        
+    def colToArray(self, colNum):
+        arrayToReturn = []
+        for i in range(15):
+            arrayToReturn.append(self.tileGrid[i][colNum])
+        return arrayToReturn
 
     #Button Pressed Funcs ===========-=-=-======================================-=-=-=-=-=-=-=-=-=-
     #Needs to send:
@@ -105,8 +110,10 @@ class Gui:
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
-        #if self.direction == 'd':t
-        player.made_move(self.tileGrid[7], 'r', (7,7), self.currPlacedTiles)
+        rowOrCol = self.tileGrid[currPlacedXYs[0][0]]
+        if self.direction == 'd':
+            rowOrCol = colToArray(currPlacedXYs[0][1])
+        player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
         print 'You clicked Submit'
 
     def clickExchange(self):
@@ -128,20 +135,29 @@ class Gui:
             for col in range(15):
                 if self.grid[row][col] == event.widget:
                     break;
+            if self.grid[row][col] == event.widget:
+                break;
+                    
+        print 'after break: row, col = ', str(row), ', ', str(col)
         if len(self.currPlacedXYs) == 1:
             print self.currPlacedXYs[0]
             if self.currPlacedXYs[0][0] == row:
                 self.direction = 'r'
             elif self.currPlacedXYs[0][1] == col:
                 self.direction = 'd'
-        elif len(self.currPlacedXYs) > 1:
-            print self.currPlacedXYs[0]
-            if self.currPlacedXYs[0][0] == row and self.direction == 'r':
+            else:
                 validMove = False
-            elif self.currPlacedXYs[0][1] == col and self.direction == 'd':
+        elif len(self.currPlacedXYs) > 1:
+            print 'self.currPlacedXYs[0][0] = ', self.currPlacedXYs[0][0]
+            print 'row, col = ', str(row), ', ', str(col)
+            print 'self.direction = ', self.direction
+            print str(self.currPlacedXYs[0][0] == row and self.direction == 'r')
+            if self.currPlacedXYs[0][0] != row and self.direction == 'r':
+                validMove = False
+            elif self.currPlacedXYs[0][1] != col and self.direction == 'd':
                 validMove = False
 
-        #below only executed when placing in proper spot
+        #below only executed when placing in proper spotupdate
         if validMove == True:
             print 'validMove = True'
             if event.widget.config()['text'][4] == '':
@@ -250,6 +266,8 @@ class Gui:
         # to start loop after calling .start()
         self.window.mainloop()
         print 'after mainloop'
+        
+        from player import Player
 
 
     def drawTileGrid(self):
@@ -301,7 +319,6 @@ class Gui:
         self.lastPlacedTile = ''
         self.direction = ''
         self.firstTilePlaced = []
-        self.window.mainloop()
         self.window.quit()
         self.window.mainloop()
 
@@ -316,7 +333,7 @@ def main():
         #player1Screen.drawScores(dummyScores)
         print 'calling player1Screen'
         player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
-        #player1Screen.window.mainloop()
+        player1Screen.window.mainloop()
         testHand  = string_to_tiles('turtler')
         dummyScores = [2, 3, 4, 5]
         player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
