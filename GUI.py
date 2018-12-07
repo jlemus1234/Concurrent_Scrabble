@@ -5,6 +5,8 @@ else:
     from tkinter import *
 from mttkinter import mtTkinter
 
+
+import threading
 import tkFont
 from PIL import ImageTk, Image
 
@@ -301,9 +303,10 @@ class Gui:
         self.lastPlacedTile = ''
         self.direction = ''
         self.firstTilePlaced = []
-        self.window.mainloop()
         self.window.quit()
-        self.window.mainloop()
+        thread = threading.Thread(target = self.window.mainloop())
+        thread.daemon = True
+        thread.start()
 
 #main for testing
 def main():
