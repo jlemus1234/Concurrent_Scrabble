@@ -24,23 +24,10 @@ class Game:
         self.scores = []
         self.bag = Bag()
         self.first_move = True
+    	# adding so board can use imported send_message
+    	self.PID_players = PID_players
+    	self.PID_my = PID_my
 
-	# adding so board can use imported send_message
-	self.PID_players = PID_players
-	self.PID_my = PID_my
-
-
-    def end_game(self):
-        global GAME_END
-        max_score = max(scores)
-        winning_player = GAME_END
-        for i in range(0,4):
-            if (scores[i] == max_score):
-                winning_player = i
-                break
-        send_back = [GAME_END for i in range(4)]
-        send_back[winning_player] = max_score
-        send_to_all_player(True, [[]], send_back, [], [])
 
 
     # should review exactly what critical section is so can make it run faster
@@ -91,6 +78,15 @@ class Game:
             tiles = self.bag.take_n_from_bag(7)
             self.send_to_one_player(i, False, self.board.get_board(), [0,0,0,0], tiles,[])
 
+    # 
+    # def send_message(pid_list, my_pid ,player_number, data):
+    # 	Pid_to_send = pid_list[player_number]
+    # 	message = (Pid_to_send + data)
+    # 	cast(my_pid, message)
+
+
+
+
     # messge recieve
     # word, direction, starting_positon, used tiles
 
@@ -105,15 +101,24 @@ class Game:
         tuple_new_tiles =  [tile.to_tuple() for tile in new_tiles]
         # funciton name needs to be changed when we finish middle module
         #send_message(player_number, (status, tuple_board, scores, tuple_old_tiles, tuple_new_tiles))
-        send_message(self.PID_players, self.PID_my, player_number, (status, tuple_board, scores, tuple_old_tiles, tuple_new_tiles))
+        send_message(self.PID_players, self.PID_my, player_number, (status, tuple_board, scores, old_tiles, tuple_new_tiles))
 
 
-    def send_message(pid_list, my_pid ,player_number, data):
-    	Pid_to_send = pid_list[player_number]
-    	message = (Pid_to_send + data)
-    	cast(my_pid, message)
-	
+
 
     def send_to_all_player(self, status, board, scores, old_tiles, new_tiles):
         for player_number in range(4):
             send_to_one_player(player_number, status, board, scores, old_tiles, new_tiles)
+
+    # not worring about ending game right now
+    def end_game(self):
+        global GAME_END
+        max_score = max(scores)
+        winning_player = GAME_END
+        for i in range(0,4):
+            if (scores[i] == max_score):
+                winning_player = i
+                break
+        send_back = [GAME_END for i in range(4)]
+        send_back[winning_player] = max_score
+        send_to_all_player(True, [[]], send_back, [], [])
