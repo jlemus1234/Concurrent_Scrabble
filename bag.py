@@ -8,7 +8,7 @@
 
 """ Purpose: This module holds the implementation of the class Bag"""
 
-import tile
+from tile import Tile
 import random
 import threading
 
@@ -26,6 +26,12 @@ class Bag:
     def initialize_bag(self):
         """ Add the default 98 tiles to bag """
         id = 0
+
+
+
+
+
+
         for id in range(id, id + 9):
             self.bag.append(Tile("a", start_id=id))
         for id in range(id, id + 2):
@@ -40,7 +46,7 @@ class Bag:
             self.bag.append(Tile("f", start_id=id))
         for id in range(id, id + 3):
             self.bag.append(Tile("g", start_id=id))
-#        for id in range(id, id + 2):
+    #    for id in range(id, id + 2):
         self.bag.append(Tile("h", start_id=id))
         self.bag.append(Tile("i", start_id=id))
         self.bag.append(Tile("j", start_id=id))
@@ -75,3 +81,5 @@ class Bag:
     def size_of_bag(self):
         """ Return number of tiles left in bag"""
         return len(self.bag)
+
+    #start_tiles = ['a'] * 12 + ['b'] *
