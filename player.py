@@ -11,7 +11,7 @@
 from board import Board
 from tile import Tile
 import threading
-from GUI import Gui
+
 from middle_for_game import send_message
 
 
@@ -97,7 +97,7 @@ class Player:
 
 
 
-
+from GUI import Gui
     # def sendMessageToErlang(self, tile_ray, direction, start_pos, used_tiles):
     # def receiveMessageFromErlang(self):
     # def moveSuccessful()
