@@ -39,7 +39,7 @@ class Gui:
     def __init__(self, grid = '', hand = '', scores = ''):
 
 
-        
+
         # Labels of the board for GUI
         self.grid = [
             ['','','','','','','','','','','','','','',''],
@@ -98,7 +98,7 @@ class Gui:
 
     def setPlayer(self, Player):
         self.player = Player
-        
+
     def colToArray(self, colNum):
         arrayToReturn = []
         for i in range(15):
@@ -139,7 +139,7 @@ class Gui:
                     break;
             if self.grid[row][col] == event.widget:
                 break;
-                    
+
         print 'after break: row, col = ', str(row), ', ', str(col)
         if len(self.currPlacedXYs) == 1:
             print self.currPlacedXYs[0]
@@ -266,11 +266,9 @@ class Gui:
         print 'before mainloop'
         # move loop start to main, in final version the caller will need
         # to start loop after calling .start()
-        thread = threading.Thread(target = self.window.mainloop)
-        thread.daemon = True
-        thread.start()
+        self.window.mainloop()
         print 'after mainloop'
-        
+
         from player import Player
 
 
