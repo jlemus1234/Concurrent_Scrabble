@@ -29,7 +29,7 @@ def start(Pid):
 
 def send_message(player_number, message):
     global PID_my, PID_players
-    print("In middle for game's send message")
+    print("In middle of game's send message")
     dest = PID_players[player_number]
     call(Atom("scrabble"), Atom("send_to_pyclient"), [dest, message])
     #cast(PID_my, (PID_players[player_number], message))
@@ -67,11 +67,13 @@ def handler(message):
 
 # INCOMPLETE need to know what the message looks like
 def add_player(message):
+    print("Adding player")
     global PID_players
     PID_players.append(message[0])
     game.new_player(len(PID_players) - 1)
 
 def make_move(message):
+    print("Making move")
     player_number, word, direction, starting_positon, used_tiles = split_message(message)
     game.check_move(player_number, word, starting_positon, direction, used_tiles)
 
@@ -79,12 +81,14 @@ def game_over():
     game.end_game()
 
 def split_message(message):
+    print("Splitting message")
     global player_PID
     player_number       = PID_players.index(message[0])
     word                = message[2]
     direction           = message[3]
     starting_positon    = message[4]
     used_tiles          = message[5]
+    print("Finished splitting message")
     return player_number, word, direction, starting_positon, used_tiles
 
 from game import Game

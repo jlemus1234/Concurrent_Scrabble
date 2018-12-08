@@ -27,6 +27,7 @@ class Game:
         # adding so board can use imported send_message
         self.PID_players = PID_players
         self.PID_my = PID_my
+	print("Finished creating a new Game instance")
 
 
 
@@ -57,6 +58,7 @@ class Game:
                 self.send_to_all_player(True, new_board, self.scores, [], [])
 
     def over_lap_center(self, word, positon, direction):
+	print("over_lap_center called")
         length = len(word)
         for i in range(length):
             if positon == (7,7):
@@ -69,6 +71,7 @@ class Game:
 
 
     def new_player(self, player_number):
+	print("In new_player game.py")
         with self.lock:
             self.scores.append(0)
             print("This is the player number:{}".format(player_number))
@@ -100,6 +103,7 @@ class Game:
     # status, board, scores, old_tiles, new_tiles
 
     def send_to_one_player(self, keyword, player_number, staus, board, scores, old_tiles, new_tiles):
+	print("in send_to_one_player of game.py")
         # everything sent should be in a sendable way
         tuple_board     = [[tile.to_tuple() for tile in row] for row in board]
         # not converting used_tiles to Tiles so no need to switch back
@@ -112,6 +116,7 @@ class Game:
 
 
     def send_to_all_player(self, status, board, scores, old_tiles, new_tiles):
+	print("In send to all players of game.py")
         for player_number in range(4):
             send_to_one_player(player_number, status, board, scores, old_tiles, new_tiles)
 
