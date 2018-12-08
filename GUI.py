@@ -138,7 +138,9 @@ class Gui:
 
     # Clicking on the board
     def boardClicked(self, event):
+      print 'before boardClicked lock'
       with self.lock:
+        print 'got board lock'
         validMove = True
         #find current x,y
         row = 0
@@ -189,6 +191,7 @@ class Gui:
                         self.currPlacedXYs.append([row ,col])
                         self.tileGrid[row][col] = self.currLetterTile
                         self.currLetterTile = Tile('')
+        print 'release board lock'
 
     def boardRightClicked(self, event):
         print 'we in boardRightClicked'
