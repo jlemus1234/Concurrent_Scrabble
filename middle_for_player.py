@@ -65,7 +65,7 @@ def register_handler(dest):
 def handler(message):
     # getting rid of PID of destination
     print("inside middle_for_player handler")
-    print("this is the message: {}".format(message))
+#    print("this is the message: {}".format(message))
     message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,

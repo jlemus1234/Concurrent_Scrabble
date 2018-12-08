@@ -67,7 +67,7 @@ class Gui:
         self.scores = [0, 0, 0, 0]
         self.scoreLabels = []
         self.currLetterChar = ''
-        self.currLetterTile = ''
+        self.currLetterTile = Tile()
         self.currPlacedTiles = []
         self.currPlacedXYs = []
 
@@ -184,7 +184,7 @@ class Gui:
         testHand  = string_to_tiles('turtler')
         dummyScores = [2, 3, 4, 5]
         self.refresh(self.tileGrid, testHand, dummyScores)
-        
+
         #clickedLetter = event.widget.config()['text'][4]
         #if clickedLetter != '':
             #self.addToHand(clickedLetter)
@@ -326,8 +326,9 @@ class Gui:
         self.direction = ''
         self.firstTilePlaced = []
         self.currPlacedXYs = []
-        self.currPlacedTiles = []     
-        
+        self.currPlacedTiles = []
+        self.currLetterTile = Tile()
+
         self.window.mainloop()
         self.window.update()
 
@@ -339,12 +340,12 @@ def main():
     testBoard = Board()
     testHand  = string_to_tiles('rabbitr')
     dummyScores = [100, 12, 34, 56]
-    
+
     #player1Screen.drawScores(dummyScores)
     print 'calling player1Screen'
     player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
     #player1Screen.window.mainloop()
-        
+
     testHand  = string_to_tiles('turtler')
     dummyScores = [2, 3, 4, 5]
     player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
