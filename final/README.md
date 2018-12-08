@@ -1,7 +1,8 @@
 # Quadruple Score
-##### A game based on scrabble in which players race to put down tiles rather than take turns
+#### A game based on scrabble in which players race to put down tiles rather than take turns
 
 ### Made by:
+
     * Billy Witrock
     * Saad Mazhar
     * Irving Pena
@@ -10,14 +11,17 @@
 ## Guide to Files and folder
 
 #### assets
+
     * The assets folder contains images needed to run the GUI
 
 #### erlport
+
     * The erlport folder contains our version of erlport that we are using.
     Some of the files have been modified from the original files on the
     Github repository
 
 #### mttkinter
+
     * This folder contains all files needed to run mttkinter, which is the
     package we chose to use for our GUI
 
