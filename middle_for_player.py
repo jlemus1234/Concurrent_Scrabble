@@ -35,12 +35,11 @@ def start(my_Pid, server_Pid):
     print("calling player start")
 
 def send_message_helper(message):
-    global PID_server
     send_message(PID_server, message)
 
 def start_gui():
     global player, gui, PID_server, PID_my
-    player = Player("Player",PID_server)
+    player = Player("Player",PiD_my)
     gui = Gui()
     player.setGUI(gui)
     # start_lock[0].release()
