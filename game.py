@@ -54,7 +54,7 @@ class Game:
                 self.send_to_one_player(player_number, True, [[]], [], used_tiles, new_tiles)
                 self.send_to_all_player(True, new_board, self.scores, [], [])
 
-    def over_lap_center(word, positon, direction):
+    def over_lap_center(self, word, positon, direction):
         length = len(word)
         for i in range(length):
             if positon == (7,7):
