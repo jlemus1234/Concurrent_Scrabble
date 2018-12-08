@@ -46,26 +46,10 @@ class Board:
                 # print("returning 2")
                 return (False, self.grid, 0)
 
-########################################################################
-# gotta come up with a solution that allows a user to place a move like this: p
-#                                             set being the new word          i
-#                            should word if only s is played also             e
-#                                                                             s e t
-            # # check if letters to left or up
-            # if self.inbounds(row - 1):
-            #     if not self.grid[row-1][col].is_blank():
-            #         # non-empty tile above
-            #        print("returning 3")
-            #         return (False, self.grid, 0)
-            # if self.inbounds(col - 1):
-            #     if not self.grid[row][col-1].is_blank():
-            #         # non-empty tile left
-            #        print("returning 4")
-            #         return (False, self.grid, 0)
-#########################################################################
+
 
             # create copy of grid so if the word turns out to not work we have the old list
-            grid = [row[:] for row in self.grid]
+            grid = [row_make_temp[:] for row_make_temp in self.grid]
             print("grid: {}".format(grid))
             # used to lock cross_score and is_valid
             mutex = threading.Lock()
@@ -76,7 +60,7 @@ class Board:
                 # check to see if a tile is already there
                 print("row before is_blank: {}".format(row))
                 print("col before is_blank: {}".format(row))
-                
+
                 if grid[row][col].is_blank():
                     # can be inserted
                     new_tile_count += 1
@@ -442,3 +426,23 @@ class Board:
                     #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
                     #                 else:
                     #                     cross_score += added_score * temp_multi[0]
+
+
+
+########################################################################
+# gotta come up with a solution that allows a user to place a move like this: p
+#                                             set being the new word          i
+#                            should word if only s is played also             e
+#                                                                             s e t
+            # # check if letters to left or up
+            # if self.inbounds(row - 1):
+            #     if not self.grid[row-1][col].is_blank():
+            #         # non-empty tile above
+            #        print("returning 3")
+            #         return (False, self.grid, 0)
+            # if self.inbounds(col - 1):
+            #     if not self.grid[row][col-1].is_blank():
+            #         # non-empty tile left
+            #        print("returning 4")
+            #         return (False, self.grid, 0)
+#########################################################################
