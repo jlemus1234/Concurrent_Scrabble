@@ -274,7 +274,7 @@ class Gui:
 
                 #Tiles in hand
                 for i in range(7):
-                    singleTile = self.makeTile('')
+                    singleTile = self.makeTile(str(i))
                     singleTile.bind("<Button-1>", self.handClicked)
                     singleTile.pack(side = LEFT)
                     self.hand.append(singleTile)
@@ -337,6 +337,7 @@ class Gui:
 
             self.tileHand = hand
             self.drawHandTiles()#done
+            self.handFrame.update()
 
             self.scores   = scores
             self.drawScores()#done
