@@ -79,14 +79,14 @@ class Board:
                     # direction, and if there is make sure thats a word
                     if direction == 'd':
                         # to check row
-                        cur_thread =
-                            threading.Thread(target = self.check_and_score_row,
+                        cur_thread = threading.Thread(
+                            target = self.check_and_score_row,
                             args=(grid, row, col, temp_multi, cross_score,
                                                 is_valid, is_touching, mutex))
                     else:
                         # to check col
-                        cur_thread =
-                            threading.Thread(target = self.check_and_score_col,
+                        cur_thread = threading.Thread(
+                            target = self.check_and_score_col,
                             args=(grid, row, col, temp_multi, cross_score,
                                                 is_valid, is_touching, mutex))
                     cur_thread.daemon = True
