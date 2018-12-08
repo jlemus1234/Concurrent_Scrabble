@@ -14,6 +14,8 @@ global PID_my # python instance's parent pid
 global PID_server # pid of game server
 
 
+
+
 def start(my_Pid, server_Pid):
     global player, gui, PID_my, PID_server
     PID_my = my_Pid
@@ -56,7 +58,9 @@ def register_handler(dest):
     # no need to hold on to dest (the PID from which the message was sent)
     # because it will stay const and was set in start
     print("setting client handler")
-    set_message_handler(handler)
+    thread = threading.Thread(target = set_message_handler, args = handler)
+    thread.daemon = True
+    thread.start()
     return Atom("ok")
 
 # need to add more funcitons
