@@ -112,31 +112,3 @@ def send_message(dest_pid, message):
     cast(dest_pid, message)
 
 from GUI import Gui
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # Validate to get start_pos of word, not first tile put down, and the
-    # array of tiles to represent word
-
-    # import middle module and send stuff to it via function call. Convert
-    # everything to tuples
-
-    # Have a function to get new board and new score, then call GUI update
-
-    # Have function to call GUI fucntion to report winner
-
-    # For each class written, convert to Tuuple (to_tuple)

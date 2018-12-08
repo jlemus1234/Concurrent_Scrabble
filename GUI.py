@@ -16,7 +16,7 @@ from board import Board
 #python 2.712
 
 class Gui:
-    
+
     initGrid = [
             ['3w','x','x','2l','x','x','x','3w','x','x','x','2l','x','x','3w'],
             ['x','2w','x','x','x','3l','x','x','x','3l','x','x','x','2w','x'],
@@ -60,8 +60,8 @@ class Gui:
         self.tileGrid = []
         self.tileHand = []
         self.currLetterTile = Tile()
-        self.currPlacedTiles = []      
-        
+        self.currPlacedTiles = []
+
         self.hand = []
         self.scores = [0, 0, 0, 0]
         self.scoreLabels = []
@@ -72,7 +72,7 @@ class Gui:
         # The main GUI elements
         self.window = Tk()
         self.handFrame = LabelFrame(self.window, padx = 5)
-        
+
         # Fonts for tiles
         self.helv16 = tkFont.Font(self.window, family='Helvetica', size=15,
             weight=tkFont.BOLD)
@@ -93,7 +93,7 @@ class Gui:
             Image.open("./assets/center.png"))
         self.legendImg         = ImageTk.PhotoImage(
             Image.open("./assets/legend.png"))
-        
+
     def setPlayer(self, cur_Player):
         self.my_player = cur_Player
 
@@ -116,7 +116,8 @@ class Gui:
             currplacedXYs_curr = self.currPlacedXYs[0]
             currplacedTiles_curr = self.currPlacedTiles
 
-            self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_curr, currplacedTiles_curr)
+            self.my_player.made_move(rowOrCol, direction_curr,
+            currplacedXYs_curr, currplacedTiles_curr)
 
     # Code to be executed when Exchange button is clicked
     def clickExchange(self):
@@ -125,13 +126,13 @@ class Gui:
     # Code to be executed when Pass button is clicked
     def clickPass(self):
         None
-        
+
     # Clicking on the board
     def boardClicked(self, event):
         validMove = True
         row = 0
         col = 0
-        
+
         # nested loops to find row and column of clicked tile
         for row in range(15):
             for col in range(15):
@@ -139,7 +140,7 @@ class Gui:
                     break;
             if self.grid[row][col] == event.widget:
                 break;
-        
+
         if len(self.currPlacedXYs) == 1:
         # figures out if player is making a word along the x or y axis and
         #    sets self.direction to r or d respectively.
@@ -149,7 +150,8 @@ class Gui:
                 self.direction = 'd'
             else:
                 validMove = False
-        # makes sure player is placing the current tile in the same row or column
+        # makes sure player is placing the current tile in the same row or
+        # column
         #    as previously placed tiles
         elif len(self.currPlacedXYs) > 1:
             if self.currPlacedXYs[0][0] != row and self.direction == 'r':
@@ -160,10 +162,12 @@ class Gui:
         #below only executed when placing in valid spot
         if validMove == True:
             if event.widget.config()['text'][4] == '':
-                event.widget.config(text = self.currLetterTile.value, image = self.tileImg)
+                event.widget.config(text = self.currLetterTile.value, image =
+                self.tileImg)
 
             # records information about correctly placed tile:
-            #    appends row, col coordinates of placed tile to self.currPlacedXYs
+            #    appends row, col coordinates of placed tile to
+            # self.currPlacedXYs
             #    appends the placed tile to self.currPlacedTiles
             # updates label on window to diplay newly placed tile
             # resets self.currLetterTile to hold an empty tile
@@ -181,7 +185,7 @@ class Gui:
         testHand  = string_to_tiles('turtles')
         dummyScores = [2, 3, 4, 5]
         self.refresh(self.tileGrid, testHand, dummyScores)
-            
+
 
     # Clicking on a tile in hand
     def handClicked(self, event):
@@ -211,7 +215,8 @@ class Gui:
 
         for x in range(15):
             for y in range(15):
-                currTile = Label(self.window, image = tileDict[self.initGrid[x][y]],
+                currTile = Label(self.window, image =
+                tileDict[self.initGrid[x][y]],
                     text = '', font = self.helv16, compound = CENTER)
                 currTile.bind("<Button-1>", self.boardClicked)
                 currTile.bind("<Button-3>", self.boardRightClicked)
@@ -235,9 +240,12 @@ class Gui:
 
                 #Submit Buttons - Submit, Exchange, Pass
                 buttonFrame = Frame(self.window)
-                submitBtn = Button(buttonFrame, text = "Submit", command = self.clickSubmit)
-                exchangeBtn = Button(buttonFrame, text = "Exhange", command = self.clickExchange)
-                passBtn = Button(buttonFrame, text = "Pass", command = self.clickPass)
+                submitBtn = Button(buttonFrame, text = "Submit", command =
+                self.clickSubmit)
+                exchangeBtn = Button(buttonFrame, text = "Exhange", command =
+                self.clickExchange)
+                passBtn = Button(buttonFrame, text = "Pass", command =
+                self.clickPass)
                 submitBtn.pack(side = LEFT)
                 exchangeBtn.pack(side = LEFT)
                 passBtn.pack(side = LEFT)
@@ -254,8 +262,8 @@ class Gui:
                 legendLabel = Label(self.window, image = self.legendImg,
                     text = '', font = self.helv16, compound = CENTER)
                 legendLabel.place(relx = .90, rely = .4,)
-                
-                
+
+
                 self.makeBoardGrid()
                 buttonFrame.place(relx = .55, rely = 1, anchor = SW)
                 self.handFrame.place(relx = .60, rely = .5,)
@@ -263,7 +271,7 @@ class Gui:
 
             #Start the GUI
             self.window.mainloop()
-            
+
             from player import Player
 
     # updates screen to display the board held in self.tileGrid
@@ -283,7 +291,8 @@ class Gui:
                     tileBack = tileDict[self.initGrid[row][col]]
                 else:
                     tileBack = self.tileImg
-                self.grid[row][col].config(text = self.tileGrid[row][col].value, image = tileBack)
+                self.grid[row][col].config(text =
+                self.tileGrid[row][col].value, image = tileBack)
 
     # updates the hand tiles displayed on screen
     def drawHandTiles(self):
@@ -323,11 +332,11 @@ class Gui:
             self.currPlacedXYs = []
             self.currPlacedTiles = []
             self.currLetterTile = Tile()
-            
+
             #update the screen
             self.window.update()
-            
-            
+
+
 
 #main for testing
 def main():
