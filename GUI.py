@@ -343,9 +343,8 @@ class Gui:
             self.currPlacedXYs = []
             self.currPlacedTiles = []
             self.currLetterTile = Tile()
-        print("in refresh after giving up lock, about to mainloop")
-        self.window.mainloop()
-        print("done with main loop in this thread")
+        #self.window.mainloop()
+        print("gave back lock in refresh")
         self.window.update()
         print("done with update")
 
