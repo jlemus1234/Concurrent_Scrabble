@@ -56,7 +56,7 @@ def handler(message):
     #message = message[1:]
     #message_type = message[1]
 
-    message_type = message[0]
+    message_type = message[1]
     switcher = {
         "new player":add_player,
         "move":make_move

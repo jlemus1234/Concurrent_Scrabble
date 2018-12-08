@@ -18,12 +18,13 @@ from erlport.erlang import set_message_handler, call, cast, self as selfPID
 
 
 class Player:
-    def __init__(self, name, PID):
+    def __init__(self, name, PID_sever, PID_me):
         self.board = Board()
         self.scores = [0,0,0,0]
         self.name  = name
         self.tiles = []
-        self.erlangPID = PID
+        self.erlangPID = PID_server
+        self.erlangMe = PID_me
         self.gui = None
         self.lock = threading.Lock()
 
@@ -78,7 +79,7 @@ class Player:
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
     ## What is this send function?
-        send_message(self.erlangPID, ("move", word_tuple, direction, start_pos, used_tiles))
+        send_message(self.erlangPID, (self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles))
 
 
     def get_word(self, tile_ray, start_pos):
