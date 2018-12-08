@@ -79,7 +79,7 @@ class Player:
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
     ## What is this send function?
-        send_message(self.erlangPID, (self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles))
+        send_message(self.erlangPID, (self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles_tuple))
 
 
     def get_word(self, tile_ray, start_pos):
@@ -107,6 +107,8 @@ class Player:
 
 def send_message(dest_pid, message):
     print("Sending message from middle_for_player")
+    print("destination Pid: {}".format(dest_pid))
+    print("message: {}".format(message))
     call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
     print("Sent message from m_f_p")
 
