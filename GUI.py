@@ -126,7 +126,7 @@ class Gui:
         print("currPlacedXYs: {}".format(currplacedXYs_curr))
         currplacedTiles_curr = self.currPlacedTiles
         print("currLetterTiles: {}".format(currplacedTiles_curr))
-        print("arguments to made_move {}".format((rowOrCol,direction_curr,currPlacedXYs_curr, currPlacedTiles_curr)))
+
       print("about to make thread")
       thread = threading.Thread(target=self.my_player.made_move, args=((rowOrCol, direction_curr, currplacedXYs_cur, currPlacedTiles_curr)))
       thread.start()
