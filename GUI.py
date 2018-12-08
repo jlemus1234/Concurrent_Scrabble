@@ -38,7 +38,7 @@ class Gui:
 
     def __init__(self, grid = '', hand = '', scores = ''):
 
-        self.lock = threading.Lock()
+        # self.lock = threading.Lock()
 
         # Labels of the board for GUI
         self.grid = [
@@ -113,7 +113,7 @@ class Gui:
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
-      with self.lock:
+      # with self.lock:
         print 'You clicked Submit'
         rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
@@ -146,7 +146,7 @@ class Gui:
     # Clicking on the board
     def boardClicked(self, event):
       print 'before boardClicked lock'
-      with self.lock:
+      # with self.lock:
         print 'got board lock'
         validMove = True
         #find current x,y
@@ -251,7 +251,7 @@ class Gui:
 
                 #currTile.bind("<Button-1>", boardClicked)
     def start(self):
-        with self.lock:
+        # with self.lock:
             #Main self.window of an application
             self.window.title("Scrabble")
             self.window.geometry("1100x650")
@@ -331,7 +331,7 @@ class Gui:
 
     def refresh(self, board, hand, scores):
         print("in refresh pre lock")
-        with self.lock:
+        # with self.lock:
             print("in refresh post lock")
             self.tileGrid = board
             self.drawTileGrid()#done
