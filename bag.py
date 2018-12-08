@@ -20,7 +20,7 @@ class Bag:
     def __init__(self):
         """ Call initialize_bag to add the default 98 tiles to bag """
         self.bag = []
-	self.start_tiles = (['a'] * 12 +
+    self.start_tiles = (['a'] * 12 +
                    ['b'] *  2 +
                    ['c'] *  2 +
                    ['d'] *  4 +
