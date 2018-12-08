@@ -187,7 +187,8 @@ join_game(NodeName) ->
 	GameServer = {scrabble, NodeName},
 %% Set up the python message handler
 	python:call(Pypid, middle_for_player, register_handler, [self()]),
-	python:call(Pypid, middle_for_player, start, [self(), GameServer]),
+%	python:call(Pypid, middle_for_player, start, [self(), GameServer]),
+	python:call(Pypid, middle_for_player, start, [Pypid, GameServer]),
 %% Listen to client
 	%get_client_messages(GameServer, Pypid),
 	get_server_messages(Pypid),
@@ -218,7 +219,8 @@ get_server_messages(Pypid) ->
 			%Pypid ! Something
 			python:cast(Pypid, Something);
 		Anything ->
-			io:format("~s~n", ["Wrong format"])
+			io:format("~s~n", ["Wrong format"]),
+			io:format("~p~n", [Anything])
 	end,
 	get_server_messages(Pypid).
 
