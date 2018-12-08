@@ -66,20 +66,21 @@ def handler(message):
     # getting rid of PID of destination
     print("inside middle_for_player handler")
 #    print("this is the message: {}".format(message))
-    thread = threading.Thread(target=handler_helper, args=((message)))
+    print(message)
+    thread = threading.Thread(target=handler_helper, args=(message))
     thread.daemon = True
     thread.start()
 
-def handler_helper(message):
+def handler_helper(message_type, board, scores, old_tiles, new_tiles):
     print("in other thread")
-    message_type = message[0]
+    #message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,
         "refresh":refresh_func
         # "report_winner":winner,
         # "end":end_game
     }
-    switcher[message_type](message[1:])
+    switcher[message_type](board, scores, old_tiles, new_tiles)
 
 def send_message(dest_pid, message):
     global PID_my, PID_server
@@ -98,16 +99,16 @@ def split_message_player_side(message):
     return board, scores, old_tiles, new_tiles
 #new_tiles
 
-def refresh_func(message):
-    board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
+def refresh_func(board, scores, old_tiles_tup, new_tiles_tup):
+    # board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
 
     global player
     tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
 
     player.refresh(tile_board, scores)
 
-def new_tiles_func(message):
-    board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
+def new_tiles_func(board, scores, old_tiles_tup, new_tiles_tup):
+    # board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
 
     global player
 
