@@ -16,8 +16,7 @@ from board import Board
 #python 2.712
 
 class Gui:
-
-    #grid shared by all instances of GUI, do not modify!
+    
     initGrid = [
             ['3w','x','x','2l','x','x','x','3w','x','x','x','2l','x','x','3w'],
             ['x','2w','x','x','x','3l','x','x','x','3l','x','x','x','2w','x'],
@@ -57,24 +56,23 @@ class Gui:
             ['','','','','','','','','','','','','','','']
         ]
 
-        # Tile representation of the GUI board
+        # Tile representation of various GUI elements
         self.tileGrid = []
-
-        self.hand = []
         self.tileHand = []
+        self.currLetterTile = Tile()
+        self.currPlacedTiles = []      
+        
+        self.hand = []
         self.scores = [0, 0, 0, 0]
         self.scoreLabels = []
         self.currLetterChar = ''
-        self.currLetterTile = Tile()
-        self.currPlacedTiles = []
         self.currPlacedXYs = []
-
-        self.lastPlacedTile = ''
         self.direction = ''
-        self.firstTilePlaced = ''
 
+        # The main GUI elements
         self.window = Tk()
         self.handFrame = LabelFrame(self.window, padx = 5)
+        
         # Fonts for tiles
         self.helv16 = tkFont.Font(self.window, family='Helvetica', size=15,
             weight=tkFont.BOLD)
@@ -93,42 +91,45 @@ class Gui:
             Image.open("./assets/2ls.png"))
         self.centerTileImg     = ImageTk.PhotoImage(
             Image.open("./assets/center.png"))
-
+        self.legendImg         = ImageTk.PhotoImage(
+            Image.open("./assets/legend.png"))
+        
     def setPlayer(self, cur_Player):
         print("setting player")
         self.my_player = cur_Player
 
+    # returns a tile array that corresponds to all the tiles in a single column
+    #   of tileGrid where column = colNum
     def colToArray(self, colNum):
         arrayToReturn = []
         for i in range(15):
             arrayToReturn.append(self.tileGrid[i][colNum])
         return arrayToReturn
 
-    #Button Pressed Funcs ============================================================
+    # calls Player().made_move() with information about the current game state.
     def clickSubmit(self):
-        print 'You clicked Submit'
-        rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
-        if self.direction == 'd':
-            rowOrCol = self.colToArray(self.currPlacedXYs[0][1])
-        print("about to call made_move")
+        if currPlacedTiles > 0:
+            print 'You clicked Submit'
+            rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
+            if self.direction == 'd':
+                rowOrCol = self.colToArray(self.currPlacedXYs[0][1])
+            print("about to call made_move")
 
-        direction_curr = self.direction
-        currplacedXYs_curr = self.currPlacedXYs[0]
-        currplacedTiles_curr = self.currPlacedTiles
+            direction_curr = self.direction
+            currplacedXYs_curr = self.currPlacedXYs[0]
+            currplacedTiles_curr = self.currPlacedTiles
 
-        print("about to make thread")
-        self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_curr, currplacedTiles_curr)
-        print 'You clicked Submit end, thread started'
+            print("about to make thread")
+            self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_curr, currplacedTiles_curr)
+            print 'You clicked Submit end, thread started'
 
-
+    # Code to be executed when Exchange button is clicked
     def clickExchange(self):
         print 'You clicked Exchange'
 
+    # Code to be executed when Pass button is clicked
     def clickPass(self):
         print 'You clicked Pass'
-
-    def addToHand(self, letter):
-        print 'added ', letter, 'to hand'
 
     # Clicking on the board
     def boardClicked(self, event):
@@ -136,16 +137,20 @@ class Gui:
         validMove = True
         row = 0
         col = 0
-
+        
+        # nested loops to find row and column of clicked tile
         for row in range(15):
             for col in range(15):
                 if self.grid[row][col] == event.widget:
                     break;
             if self.grid[row][col] == event.widget:
                 break;
-
         print 'after break: row, col = ', str(row), ', ', str(col)
+        
+
         if len(self.currPlacedXYs) == 1:
+        # figures out if player is making a word along the x or y axis and
+        #    sets self.direction to r or d respectively.
             print self.currPlacedXYs[0]
             if self.currPlacedXYs[0][0] == row:
                 self.direction = 'r'
@@ -153,6 +158,8 @@ class Gui:
                 self.direction = 'd'
             else:
                 validMove = False
+        # makes sure player is placing the current tile in the same row or column
+        #    as previously placed tiles
         elif len(self.currPlacedXYs) > 1:
             print 'self.currPlacedXYs[0][0] = ', self.currPlacedXYs[0][0]
             print 'row, col = ', str(row), ', ', str(col)
@@ -169,7 +176,11 @@ class Gui:
             if event.widget.config()['text'][4] == '':
                 event.widget.config(text = self.currLetterTile.value, image = self.tileImg)
 
-            #code to extract row, col
+            # records information about correctly placed tile:
+            #    appends row, col coordinates of placed tile to self.currPlacedXYs
+            #    appends the placed tile to self.currPlacedTiles
+            # updates label on window to diplay newly placed tile
+            # resets self.currLetterTile to hold an empty tile
             for row in range(15):
                 for col in range(15):
                     if self.grid[row][col] == event.widget:
@@ -179,22 +190,13 @@ class Gui:
                         self.tileGrid[row][col] = self.currLetterTile
                         self.currLetterTile = Tile('')
 
+
+    # Debug function that makes a favorable game state
     def boardRightClicked(self, event):
         print 'we in boardRightClicked'
-        testHand  = string_to_tiles('turtler')
+        testHand  = string_to_tiles('turtles')
         dummyScores = [2, 3, 4, 5]
         self.refresh(self.tileGrid, testHand, dummyScores)
-        
-        #row = col = 0
-        #for row in range(15):
-            #for col in range(15):
-                #if self.grid[row][col] == event.widget:
-                    #break;
-            #if self.grid[row][col] == event.widget:
-                #break;
-        
-        #for i in range(len(currPlacedTiles)):
-            #if event.widget == tileGrid[row]col]
             
 
     # Clicking on a tile in hand
@@ -235,7 +237,7 @@ class Gui:
             #Main self.window of an application
             self.window.title("Scrabble")
             self.window.geometry("1100x650")
-            self.window.configure(background='grey')
+            self.window.configure(background='SteelBlue1')
 
             #Score Labels
             scoreFrame = LabelFrame(self.window, text="Scores")
@@ -261,6 +263,12 @@ class Gui:
                         singleTile.pack(side = LEFT)
                         self.hand.append(singleTile)
 
+                #Make legend
+                legendLabel = Label(self.window, image = self.legendImg,
+                    text = '', font = self.helv16, compound = CENTER)
+                legendLabel.place(relx = .90, rely = .4,)
+                
+                
                 self.makeBoardGrid()
                 buttonFrame.place(relx = .55, rely = 1, anchor = SW)
                 self.handFrame.place(relx = .60, rely = .5,)
@@ -326,9 +334,7 @@ class Gui:
 
             #reset everything for this turn
             self.currPlacedTiles = []
-            self.lastPlacedTile = ''
             self.direction = ''
-            self.firstTilePlaced = []
             self.currPlacedXYs = []
             self.currPlacedTiles = []
             self.currLetterTile = Tile()

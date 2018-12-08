@@ -49,7 +49,7 @@ class Player:
                 start_pos = (start_index, start_pos[1])
 
             print("start_pos: {}: ".format(start_pos))
-            valid, new_grid, new_score = self.board.update(start_pos, word, direction)
+            valid, new_grid, new_score = self.board.update(start_pos, word, direction, False)
             print(valid)
             if valid:
                 print("in valid")
@@ -135,6 +135,7 @@ def send_message(dest_pid, message):
     print("message: {}".format(message))
     #call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
     cast(dest_pid, message)
+
     print("Sent message from m_f_p")
 
 from GUI import Gui

@@ -7,12 +7,14 @@
 #               type of multiplier is a char, 'w' for word, 'l' for letter
 # id -> a unique identifier given to each tile (must be set by client)
 
+# Convert string word to an array of Tiles
 def string_to_tiles(word):
     tile_word = []
     for letter in word:
         tile_word.append(Tile(letter))
     return tile_word
 
+# Convert an array of Tiles to a string
 def tiles_to_string(tile_word):
     word = ""
     for letter in tile_word:
@@ -21,11 +23,14 @@ def tiles_to_string(tile_word):
 
 
 class Tile:
-
-    def __init__(self, start_value='', start_score=0, start_multiplier=(1,'w'), start_id=0, tuple_form=''):
+    def __init__(self, start_value='', start_score=0, start_multiplier=(1,'w'), 
+                 start_id=0, tuple_form=''):
         if tuple_form == '':
             self.value      = start_value
             self.score      = self.scores[start_value]
+            # Multiplier is a tuple where position 0 holds the multiplier value
+            # and position 1 holds whether to multiply by word score (w) or 
+            # letter score (l)
             self.multiplier = start_multiplier
             self.id         = start_id
         else:
@@ -34,15 +39,16 @@ class Tile:
             self.multiplier = tuple_form[2]
             self.id         = tuple_form[3]
 
+    # Convert Tile object to tuple so that it can be passed in Erport
     def to_tuple(self):
         return (self.value, self.score, self.multiplier, self.id)
 
+    # Checks if tile value is blank 
     def is_blank(self):
         return self.value == ''
 
 
-    # equal overloader
-    # everything is equal to blank or multiplier
+    # equal overloader. Equal if everything blank or if ID and value match
     def __eq__(self, other):
         if self.value == '' or other.value == '':
             return True
