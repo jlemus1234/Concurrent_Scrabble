@@ -40,6 +40,8 @@ class Board:
             # check if starting position is valid
             row = starting_positon[0]
             col = starting_positon[1]
+            print("row before inbonds: {}".format(row))
+            print("col before inbounds: {}".format(row))
             if not self.inbounds(row,col):
                 # print("returning 2")
                 return (False, self.grid, 0)
@@ -64,6 +66,7 @@ class Board:
 
             # create copy of grid so if the word turns out to not work we have the old list
             grid = [row[:] for row in self.grid]
+            print("grid: {}".format(grid))
             # used to lock cross_score and is_valid
             mutex = threading.Lock()
             threads = []
@@ -71,6 +74,9 @@ class Board:
             is_valid = [True]
             for letter in word:
                 # check to see if a tile is already there
+                print("row before is_blank: {}".format(row))
+                print("col before is_blank: {}".format(row))
+                
                 if grid[row][col].is_blank():
                     # can be inserted
                     new_tile_count += 1

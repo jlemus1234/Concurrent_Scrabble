@@ -31,8 +31,9 @@ class Player:
             self.gui = GUI
 
 
-    def made_move(self, tile_ray, direction, start_pos, used_tiles):
+    def made_move(self, tile_ray, direction, start_pos_array, used_tiles):
         print("in made move before lock")
+        start_pos = (start_pos_array[0], start_pos_array[1])
         with self.lock:
             print("in made_move after lock")
             start_index = start_pos[0] # if direction = 'd'
@@ -40,7 +41,7 @@ class Player:
                 start_index = start_pos[1]
 
             word = self.get_word(tile_ray, start_index);
-
+            print("start_pos: {}: ".format(start_pos))
             valid, new_grid, new_score = self.board.update(start_pos, word, direction)
 
             if valid:
