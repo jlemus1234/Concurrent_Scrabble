@@ -66,7 +66,7 @@ def handler(message):
     # getting rid of PID of destination
     print("inside middle_for_player handler")
 #    print("this is the message: {}".format(message))
-    thread = threading.Thread(target=handler_helper, args=(message))
+    thread = threading.Thread(target=handler_helper, args=((message)))
     thread.daemon = True
     thread.start()
 
