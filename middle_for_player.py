@@ -58,9 +58,7 @@ def register_handler(dest):
     # no need to hold on to dest (the PID from which the message was sent)
     # because it will stay const and was set in start
     print("setting client handler")
-    thread = threading.Thread(target=set_message_handler, args=(handler))
-    thread.daemon = True
-    thread.start()
+    set_message_handler(handler)
     return Atom("ok")
 
 # need to add more funcitons
