@@ -276,7 +276,7 @@ class Gui:
                 #Tiles in hand
                 if self.hand == []:
                     for i in range(7):
-                        singleTile = self.makeTile(str(i))
+                        singleTile = self.makeTile('')
                         singleTile.bind("<Button-1>", self.handClicked)
                         singleTile.pack(side = LEFT)
                         self.hand.append(singleTile)
