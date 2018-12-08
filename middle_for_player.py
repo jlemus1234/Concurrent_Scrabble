@@ -20,103 +20,81 @@ def start(my_Pid, server_Pid):
     global player, gui, PID_my, PID_server
     PID_my = my_Pid
     PID_server = server_Pid
-
-
-    # start_lock = [threading.Semaphore(0)]
     gameThread = threading.Thread(target = start_gui)
     gameThread.start()
-    # send start message
-    #send_message((PID_server, "new player"))
-    # start_lock[0].acquire()
+
+    # sends message back to server saying we want to play
     send_message(PID_server, (PID_my, "new player"))
 
-     # Sending the python instance's pid right now
-    #cast(PID
-    print("calling player start")
+# Think we can delete this later
+# def send_message_helper(message):
+#     send_message(PID_server, message)
 
-def send_message_helper(message):
-    send_message(PID_server, message)
-
+# This is used to start up the player and gui
 def start_gui():
     global player, gui, PID_server, PID_my
     player = Player("Player", PID_server, PID_my)
     gui = Gui()
     player.setGUI(gui)
-    # start_lock[0].release()
     gui.setPlayer(player)
-    # something like this
     gui.start()
 
-
-    ## This creates the game loop that the game doesn't return from.
-    ## must launch this from a different thread.
-
-
-    #send_message(("new player", PID_my))
-    print("player start finished")
-    # need to now send message to server registering me
-
-
-
+# function needed for Erlport
+# sets up the default handler for any messages python recieves
 def register_handler(dest):
-    # no need to hold on to dest (the PID from which the message was sent)
-    # because it will stay const and was set in start
-    print("setting client handler")
     set_message_handler(handler)
     return Atom("ok")
 
-# need to add more funcitons
+# our handler that all messages pass through
 def handler(message):
-    # getting rid of PID of destination
     print("inside middle_for_player handler")
-#    print("this is the message: {}".format(message))
     print(message)
     thread = threading.Thread(target=handler_helper, args=(message))
     thread.daemon = True
     thread.start()
 
+# this is our helper function for the handler
+# It is used as targets of threads so we can handle multiple requests
+# that may eventually call gui.refresh which starts an infinite loop
 def handler_helper(message_type, board, scores, old_tiles, new_tiles):
     print("in other thread")
-    #message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,
         "refresh":refresh_func
-        # "report_winner":winner,
-        # "end":end_game
     }
     switcher[message_type](board, scores, old_tiles, new_tiles)
 
+# sends message from the player to the given PID, in this case, the server
 def send_message(dest_pid, message):
     print("Sending message from middle_for_player")
     retvalue = call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
     print(retvalue)
     print("Sent message from m_f_p")
-    #cast(PID_server, message) # does send to the game server, but not through gen server (unhandled)
-    #cast(PID_my, (PID_server, PID_my, message)) #original
 
 
+# function that takes in a message that a player may recieve, and breaks it
+# splits it up into its compounents
 def split_message_player_side(message):
     board       = message[0]
     scores      = message[1]
     old_tiles   = message[2]
     new_tiles   = message[3]
     return board, scores, old_tiles, new_tiles
-#new_tiles
 
+# function used when the message recieved has the keyword "refresh"
+# this means the message contains information about a new board and new scores
 def refresh_func(board, scores, old_tiles_tup, new_tiles_tup):
-    # board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
     print("in refresh_func middle_for_player")
     global player
-    tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
-
+    tile_board = [[Tile("","","","",tile_tup) for tile_tup in row]
+                                                for row in board]
     player.refresh(tile_board, scores)
 
+# function used when the message recieved has the keyword "tiles"
+# this means the message contains information about a new tiles and old tiles
 def new_tiles_func(board, scores, old_tiles_tup, new_tiles_tup):
-    # board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
     print("in new_tiles_func middle_for_player")
-
     global player
-
     new_tiles = []
     for tile_tup in new_tiles_tup:
          new_tiles.append(Tile("","","","",tile_tup))
@@ -124,7 +102,5 @@ def new_tiles_func(board, scores, old_tiles_tup, new_tiles_tup):
     old_tiles = []
     for tile_tup_old in old_tiles_tup:
         old_tiles.append(Tile("","","","",tile_tup_old))
-
-    #tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
 
     player.get_new_tiles(old_tiles, new_tiles)

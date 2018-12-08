@@ -133,7 +133,7 @@ def send_message(dest_pid, message):
     print("Sending message from middle_for_player")
     print("destination Pid: {}".format(dest_pid))
     print("message: {}".format(message))
-    call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
+    retvalue = call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
     print("Sent message from m_f_p")
 
 from GUI import Gui
