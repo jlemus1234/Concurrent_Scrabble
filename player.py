@@ -18,13 +18,13 @@ from erlport.erlang import set_message_handler, call, cast, self as selfPID
 
 
 class Player:
-    def __init__(self, name, PID_sever, PID_me):
+    def __init__(self, name, PID_server_player, PID_me_player):
         self.board = Board()
         self.scores = [0,0,0,0]
         self.name  = name
         self.tiles = []
-        self.erlangPID = PID_server
-        self.erlangMe = PID_me
+        self.erlangPID = PID_server_player
+        self.erlangMe = PID_me_player
         self.gui = None
         self.lock = threading.Lock()
 
