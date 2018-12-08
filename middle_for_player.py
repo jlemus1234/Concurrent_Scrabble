@@ -14,6 +14,8 @@ global PID_my # python instance's parent pid
 global PID_server # pid of game server
 
 
+
+
 def start(my_Pid, server_Pid):
     global player, gui, PID_my, PID_server
     PID_my = my_Pid
