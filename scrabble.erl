@@ -182,7 +182,7 @@ join_game(NodeName) ->
 %% Set up the python process
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
 %% Set up a listener
-	Receiver = spawn_link(scrabble, get_server_messages, [Pypid]),
+	%%Receiver = spawn_link(scrabble, get_server_messages, [Pypid]),
 %% Game server's pid
 	GameServer = {scrabble, NodeName},
 %% Set up the python message handler
@@ -214,7 +214,8 @@ get_server_messages(Pypid) ->
 	receive Something ->
 		io:format("~s~n", ["got something from server"]),
 		io:format("~p~n", [Something]),
-		Pypid ! Something
+		%Pypid ! Something
+		python:cast(Pypid, something)
 	end,
 	get_server_messages(Pypid).
 
