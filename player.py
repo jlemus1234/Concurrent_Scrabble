@@ -34,10 +34,8 @@ class Player:
 
 
     def made_move(self, tile_ray, direction, start_pos_array, used_tiles):
-        print("in made move before lock")
         start_pos = (start_pos_array[0], start_pos_array[1])
         with self.lock:
-            print("in made_move after lock")
             start_index = start_pos[0] # if direction = 'd'
             if direction == 'r':
                 start_index = start_pos[1]
@@ -48,26 +46,15 @@ class Player:
             else:
                 start_pos = (start_index, start_pos[1])
 
-            print("start_pos: {}: ".format(start_pos))
             valid, new_grid, new_score = self.board.update(start_pos, word, direction, False)
-            print(valid)
             if valid:
-                print("in valid")
                 # send to server
                 self.send_to_server(word, direction, start_pos, used_tiles)
-
-                # dont want to remove tiles anymore
-                # # remove tiles from rack
-                # for tile in used_tiles:
-                #     self.tiles.remove(tile)
-            print("not in valid")
             # refresh display
             self.gui.refresh(new_grid, self.tiles[:], self.scores)
 
     def refresh(self, tile_board, scores):
-        print("in refresh in player before lock")
         with self.lock:
-            print("in refresh in player after lock")
             self.board.set_board(tile_board)
             self.scores = scores
             self.board.print_board()
@@ -75,13 +62,10 @@ class Player:
             # print tiles
             for tile_print in cur_tiles:
                 print(tile_print.to_tuple())
-        print("in refresh in player after lock released")
         self.gui.refresh(tile_board, cur_tiles, scores)
 
     def get_new_tiles(self, old_tiles, new_tiles):
-        print("in get_new_tiles player before lock")
         with self.lock:
-            print("in get_new_tiles player after lock")
             for tile in old_tiles:
                 self.tiles.remove(tile)
             self.tiles.extend(new_tiles)
@@ -90,20 +74,16 @@ class Player:
             # print tiles
             for tile_print in tiles_cur:
                 print(tile_print.to_tuple())
-        print("in get_new_tiles player after lock released")
         self.gui.refresh(self.board.get_board(), tiles_cur, scores_cur)
 
     def send_to_server(self, word, direction, start_pos, used_tiles):
-        print("in send to server")
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
-        print("about to send message")
-        print("message in send_to_server: {}".format((self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles_tuple)))
-        send_message(self.erlangPID, (self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles_tuple))
+        send_message(self.erlangPID, (self.erlangMe, "move", word_tuple,
+        direction, start_pos, used_tiles_tuple))
 
 
     def get_word(self, tile_ray, start_pos):
-        print("in get word")
         word = []
         front = start_pos
         # finds begining of word
@@ -126,20 +106,13 @@ class Player:
             else:
                 word.append(tile_ray[back])
             back += 1
-        print("in get word front: {}, word: {}".format(front,word))
         return word, front
 
 def send_message(dest_pid, message):
-    print("Sending message from middle_for_player")
-    print("destination Pid: {}".format(dest_pid))
-    print("message: {}".format(message))
     retvalue = call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
-    print("Sent message from m_f_p")
 
 from GUI import Gui
-    # def sendMessageToErlang(self, tile_ray, direction, start_pos, used_tiles):
-    # def receiveMessageFromErlang(self):
-    # def moveSuccessful()
+
 
 
 
