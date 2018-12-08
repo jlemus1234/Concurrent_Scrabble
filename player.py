@@ -50,8 +50,9 @@ class Player:
 
             print("start_pos: {}: ".format(start_pos))
             valid, new_grid, new_score = self.board.update(start_pos, word, direction)
-
+            print(valid)
             if valid:
+                print("in valid")
                 # send to server
                 self.send_to_server(word, direction, start_pos, used_tiles)
 
@@ -59,9 +60,9 @@ class Player:
                 # # remove tiles from rack
                 # for tile in used_tiles:
                 #     self.tiles.remove(tile)
-
+            print("not in valid")
             # refresh display
-            #self.gui.refresh(new_grid, self.tiles, self.scores)
+            self.gui.refresh(new_grid, self.tiles, self.scores)
 
     def refresh(self, tile_board, scores):
         with self.lock:
