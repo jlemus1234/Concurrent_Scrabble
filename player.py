@@ -12,7 +12,7 @@ from board import Board
 from tile import Tile
 import threading
 
-from middle_for_game import send_message
+from middle_for_game import send_message_helper
 
 
 
@@ -77,7 +77,7 @@ class Player:
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
     ## What is this send function?
-        send_message(("move", word_tuple, direction, start_pos, used_tiles))
+        send_message_helper(("move", word_tuple, direction, start_pos, used_tiles))
 
 
     def get_word(self, tile_ray, start_pos):
