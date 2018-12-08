@@ -62,6 +62,7 @@ class Gui:
         # Tile representation of the GUI board
         self.tileGrid = []
 
+        #self.hand = ['' for i in range(7)]
         self.hand = []
         self.tileHand = []
         self.scores = [0, 0, 0, 0]
@@ -273,11 +274,12 @@ class Gui:
                 passBtn.pack(side = LEFT)
 
                 #Tiles in hand
-                for i in range(7):
-                    singleTile = self.makeTile(str(i))
-                    singleTile.bind("<Button-1>", self.handClicked)
-                    singleTile.pack(side = LEFT)
-                    self.hand.append(singleTile)
+                if self.hand == []:
+                    for i in range(7):
+                        singleTile = self.makeTile(str(i))
+                        singleTile.bind("<Button-1>", self.handClicked)
+                        singleTile.pack(side = LEFT)
+                        self.hand.append(singleTile)
 
                 self.makeBoardGrid()
                 buttonFrame.place(relx = .55, rely = 1, anchor = SW)
