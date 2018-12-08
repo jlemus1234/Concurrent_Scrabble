@@ -47,11 +47,14 @@ class Game:
         with self.lock:
             print("After lock acquired inside check move")
             valid, new_board, score = self.board.update(starting_positon, word, direction)
+            print("valid: {}".format(valid))
+            temp_board = Board(new_board)
+            temp_board.print_board()
             if not valid:
                 self.send_to_one_player("refresh", player_number, False, new_board, self.scores, [], [])
             else:
                 # have to send to all players new state and to one player new tiles
-                self.first_move = False
+                # self.first_move = False
                 self.scores[player_number] += score
                 new_tiles = self.bag.take_n_from_bag(len(used_tiles))
                 self.send_to_one_player(player_number, True, [[]], [], used_tiles, new_tiles)
@@ -103,7 +106,7 @@ class Game:
     # status, board, scores, old_tiles, new_tiles
 
     def send_to_one_player(self, keyword, player_number, staus, board, scores, old_tiles, new_tiles):
-	print("in send_to_one_player of game.py")
+	    print("in send_to_one_player of game.py")
         # everything sent should be in a sendable way
         tuple_board     = [[tile.to_tuple() for tile in row] for row in board]
         # not converting used_tiles to Tiles so no need to switch back
