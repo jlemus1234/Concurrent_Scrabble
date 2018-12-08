@@ -13,8 +13,7 @@ from tile import Tile
 import threading
 from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, call, cast, self as selfPID
-
-from middle_for_player import send_message
+# from middle_for_player import send_message
 
 
 
@@ -105,7 +104,10 @@ class Player:
             back += 1
         return word
 
-
+def send_message(dest_pid, message):
+    print("Sending message from middle_for_player")
+    call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
+    print("Sent message from m_f_p")
 
 from GUI import Gui
     # def sendMessageToErlang(self, tile_ray, direction, start_pos, used_tiles):
