@@ -23,16 +23,16 @@ def send_message(player_number, message):
     global PID_my, PID_players
     print("In middle of game's send message")
     dest = PID_players[player_number]
-    # Erlport call function to send message because it spawns a new process 
+    # Erlport call function to send message because it spawns a new process
     call(Atom("scrabble"), Atom("send_to_pyclient"), [dest, message])
 
-# Function needed for Erlport. Sets up the default handler for 
+# Function needed for Erlport. Sets up the default handler for
 # any messages python recieves
 def register_handler(dest):
     set_message_handler(handler)
     return Atom("ok")
 
-# Takes in message and calls the appropriate function. Message could either 
+# Takes in message and calls the appropriate function. Message could either
 # instruct to create a new player, make a move, or end the game
 def handler(message):
     print("In python handler for middle_for_game")
@@ -56,13 +56,13 @@ def add_player(message):
     PID_players.append(message[0])
     game.new_player(len(PID_players) - 1)
 
-# Split the message given to vlarify the return values and check if the move is 
+# Split the message given to vlarify the return values and check if the move is
 # valid by calling "check_move" from within the game module instance.
 def make_move(message):
     print("Making move")
-    player_number, word, direction, starting_positon, used_tiles = 
-    split_message(message)
-    game.check_move(player_number, word, starting_positon, direction, 
+    (player_number, word, direction, starting_positon,
+                                        used_tiles) = split_message(message)
+    game.check_move(player_number, word, starting_positon, direction,
                     used_tiles)
 
 def game_over():
