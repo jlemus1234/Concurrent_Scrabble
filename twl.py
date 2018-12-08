@@ -111,7 +111,8 @@ the search fails - the string is not a word.
 
 See also:
 
-http://code.activestate.com/recipes/577835-self-contained-twl06-dictionary-module-500-kb/
+http://code.activestate.com/recipes/577835-self-contained-twl06-dictionary-
+module-500-kb/
 http://en.wikipedia.org/wiki/Official_Tournament_and_Club_Word_List
 http://www.isc.ro/lists/twl06.zip
 '''

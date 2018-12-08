@@ -23,7 +23,7 @@ def tiles_to_string(tile_word):
 
 
 class Tile:
-    def __init__(self, start_value='', start_score=0, start_multiplier=(1,'w'), 
+    def __init__(self, start_value='', start_score=0, start_multiplier=(1,'w'),
                  start_id=0, tuple_form=''):
         if tuple_form == '':
             self.value      = start_value
