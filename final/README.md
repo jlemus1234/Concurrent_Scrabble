@@ -3,10 +3,10 @@
 
 ### Made by:
 
-    * Billy Witrock
-    * Saad Mazhar
-    * Irving Pena
-    * Jose Ortiz
+* Billy Witrock
+* Saad Mazhar
+* Irving Pena
+* Jose Ortiz
 
 ## Guide to Files and folder
 #### assets
