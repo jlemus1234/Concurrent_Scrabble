@@ -80,7 +80,7 @@ def game_over():
 
 def split_message(message):
     global player_PID
-    player_number       = player_PID.index(message[0])
+    player_number       = PID_players.index(message[0])
     word                = message[2]
     direction           = message[3]
     starting_positon    = message[4]

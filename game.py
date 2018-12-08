@@ -38,12 +38,12 @@ class Game:
 
         # check if first move is in center
         if self.first_move:
-            if not over_lap_center(word, starting_positon, direction):
+            if not self.over_lap_center(word, starting_positon, direction):
                 self.send_to_one_player(player_number, False, self.board.get_board(), self.scores, [], [])
                 return
 
         with self.lock:
-            valid, new_board, score = board.update(starting_positon, word, direction)
+            valid, new_board, score = self.board.update(starting_positon, word, direction)
             if not valid:
                 self.send_to_one_player("refresh", player_number, False, new_board, self.scores, [], [])
             else:
@@ -54,7 +54,7 @@ class Game:
                 self.send_to_one_player(player_number, True, [[]], [], used_tiles, new_tiles)
                 self.send_to_all_player(True, new_board, self.scores, [], [])
 
-    def over_lap_center(word, positon, direction):
+    def over_lap_center(self, word, positon, direction):
         length = len(word)
         for i in range(length):
             if positon == (7,7):
