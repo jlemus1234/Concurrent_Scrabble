@@ -138,7 +138,7 @@ join_game(NodeName) ->
 % Await any messages sent from the game server
 get_server_messages(Pypid) ->
 	receive {r, Message} ->
-			;
+			nothing;
 		Something ->
 			python:cast(Pypid, Something)
 	end,
