@@ -15,8 +15,8 @@
 #### erlport
 
     * The erlport folder contains our version of erlport that we are using.
-    Some of the files have been modified from the original files on the Github
-    repository
+        Some of the files have been modified from the original files on the
+        Github repository
 
 #### mttkinter
 
