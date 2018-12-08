@@ -87,7 +87,6 @@ def handler_helper(message_type, board, scores, old_tiles, new_tiles):
     switcher[message_type](board, scores, old_tiles, new_tiles)
 
 def send_message(dest_pid, message):
-    global PID_my, PID_server
     print("Sending message from middle_for_player")
     call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
     print("Sent message from m_f_p")
