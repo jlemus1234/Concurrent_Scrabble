@@ -112,9 +112,9 @@ class Gui:
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
-        rowOrCol = self.tileGrid[currPlacedXYs[0][0]]
+        rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
-            rowOrCol = colToArray(currPlacedXYs[0][1])
+            rowOrCol = colToArray(self.currPlacedXYs[0][1])
         player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
         print 'You clicked Submit'
 
@@ -177,15 +177,19 @@ class Gui:
                         self.currPlacedTiles.append(self.currLetterTile)
                         self.currPlacedXYs.append([row ,col])
                         self.tileGrid[row][col] = self.currLetterTile
-                        self.currLetterTile = ''
+                        self.currLetterTile = Tile('')
 
     def boardRightClicked(self, event):
         print 'we in boardRightClicked'
-        clickedLetter = event.widget.config()['text'][4]
-        if clickedLetter != '':
-            self.addToHand(clickedLetter)
-            event.widget.config(text = '', image = self.tileImg)
-            self.currLetterChar = ''
+        testHand  = string_to_tiles('turtler')
+        dummyScores = [2, 3, 4, 5]
+        self.refresh(self.tileGrid, testHand, dummyScores)
+        
+        #clickedLetter = event.widget.config()['text'][4]
+        #if clickedLetter != '':
+            #self.addToHand(clickedLetter)
+            #event.widget.config(text = '', image = self.tileImg)
+            #self.currLetterChar = ''
 
     # Clicking on a tile in hand
     def handClicked(self, event):
@@ -266,12 +270,12 @@ class Gui:
         print 'before mainloop'
         # move loop start to main, in final version the caller will need
         # to start loop after calling .start()
-        thread = threading.Thread(target = self.window.mainloop)
-        thread.daemon = True
-        thread.start()
+        #thread = threading.Thread(target = self.window.mainloop)
+        #thread.daemon = True
+        #thread.start()
         print 'after mainloop'
         
-        from player import Player
+        #from player import Player
 
 
     def drawTileGrid(self):
@@ -323,10 +327,12 @@ class Gui:
         self.lastPlacedTile = ''
         self.direction = ''
         self.firstTilePlaced = []
-        self.window.quit()
-        thread = threading.Thread(target = self.window.mainloop)
-        thread.daemon = True
-        thread.start()
+        self.currPlacedXYs = []
+        self.currPlacedTiles = []     
+        
+        self.window.mainloop()
+        self.window.update()
+
 
 #main for testing
 def main():
@@ -335,14 +341,15 @@ def main():
     testBoard = Board()
     testHand  = string_to_tiles('rabbitr')
     dummyScores = [100, 12, 34, 56]
-    while True:
-        #player1Screen.drawScores(dummyScores)
-        print 'calling player1Screen'
-        player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
-        player1Screen.window.mainloop()
-        testHand  = string_to_tiles('turtler')
-        dummyScores = [2, 3, 4, 5]
-        player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
+    
+    #player1Screen.drawScores(dummyScores)
+    print 'calling player1Screen'
+    player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
+    #player1Screen.window.mainloop()
+        
+    testHand  = string_to_tiles('turtler')
+    dummyScores = [2, 3, 4, 5]
+    player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
 
 
 if __name__ == '__main__':
