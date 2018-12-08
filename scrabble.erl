@@ -22,7 +22,7 @@
 -export([broadcastMoveResult/1, printMoveResult/1, gotNewMove/0]).
 
 %% gen_server callbacks
--export([init/1, handle_call/3, handle_cast/2, terminate/2]).
+-export([init/1, handle_call/3, handle_cast/2, terminate/2, handle_info/2]).
 
 
 %%====================================================================
@@ -104,8 +104,15 @@ handle_cast(_X, State) ->
 	io:format("~s~n", ["Got unmatched message"]),
 	{noreply, State}.
 
-
-
+%%--------------------------------------------------------------------
+%% Function: handle_info/2
+%% 
+%%--------------------------------------------------------------------
+handle_info(Info, PyPid) ->
+	io:format("~s~n", ["Server received some info"]),
+	python:cast(PyPid, Info),
+	{noreply, PyPid}.
+	
 %%--------------------------------------------------------------------
 %% Function: terminate/2
 %% Description: Shutdown the server
@@ -187,8 +194,8 @@ join_game(NodeName) ->
 	GameServer = {scrabble, NodeName},
 %% Set up the python message handler
 	python:call(Pypid, middle_for_player, register_handler, [self()]),
-%	python:call(Pypid, middle_for_player, start, [self(), GameServer]),
-	python:call(Pypid, middle_for_player, start, [Pypid, GameServer]),
+	python:call(Pypid, middle_for_player, start, [self(), GameServer]),
+%	python:call(Pypid, middle_for_player, start, [Pypid, GameServer]),
 %% Listen to client
 	%get_client_messages(GameServer, Pypid),
 	get_server_messages(Pypid),
@@ -213,10 +220,13 @@ get_client_messages(GameServer, Pypid) ->
 get_server_messages(Pypid) ->
 	%receive {message, MessageText} ->
 	%receive Something ->
-	receive {message, Something} ->
+	%receive {message, Something} ->
+	receive {r, Message} ->
+			io:format("~s~n", ["atom r"]);
+		Something ->
 			io:format("~s~n", ["got something from server"]),
 			io:format("~p~n", [Something]),
-			%Pypid ! Something
+			%Pypid ! Something;
 			python:cast(Pypid, Something);
 		Anything ->
 			io:format("~s~n", ["Wrong format"]),
@@ -235,9 +245,15 @@ send_messages(PID, Message) ->
 %	io:format("~s~n", [ServerPID]),
 %	1.
 
+%send_to_pyclient(erlPID, Message) ->
+%	erlPID ! Message.
+
 send_to_pyclient(PyPid, Message) ->
 	io:format("~s~n", ["Trying to send message to pyclient"]),
-	python:cast(PyPid, Message).
+	io:format("~p~n", [PyPid]),
+	io:format("~p~n", [Message]),
+	PyPid ! Message.
+	%python:cast(PyPid, Message).
 
 
 %send_messages(Anything) ->
