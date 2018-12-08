@@ -18,13 +18,13 @@ from middle_for_game import send_message
 
 class Player:
     def __init__(self, name, PID):
-	self.board = Board()
-    self.scores = [0,0,0,0]
-    self.name  = name
-    self.tiles = []
-    self.erlangPID = PID
-    self.gui = None
-    self.lock = threading.Lock()
+        self.board = Board()
+        self.scores = [0,0,0,0]
+        self.name  = name
+        self.tiles = []
+        self.erlangPID = PID
+        self.gui = None
+        self.lock = threading.Lock()
 
     def setGUI(self, GUI):
         with self.lock:
@@ -75,7 +75,7 @@ class Player:
     def send_to_server(self, word, direction, start_pos, used_tiles):
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
-	## What is this send function?
+    ## What is this send function?
         send_message(("move", word_tuple, direction, start_pos, used_tiles))
 
 
