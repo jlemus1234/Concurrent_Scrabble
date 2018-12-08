@@ -42,7 +42,12 @@ class Player:
             if direction == 'r':
                 start_index = start_pos[1]
 
-            word = self.get_word(tile_ray, start_index);
+            word, start_index = self.get_word(tile_ray, start_index);
+            if direction == 'r':
+                start_pos = (start_pos[0], start_index)
+            else:
+                start_pos = (start_index, start_pos[1])
+
             print("start_pos: {}: ".format(start_pos))
             valid, new_grid, new_score = self.board.update(start_pos, word, direction)
 
@@ -103,7 +108,7 @@ class Player:
             else:
                 word.append(tile_ray[back])
             back += 1
-        return word
+        return word, front
 
 def send_message(dest_pid, message):
     print("Sending message from middle_for_player")
