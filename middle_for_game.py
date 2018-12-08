@@ -5,7 +5,7 @@ from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, call, cast
 
 
-
+import time
 global game
 global PID_my
 global PID_players
@@ -62,6 +62,7 @@ def handler(message):
         "move":make_move
         # "game over":game_over
     }
+    time.sleep(5)
     switcher[message_type](message)
 
 # INCOMPLETE need to know what the message looks like

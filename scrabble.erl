@@ -224,7 +224,9 @@ get_server_messages(Pypid) ->
 send_messages(PID, Message) ->
 	io:format("~s~n", ["Trying to send message"]),
 	gen_server:cast(PID, Message),
-	sent.
+	testingsenterror.
+
+
 %	io:format("~s~n", [ServerPID]),
 %	1.
 
