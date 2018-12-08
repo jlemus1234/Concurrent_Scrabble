@@ -34,13 +34,13 @@ def start(my_Pid, server_Pid):
 
 
 def start_gui():
-    global player, gui
+    global player, gui, PID_server, PID_my
     player = Player("Player",PID_server)
     gui = Gui()
     player.setGUI(gui)
     # start_lock[0].release()
     gui.setPlayer(player)
-    send_message(PID_server, (selfPID(), "new player"))
+    send_message(PID_server, (PID_my, "new player"))
     # something like this
     gui.start()
 
