@@ -27,16 +27,19 @@ class Board:
 
     # takes array of tiles as word
     def update(self,starting_positon, word, direction):
+        print("in board update")
         score = 0
         word_multipler = 1
         tile = Tile() # simple tile used as a base for many comparisons
-        has_over_lap = False # used to make sure word is touching another
+        # has_over_lap = False # used to make sure word is touching another
         new_tile_count = 0 # used to see if user placed 7 tiles so 50 point bonus can be added
+        print("about to get lock")
         with self.lock:
+            print("got lock checking against dict")
             if (not twl.check(tiles_to_string(word))):
                 # print("returning 1")
                 return (False, self.grid, 0)
-
+            print("checked dict")
             # check if starting position is valid
             row = starting_positon[0]
             col = starting_positon[1]
@@ -60,6 +63,7 @@ class Board:
                 print("col before is_blank: {}".format(row))
 
                 if grid[row][col].is_blank():
+                    print("in is_blank section")
                     # can be inserted
                     new_tile_count += 1
                     temp_multi = grid[row][col].multiplier
@@ -84,12 +88,15 @@ class Board:
 
                 # check to see if tile trying to insert is already there
                 elif grid[row][col] != letter:
+                    print("letter already there")
                     return (False, self.grid, 0)
                 else:
                     # this means we are inserting the same tile so we are now overlapping what is there
-                    has_over_lap = True
+                    print("tile already there, so has overlap")
+                    # has_over_lap = True
                     score += grid[row][col].score
 
+                print("about to increase row/col")
                 # update row and col
                 if direction == 'd':
                     row += 1
@@ -100,16 +107,18 @@ class Board:
                 thread.join()
                 # print("thread joined")
 
-            # outside looping through letters
-            if (not has_over_lap) or (not is_valid[0]):
-                return (False, self.grid, 0)
-            else:
-                self.grid = grid
-                score = score * word_multipler + (cross_score[0])
-                return (True, self.grid, (score,score+50)[new_tile_count == 7])
+            # # outside looping through letters
+            # if (not has_over_lap) or (not is_valid[0]):
+            #     return (False, self.grid, 0)
+            # have to go back to make sure letters have overlap
+
+            self.grid = grid
+            score = score * word_multipler + (cross_score[0])
+            print("returing from update in board")
+            return (True, self.grid, (score,score+50)[new_tile_count == 7])
 
     def check_and_score_col(self,grid,r,c,multiplier, xtra_score, valid, mutex):
-        # print("in thread")
+        print("in thread check_and_score_col")
         # checking row so col is changing
         word = [grid[r][c]]
         temp_score = grid[r][c].score
@@ -151,10 +160,12 @@ class Board:
         with mutex:
             valid[0] = valid[0] and word_valid
             xtra_score[0] += temp_score
+        print("end thread check_and_score_col")
         return
 
 
     def check_and_score_row(self,grid,r,c,multiplier, xtra_score, valid, mutex):
+        print("in thread check_and_score_row")
         # print("in thread")
         # checking row so col is changing
         word = [grid[r][c]]
@@ -196,6 +207,7 @@ class Board:
         with mutex:
             valid[0] = valid[0] and word_valid
             xtra_score[0] += temp_score
+        print("end thread check_and_score_row")
         return
 
 
