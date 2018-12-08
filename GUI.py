@@ -38,8 +38,6 @@ class Gui:
 
     def __init__(self, grid = '', hand = '', scores = ''):
 
-        # self.lock = threading.Lock()
-
         # Labels of the board for GUI
         self.grid = [
             ['','','','','','','','','','','','','','',''],
@@ -62,7 +60,6 @@ class Gui:
         # Tile representation of the GUI board
         self.tileGrid = []
 
-        #self.hand = ['' for i in range(7)]
         self.hand = []
         self.tileHand = []
         self.scores = [0, 0, 0, 0]
@@ -107,14 +104,8 @@ class Gui:
             arrayToReturn.append(self.tileGrid[i][colNum])
         return arrayToReturn
 
-    #Button Pressed Funcs ===========-=-=-======================================-=-=-=-=-=-=-=-=-=-
-    #Needs to send:
-    #     tile_ray  = entire row or column being played TILES
-    #     direction = 'd' or 'r'
-    #     start     = (x, y) of first tile placed
-    #     usedTiles = Array of used TILES
+    #Button Pressed Funcs ============================================================
     def clickSubmit(self):
-      # with self.lock:
         print 'You clicked Submit'
         rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
@@ -122,15 +113,11 @@ class Gui:
         print("about to call made_move")
 
         direction_curr = self.direction
-        # print("direction: {}".format(direction_curr))
         currplacedXYs_curr = self.currPlacedXYs[0]
-        # print("currPlacedXYs: {}".format(currplacedXYs_curr))
         currplacedTiles_curr = self.currPlacedTiles
-        # print("currLetterTiles: {}".format(currplacedTiles_curr))
 
         print("about to make thread")
         self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_curr, currplacedTiles_curr)
-        # self.my_player.made_move(rowOrCol, direction_curr,    currplacedXYs_cur, currPlacedTiles_curr)
         print 'You clicked Submit end, thread started'
 
 
@@ -145,11 +132,8 @@ class Gui:
 
     # Clicking on the board
     def boardClicked(self, event):
-        print 'before boardClicked lock'
-        # with self.lock:
-        print 'got board lock'
+        print 'in boardClicked start'
         validMove = True
-        #find current x,y
         row = 0
         col = 0
 
@@ -179,15 +163,11 @@ class Gui:
             elif self.currPlacedXYs[0][1] != col and self.direction == 'd':
                 validMove = False
 
-        #below only executed when placing in proper spotupdate
+        #below only executed when placing in valid spot
         if validMove == True:
             print 'validMove = True'
             if event.widget.config()['text'][4] == '':
                 event.widget.config(text = self.currLetterTile.value, image = self.tileImg)
-                #self.currLetterChar = ''
-
-            #code to extract mouse click x,y. Unneeded
-            #print 'mouse click  on board x, y = ', event.x, event.y
 
             #code to extract row, col
             for row in range(15):
@@ -198,19 +178,24 @@ class Gui:
                         self.currPlacedXYs.append([row ,col])
                         self.tileGrid[row][col] = self.currLetterTile
                         self.currLetterTile = Tile('')
-            # print 'release board lock'
 
     def boardRightClicked(self, event):
         print 'we in boardRightClicked'
         testHand  = string_to_tiles('turtler')
         dummyScores = [2, 3, 4, 5]
         self.refresh(self.tileGrid, testHand, dummyScores)
-
-        #clickedLetter = event.widget.config()['text'][4]
-        #if clickedLetter != '':
-            #self.addToHand(clickedLetter)
-            #event.widget.config(text = '', image = self.tileImg)
-            #self.currLetterChar = ''
+        
+        #row = col = 0
+        #for row in range(15):
+            #for col in range(15):
+                #if self.grid[row][col] == event.widget:
+                    #break;
+            #if self.grid[row][col] == event.widget:
+                #break;
+        
+        #for i in range(len(currPlacedTiles)):
+            #if event.widget == tileGrid[row]col]
+            
 
     # Clicking on a tile in hand
     def handClicked(self, event):
@@ -243,15 +228,10 @@ class Gui:
                     text = '', font = self.helv16, compound = CENTER)
                 currTile.bind("<Button-1>", self.boardClicked)
                 currTile.bind("<Button-3>", self.boardRightClicked)
-                #currTile.bind("<Button-1>", lambda event: lamClick(event, currLetter))
                 currTile.grid(row = x, column = y)
                 self.grid[x][y] = currTile
 
-
-
-                #currTile.bind("<Button-1>", boardClicked)
     def start(self):
-        # with self.lock:
             #Main self.window of an application
             self.window.title("Scrabble")
             self.window.geometry("1100x650")
@@ -366,10 +346,8 @@ def main():
     testHand  = string_to_tiles('rabbitr')
     dummyScores = [100, 12, 34, 56]
 
-    #player1Screen.drawScores(dummyScores)
     print 'calling player1Screen'
     player1Screen.refresh(testBoard.get_board(), testHand, dummyScores)
-    #player1Screen.window.mainloop()
 
     testHand  = string_to_tiles('turtler')
     dummyScores = [2, 3, 4, 5]
