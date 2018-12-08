@@ -66,6 +66,12 @@ def handler(message):
     # getting rid of PID of destination
     print("inside middle_for_player handler")
 #    print("this is the message: {}".format(message))
+    thread = threading.Thread(target=handler_helper, args=(message))
+    thread.daemon = True
+    thread.start()
+
+def handler_helper(message):
+    print("in other thread")
     message_type = message[0]
     switcher = {
         "tiles":new_tiles_func,
