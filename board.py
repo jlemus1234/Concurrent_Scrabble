@@ -32,7 +32,7 @@ class Board:
         word_multipler = 1
         tile = Tile() # simple tile used as a base for many comparisons
         # has_over_lap = False # used to make sure word is touching another
-        new_tile_count = 0 # used to see if user placed 7 tiles so 50 point bonus can be added
+        new_tile_count = 0 # used to see if user placed 7 tiles so 50 point bonus can be added      
         print("about to get lock")
         with self.lock:
             print("got lock checking against dict")

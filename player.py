@@ -62,7 +62,7 @@ class Player:
                 #     self.tiles.remove(tile)
             print("not in valid")
             # refresh display
-            self.gui.refresh(new_grid, self.tiles, self.scores)
+            self.gui.refresh(new_grid, self.tiles[:], self.scores)
 
     def refresh(self, tile_board, scores):
         print("in refresh in player before lock")
@@ -71,8 +71,8 @@ class Player:
             self.board.set_board(tile_board)
             self.scores = scores
             self.board.print_board()
-            cur_tiles = self.tiles
-        # print tiles
+            cur_tiles = self.tiles[:]
+            # print tiles
             for tile_print in cur_tiles:
                 print(tile_print.to_tuple())
         print("in refresh in player after lock released")
@@ -85,7 +85,7 @@ class Player:
             for tile in old_tiles:
                 self.tiles.remove(tile)
             self.tiles.extend(new_tiles)
-            tiles_cur = self.tiles
+            tiles_cur = self.tiles[:]
             scores_cur = self.scores
             # print tiles
             for tile_print in tiles_cur:
@@ -97,7 +97,6 @@ class Player:
         print("in send to server")
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
-    ## What is this send function?
         print("about to send message")
         print("message in send_to_server: {}".format((self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles_tuple)))
         send_message(self.erlangPID, (self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles_tuple))
