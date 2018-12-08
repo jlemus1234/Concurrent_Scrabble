@@ -113,14 +113,18 @@ class Gui:
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
+      with self.lock:
         print 'You clicked Submit'
         rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
             rowOrCol = colToArray(self.currPlacedXYs[0][1])
         print("about to call made_move")
         print("arguments to made_move {}".format((rowOrCol,self.direction,self.currPlacedXYs[0], self.currPlacedTiles)))
-        self.my_player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
-        print 'You clicked Submit end'
+        direction_curr = self.direction
+        currplacedXYs_curr = self.currPlacedXYs[0]
+        currplacedTiles_curr = self.currPlacedTiles
+      self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_cur, currPlacedTiles_curr)
+      print 'You clicked Submit end'
 
 
     def clickExchange(self):
@@ -134,6 +138,7 @@ class Gui:
 
     # Clicking on the board
     def boardClicked(self, event):
+      with self.lock:
         validMove = True
         #find current x,y
         row = 0
