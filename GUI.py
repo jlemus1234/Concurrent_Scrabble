@@ -113,11 +113,13 @@ class Gui:
     #     start     = (x, y) of first tile placed
     #     usedTiles = Array of used TILES
     def clickSubmit(self):
+        print 'You clicked Submit'
         rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
             rowOrCol = colToArray(self.currPlacedXYs[0][1])
         self.my_player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
-        print 'You clicked Submit'
+        print 'You clicked Submit end'
+
 
     def clickExchange(self):
         print 'You clicked Exchange'

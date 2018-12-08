@@ -32,7 +32,9 @@ class Player:
 
 
     def made_move(self, tile_ray, direction, start_pos, used_tiles):
+        print("in made move before lock")
         with self.lock:
+            print("in made_move after lock")
             start_index = start_pos[0] # if direction = 'd'
             if direction == 'r':
                 start_index = start_pos[1]

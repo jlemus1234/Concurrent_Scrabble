@@ -28,7 +28,7 @@ def start(my_Pid, server_Pid):
     # send start message
     #send_message((PID_server, "new player"))
     # start_lock[0].acquire()
-    send_message(PID_server, (selfPID(), "new player")) # Sending the python instance's pid right now
+     # Sending the python instance's pid right now
     #cast(PID
     print("calling player start")
 
@@ -40,6 +40,7 @@ def start_gui():
     player.setGUI(gui)
     # start_lock[0].release()
     gui.setPlayer(player)
+    send_message(PID_server, (selfPID(), "new player"))
     # something like this
     gui.start()
 
