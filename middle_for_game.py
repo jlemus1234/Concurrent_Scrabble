@@ -9,42 +9,24 @@ import time
 global game
 global PID_my
 global PID_players
-#global PID_players = []
 
 def start(Pid):
     global game, PID_my, PID_players
     PID_my = Pid
-    # You can't pass around empty arrays in python so make the first entry your own PID
     PID_players = []
-    # Change game so it accepts an array of players
     game = Game(PID_my=PID_my)
 
-
-
-#def send_message(player_number, data):
-#    global PID_players, PID_my
-#    Pid_to_send = PID_players[player_number]
-#    message = (Pid_to_send + data)
-#    cast(PID_my, message)
-
+# This function takes in a player numberr and a message that you want to send
+# to that player. It then looks up the proper PID and sends it via Erlport
 def send_message(player_number, message):
     global PID_my, PID_players
     print("In middle of game's send message")
     dest = PID_players[player_number]
     call(Atom("scrabble"), Atom("send_to_pyclient"), [dest, message])
-    #cast(PID_my, (PID_players[player_number], message))
 
-
-# def send_message(pid_list, my_pid ,player_number, data):
-#     Pid_to_send = pid_list[player_number]
-#     message = (Pid_to_send + data)
-#     print("In send_message")
-#     print(message)
-#     cast(my_pid, message)
-
+# function needed for Erlport
+# sets up the default handler for any messages python recieves
 def register_handler(dest):
-    # no need to hold on to dest (the PID from which the message was sent)
-    # because it will stay const and was set in start
     set_message_handler(handler)
     return Atom("ok")
 
