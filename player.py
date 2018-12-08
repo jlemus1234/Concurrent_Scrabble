@@ -11,6 +11,8 @@
 from board import Board
 from tile import Tile
 import threading
+from erlport.erlterms import Atom
+from erlport.erlang import set_message_handler, call, cast, self as selfPID
 
 from middle_for_player import send_message
 
