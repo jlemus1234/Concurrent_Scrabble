@@ -119,12 +119,16 @@ class Gui:
         if self.direction == 'd':
             rowOrCol = colToArray(self.currPlacedXYs[0][1])
         print("about to call made_move")
-        print("arguments to made_move {}".format((rowOrCol,self.direction,self.currPlacedXYs[0], self.currPlacedTiles)))
+
         direction_curr = self.direction
         currplacedXYs_curr = self.currPlacedXYs[0]
         currplacedTiles_curr = self.currPlacedTiles
-      self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_cur, currPlacedTiles_curr)
-      print 'You clicked Submit end'
+        print("arguments to made_move {}".format((rowOrCol,direction_curr,currPlacedXYs_curr, currPlacedTiles_curr)))
+      print("about to make thread")
+      thread = threading.Thread(target=self.my_player.made_move, args=((rowOrCol, direction_curr, currplacedXYs_cur, currPlacedTiles_curr)))
+      thread.start()
+      # self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_cur, currPlacedTiles_curr)
+      print 'You clicked Submit end, thread started'
 
 
     def clickExchange(self):
@@ -145,7 +149,7 @@ class Gui:
         #find current x,y
         row = 0
         col = 0
-        
+
         for row in range(15):
             for col in range(15):
                 if self.grid[row][col] == event.widget:
