@@ -116,7 +116,7 @@ class Gui:
         rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
             rowOrCol = colToArray(self.currPlacedXYs[0][1])
-        my_player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
+        self.my_player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
         print 'You clicked Submit'
 
     def clickExchange(self):
