@@ -77,7 +77,7 @@ class Player:
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
     ## What is this send function?
-        send_message(("move", word_tuple, direction, start_pos, used_tiles))
+        send_message(self.erlangPID, ("move", word_tuple, direction, start_pos, used_tiles))
 
 
     def get_word(self, tile_ray, start_pos):
