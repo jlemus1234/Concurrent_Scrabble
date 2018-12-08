@@ -39,25 +39,19 @@ class Board:
         new_tile_count = 0
         print("about to get lock")
         with self.lock:
-            print("got lock checking against dict")
-            print("word in dict")
-            print(tiles_to_string(word))
             if (not twl.check(tiles_to_string(word))):
                 # print("returning 1")
                 return (False, self.grid, 0)
-            print("checked dict")
             # check if starting position is valid
             row = starting_positon[0]
             col = starting_positon[1]
-            print("row before inbonds: {}".format(row))
-            print("col before inbounds: {}".format(row))
             if not self.inbounds(row,col):
                 # print("returning 2")
                 return (False, self.grid, 0)
 
             # create copy of grid so if the word turns out to not work we have the old list
             grid = [row_make_temp[:] for row_make_temp in self.grid]
-            print("grid: {}".format(grid))
+
             # used to lock cross_score and is_valid
             mutex = threading.Lock()
             threads = []
@@ -65,9 +59,6 @@ class Board:
             is_valid = [True]
             for letter in word:
                 # check to see if a tile is already there
-                print("row before is_blank: {}".format(row))
-                print("col before is_blank: {}".format(row))
-
                 if grid[row][col].is_blank():
                     print("in is_blank section")
                     # can be inserted
@@ -92,8 +83,8 @@ class Board:
                     cur_thread.start()
                     threads.append(cur_thread)
 
-                # check to see if tile trying to insert is already there
                 elif grid[row][col] != letter:
+                    # check to see if tile trying to insert is already there
                     print("letter already there")
                     return (False, self.grid, 0)
                 else:
@@ -102,7 +93,6 @@ class Board:
                     is_touching = True
                     score += grid[row][col].score
 
-                print("about to increase row/col")
                 # update row and col
                 if direction == 'd':
                     row += 1
@@ -111,10 +101,9 @@ class Board:
 
             for thread in threads:
                 thread.join()
-                # print("thread joined")
 
-            # outside looping through letters
-            if not is_valid[0] or (not is_touching):
+
+            if (not is_valid[0]) or (not is_touching):
                 return (False, self.grid, 0)
 
             self.grid = grid
@@ -221,7 +210,8 @@ class Board:
     # untested function
     def to_tuple(self):
         with self.lock:
-            tuple_board = [[tile.to_tuple() for tile in row] for row in self.board]
+            tuple_board = [[tile.to_tuple() for tile in row]
+                                      for row in self.board]
             return tuple_board
 
 
