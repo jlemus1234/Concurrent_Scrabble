@@ -36,6 +36,8 @@ class Board:
         print("about to get lock")
         with self.lock:
             print("got lock checking against dict")
+            print("word in dict")
+            print(tiles_to_string(word))
             if (not twl.check(tiles_to_string(word))):
                 # print("returning 1")
                 return (False, self.grid, 0)
