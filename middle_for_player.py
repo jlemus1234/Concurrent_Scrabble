@@ -88,7 +88,8 @@ def handler_helper(message_type, board, scores, old_tiles, new_tiles):
 
 def send_message(dest_pid, message):
     print("Sending message from middle_for_player")
-    call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
+    retvalue = call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
+    print(retvalue)
     print("Sent message from m_f_p")
     #cast(PID_server, message) # does send to the game server, but not through gen server (unhandled)
     #cast(PID_my, (PID_server, PID_my, message)) #original
