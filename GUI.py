@@ -128,7 +128,7 @@ class Gui:
         print("currLetterTiles: {}".format(currplacedTiles_curr))
 
       print("about to make thread")
-      thread = threading.Thread(target=self.my_player.made_move, args=((rowOrCol, direction_curr, currplacedXYs_cur, currPlacedTiles_curr)))
+      thread = threading.Thread(target=self.my_player.made_move, args=((rowOrCol, direction_curr, currplacedXYs_curr, currPlacedTiles_curr)))
       thread.start()
       # self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_cur, currPlacedTiles_curr)
       print 'You clicked Submit end, thread started'
