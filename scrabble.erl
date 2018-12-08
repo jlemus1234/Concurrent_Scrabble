@@ -211,11 +211,14 @@ get_client_messages(GameServer, Pypid) ->
 
 get_server_messages(Pypid) ->
 	%receive {message, MessageText} ->
-	receive Something ->
-		io:format("~s~n", ["got something from server"]),
-		io:format("~p~n", [Something]),
-		%Pypid ! Something
-		python:cast(Pypid, Something)
+	%receive Something ->
+	receive {message, Something} ->
+			io:format("~s~n", ["got something from server"]),
+			io:format("~p~n", [Something]),
+			%Pypid ! Something
+			python:cast(Pypid, Something);
+		Anything ->
+			io:format("~s~n", ["Wrong format"])
 	end,
 	get_server_messages(Pypid).
 
