@@ -39,7 +39,7 @@ def send_message_helper(message):
 
 def start_gui():
     global player, gui, PID_server, PID_my
-    player = Player("Player",PiD_my)
+    player = Player("Player", PID_my)
     gui = Gui()
     player.setGUI(gui)
     # start_lock[0].release()
