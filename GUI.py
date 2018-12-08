@@ -123,7 +123,7 @@ class Gui:
         direction_curr = self.direction
         print("direction: {}".format(direction_curr))
         currplacedXYs_curr = self.currPlacedXYs[0]
-        print("currPlacedXYs: {}".format(currPlacedXYs_curr))
+        print("currPlacedXYs: {}".format(currplacedXYs_curr))
         currplacedTiles_curr = self.currPlacedTiles
         print("currLetterTiles: {}".format(currplacedTiles_curr))
         print("arguments to made_move {}".format((rowOrCol,direction_curr,currPlacedXYs_curr, currPlacedTiles_curr)))
