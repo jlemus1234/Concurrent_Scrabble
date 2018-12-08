@@ -330,8 +330,8 @@ class Gui:
 
 
     def refresh(self, board, hand, scores):
-        print("in refresh pre lock")
-        # with self.lock:
+            print("in refresh pre lock")
+            # with self.lock:
             print("in refresh post lock")
             self.tileGrid = board
             self.drawTileGrid()#done
@@ -350,10 +350,10 @@ class Gui:
             self.currPlacedXYs = []
             self.currPlacedTiles = []
             self.currLetterTile = Tile()
-        #self.window.mainloop()
-        print("gave back lock in refresh")
-        self.window.update()
-        print("done with update")
+            #self.window.mainloop()
+            print("gave back lock in refresh")
+            self.window.update()
+            print("done with update")
 
 
 #main for testing
