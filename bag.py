@@ -52,7 +52,7 @@ class Bag:
     def initialize_bag(self):
         """ Add the default 98 tiles to bag """
         for i in range(len(self.start_tiles)):
-            self.bag.append(Tile(self.start_tiles[i], start_id=i))
+            self.bag.append(Tile(self.start_tiles[i], start_id=(i+1)))
         random.shuffle(self.bag)
 
     def take_n_from_bag(self, n):
@@ -68,5 +68,3 @@ class Bag:
     def size_of_bag(self):
         """ Return number of tiles left in bag"""
         return len(self.bag)
-
-    
