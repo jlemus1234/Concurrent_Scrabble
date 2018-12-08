@@ -108,7 +108,7 @@ class Gui:
 
     # calls Player().made_move() with information about the current game state.
     def clickSubmit(self):
-        if currPlacedTiles > 0:
+        if len(self.currPlacedTiles) > 0:
             print 'You clicked Submit'
             rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
             if self.direction == 'd':
