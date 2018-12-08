@@ -7,26 +7,21 @@ from tile import string_to_tiles
 from tile import tiles_to_string
 from bag import Bag
 
-#global GAME_END = -1
 global GAME_END
 
 
 class Game:
 
-#    def __init__(self):
-
     def __init__(self, PID_players=[], PID_my=[]):
 
         GAME_END = -1
         self.lock = threading.RLock()
-        self.board = Board()
-        # self.erlangPID = Pid
-        self.scores = []
-        self.bag = Bag()
-        self.first_move = True
-        # adding so board can use imported send_message
-        self.PID_players = PID_players
-        self.PID_my = PID_my
+        self.board = Board()    # Master Board 
+        self.scores = []        # List of all players' scores
+        self.bag = Bag()        # Bag of remaining tiles
+        self.first_move = True  # Used to check if first move overlaps with center tile
+        self.PID_players = PID_players # List of PID of players so board can use imported send_message
+        self.PID_my = PID_my    # Current PID
         print("Finished creating a new Game instance")
 
 
@@ -34,8 +29,7 @@ class Game:
     # should review exactly what critical section is so can make it run faster
     def check_move(self, player_number, word_tuple, starting_positon, direction, used_tiles):
         print("Inside Check_move game module")
-        # not converting used_tiles to Tiles
-        # switches tuple form of tiles back to Tile form
+        # Switches tuple form of tiles back to Tile object form
         word = [Tile("","","","",letter) for letter in word_tuple]
 
         # check if first move is in center
@@ -46,12 +40,13 @@ class Game:
         print("Before lock acquired in check move")
         with self.lock:
             print("After lock acquired inside check move")
+            # Validate word. If valid, the new board with the word inserted as well as the new score is returned
             valid, new_board, score = self.board.update(starting_positon, word, direction)
             print("valid: {}".format(valid))
-            temp_board = Board(new_board)
-            temp_board.print_board()
+            # If word not valid, add used tiles back to player's hand and refresh board to old board 
             if not valid:
                 self.send_to_one_player("refresh", player_number, False, new_board, self.scores, [], [])
+            # Else if word is valid, update score, return new tiles, and return 
             else:
                 # have to send to all players new state and to one player new tiles
                 # self.first_move = False
