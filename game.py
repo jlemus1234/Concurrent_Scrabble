@@ -16,7 +16,7 @@ class Game:
 
         GAME_END = -1
         self.lock = threading.RLock()
-        self.board = Board()    # Master Board 
+        self.board = Board()    # Master Board
         self.scores = []        # List of all players' scores
         self.bag = Bag()        # Bag of remaining tiles
         self.first_move = True  # Used to check if first move overlaps with center tile
@@ -33,23 +33,23 @@ class Game:
         word = [Tile("","","","",letter) for letter in word_tuple]
 
         # check if first move is in center
-        # if self.first_move:
-        #     if not self.over_lap_center(word, starting_positon, direction):
-        #         self.send_to_one_player("refresh", player_number, False, self.board.get_board(), self.scores, [], [])
-        #         return
+        if self.first_move:
+            if not self.over_lap_center(word, starting_positon, direction):
+                self.send_to_one_player("refresh", player_number, False, self.board.get_board(), self.scores, [], [])
+                return
         print("Before lock acquired in check move")
         with self.lock:
             print("After lock acquired inside check move")
             # Validate word. If valid, the new board with the word inserted as well as the new score is returned
-            valid, new_board, score = self.board.update(starting_positon, word, direction)
+            valid, new_board, score = self.board.update(starting_positon, word, direction, self.first_move)
             print("valid: {}".format(valid))
-            # If word not valid, add used tiles back to player's hand and refresh board to old board 
+            # If word not valid, add used tiles back to player's hand and refresh board to old board
             if not valid:
                 self.send_to_one_player("refresh", player_number, False, new_board, self.scores, [], [])
-            # Else if word is valid, update score, return new tiles, and return 
+            # Else if word is valid, update score, return new tiles, and return
             else:
                 # have to send to all players new state and to one player new tiles
-                # self.first_move = False
+                self.first_move = False
                 self.scores[player_number] += score
                 new_tiles = self.bag.take_n_from_bag(len(used_tiles))
                 self.send_to_one_player("tiles", player_number, True, [[]], [], used_tiles, new_tiles)
