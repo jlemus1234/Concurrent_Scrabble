@@ -72,6 +72,9 @@ class Player:
             self.scores = scores
             self.board.print_board()
             cur_tiles = self.tiles
+        # print tiles
+            for tile_print in cur_tiles:
+                print(tile_print.to_tuple())
         print("in refresh in player after lock released")
         self.gui.refresh(tile_board, cur_tiles, scores)
 
@@ -82,10 +85,11 @@ class Player:
             for tile in old_tiles:
                 self.tiles.remove(tile)
             self.tiles.extend(new_tiles)
-            for tile in self.tiles:
-                print(tile.to_tuple())
             tiles_cur = self.tiles
             scores_cur = self.scores
+            # print tiles
+            for tile_print in tiles_cur:
+                print(tile_print.to_tuple())
         print("in get_new_tiles player after lock released")
         self.gui.refresh(self.board.get_board(), tiles_cur, scores_cur)
 
