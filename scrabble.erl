@@ -215,7 +215,7 @@ get_server_messages(Pypid) ->
 		io:format("~s~n", ["got something from server"]),
 		io:format("~p~n", [Something]),
 		%Pypid ! Something
-		python:cast(Pypid, something)
+		python:cast(Pypid, Something)
 	end,
 	get_server_messages(Pypid).
 
