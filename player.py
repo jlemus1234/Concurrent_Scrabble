@@ -109,7 +109,7 @@ class Player:
         return word, front
 
 def send_message(dest_pid, message):
-    retvalue = call(Atom("scrabble"), Atom("send_messages"), [dest_pid, message])
+    cast(dest_pid, message)
 
 from GUI import Gui
 

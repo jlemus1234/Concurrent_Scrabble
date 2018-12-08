@@ -108,19 +108,20 @@ class Gui:
 
     # calls Player().made_move() with information about the current game state.
     def clickSubmit(self):
-        print 'You clicked Submit'
-        rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
-        if self.direction == 'd':
-            rowOrCol = self.colToArray(self.currPlacedXYs[0][1])
-        print("about to call made_move")
+        if len(self.currPlacedTiles) > 0:
+            print 'You clicked Submit'
+            rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
+            if self.direction == 'd':
+                rowOrCol = self.colToArray(self.currPlacedXYs[0][1])
+            print("about to call made_move")
 
-        direction_curr = self.direction
-        currplacedXYs_curr = self.currPlacedXYs[0]
-        currplacedTiles_curr = self.currPlacedTiles
+            direction_curr = self.direction
+            currplacedXYs_curr = self.currPlacedXYs[0]
+            currplacedTiles_curr = self.currPlacedTiles
 
-        print("about to make thread")
-        self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_curr, currplacedTiles_curr)
-        print 'You clicked Submit end, thread started'
+            print("about to make thread")
+            self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_curr, currplacedTiles_curr)
+            print 'You clicked Submit end, thread started'
 
     # Code to be executed when Exchange button is clicked
     def clickExchange(self):

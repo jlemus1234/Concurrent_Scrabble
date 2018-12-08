@@ -35,7 +35,6 @@ class Board:
     # new_board - the board after the function was run, valid or invalid
     # score - the score of the move made
     def update(self,starting_positon, word, direction, is_first):
-        print("in board update")
         score = 0
         word_multipler = 1
         is_touching = False
@@ -65,7 +64,6 @@ class Board:
                 # check to see if a tile is already there
                 if grid[row][col].is_blank():
                     # can be inserted
-                    print("in is_blank section")
                     new_tile_count += 1
                     # calculating multipler for word
                     temp_multi = grid[row][col].multiplier
@@ -89,12 +87,10 @@ class Board:
 
                 # check to see if tile trying to insert is already there
                 elif grid[row][col] != letter:
-                    print("letter already there")
                     return (False, self.grid, 0)
 
                 # this means we are inserting the same tile already there
                 else:
-                    print("tile already there, so has overlap")
                     is_touching = True
                     score += grid[row][col].score
 
@@ -114,7 +110,6 @@ class Board:
 
             self.grid = grid
             score = score * word_multipler + (cross_score[0])
-            print("returing from update in board")
             return (True, self.grid, (score, score + 50)[new_tile_count == 7])
 
 
@@ -129,7 +124,6 @@ class Board:
     # with (r,c), also adds the score to xtra_score
     def check_and_score_col(self,grid,r,c,multiplier, xtra_score, valid,
     is_touching, mutex):
-        print("in thread check_and_score_col")
         # checking row so col is changing
         word = [grid[r][c]]
         temp_score = grid[r][c].score
@@ -157,7 +151,6 @@ class Board:
 
         if len(word) == 1:
             # is valid but not a new word
-            # print("size is 1 starting letter = {}".format(grid[r][c].value))
             return
 
         if multiplier[1] == 'l':
@@ -167,20 +160,16 @@ class Board:
 
         str_word = tiles_to_string(word)
         word_valid = twl.check(str_word)
-        # print("score from a thread = {}".format(temp_score))
         with mutex:
             valid[0] = valid[0] and word_valid
             xtra_score[0] += temp_score
             is_touching = True
-        print("end thread check_and_score_col")
         return
 
     # checks to see if there is a valid word along the row that intersects
     # with (r,c), also adds the score to xtra_score
     def check_and_score_row(self,grid,r,c,multiplier, xtra_score, valid,
     mutex):
-        print("in thread check_and_score_row")
-        # print("in thread")
         # checking row so col is changing
         word = [grid[r][c]]
         temp_score = grid[r][c].score
@@ -217,12 +206,10 @@ class Board:
 
         str_word = tiles_to_string(word)
         word_valid = twl.check(str_word)
-        # print("score from a thread = {}".format(temp_score))
         with mutex:
             valid[0] = valid[0] and word_valid
             xtra_score[0] += temp_score
             is_touching = True
-        print("end thread check_and_score_row")
         return
 
 
