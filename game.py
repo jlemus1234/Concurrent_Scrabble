@@ -27,7 +27,7 @@ class Game:
         # adding so board can use imported send_message
         self.PID_players = PID_players
         self.PID_my = PID_my
-	print("Finished creating a new Game instance")
+	    print("Finished creating a new Game instance")
 
 
 
@@ -61,7 +61,7 @@ class Game:
                 self.send_to_all_player(True, new_board, self.scores, [], [])
 
     def over_lap_center(self, word, positon, direction):
-	print("over_lap_center called")
+	    print("over_lap_center called")
         length = len(word)
         for i in range(length):
             if positon == (7,7):
@@ -74,7 +74,7 @@ class Game:
 
 
     def new_player(self, player_number):
-	print("In new_player game.py")
+	    print("In new_player game.py")
         with self.lock:
             self.scores.append(0)
             print("This is the player number:{}".format(player_number))
@@ -83,7 +83,7 @@ class Game:
 
     # to be called after the 4th player has entered
     def start_game(self):
-	print("In start_game of game.py")
+	    print("In start_game of game.py")
         for i in range(4):
             tiles = self.bag.take_n_from_bag(7)
             tile_tuples = [tile.to_tuple() for tile in tiles]
@@ -119,7 +119,7 @@ class Game:
 
 
     def send_to_all_player(self, status, board, scores, old_tiles, new_tiles):
-	print("In send to all players of game.py")
+	    print("In send to all players of game.py")
         for player_number in range(4):
             send_to_one_player(player_number, status, board, scores, old_tiles, new_tiles)
 
