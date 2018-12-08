@@ -88,7 +88,7 @@ handle_call({list}, _From, State) ->
 
 %%--------------------------------------------------------------------
 %% Function: handle_cast/2
-%% Description: Handling cast messages 
+%% Description: Handling cast messages
 %% Returns: {noreply, State}          |
 %%          {noreply, State, Timeout} |
 %%          {stop, Reason, State}            (terminate/2 is called)
@@ -119,11 +119,11 @@ terminate(_Reason, State) ->
 %%% Internal Functions
 %%--------------------------------------------------------------------
 shutdown_msg(Subscriptions) ->
-    ShutdownAlert = fun ({_Room, Client, _Name}) -> 
+    ShutdownAlert = fun ({_Room, Client, _Name}) ->
                             Client ! {message, "Game server has gone down"} end,
     lists:foreach(ShutdownAlert, Subscriptions).
 
-broadcastMoveResult(MoveResult) -> 
+broadcastMoveResult(MoveResult) ->
 	io:format("~s~n", ["sending move result"]).
 	%io:format("~p~n", MoveResult).
 	%printMoveResult(MoveResult).
@@ -142,7 +142,7 @@ printMoveResult({Result, Board, Scores, {OldTiles, NewTiles}}) ->
 
 
 
-gmTest(NodeName) -> 
+gmTest(NodeName) ->
 	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
 	%Receiver = spawn_link(scrabble, get_messages, [Pypid]),
 	python:call(Pypid, pythonClient, register_handler, [self()]),
@@ -166,7 +166,7 @@ loop(Pypid) ->
          end,
          io:format("~s~n", ["fin looped"]),
          python:cast(Pypid, update), % This would be being sent from another erlang proces
- 
+
          loop(Pypid).
 
 
@@ -196,7 +196,7 @@ join_game(NodeName) ->
 
 get_client_messages(GameServer, Pypid) ->
 	io:format("~s~n", ["looping"]),
-	receive 
+	receive
 		Something ->
 			io:format("~s~n", ["got something"]),
 			io:format("~p~n", [Something]),
@@ -223,8 +223,7 @@ get_server_messages(Pypid) ->
 
 send_messages(PID, Message) ->
 	io:format("~s~n", ["Trying to send message"]),
-	gen_server:cast(PID, Message),
-	testingsenterror.
+	gen_server:cast(PID, Message).
 
 
 %	io:format("~s~n", [ServerPID]),
@@ -233,7 +232,7 @@ send_messages(PID, Message) ->
 send_to_pyclient(PyPid, Message) ->
 	io:format("~s~n", ["Trying to send message to pyclient"]),
 	python:cast(PyPid, Message).
-		
+
 
 %send_messages(Anything) ->
 %	io:format("~w~n", ["trying to send with 1 argument"]).

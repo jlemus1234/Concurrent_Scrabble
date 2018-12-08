@@ -121,7 +121,7 @@ class Game:
     def send_to_all_player(self, status, board, scores, old_tiles, new_tiles):
         print("In send to all players of game.py")
         for player_number in range(4):
-            send_to_one_player("refresh", player_number, status, board, scores, old_tiles, new_tiles)
+            self.send_to_one_player("refresh", player_number, status, board, scores, old_tiles, new_tiles)
 
     # not worring about ending game right now
     def end_game(self):
