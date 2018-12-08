@@ -90,13 +90,17 @@ class Player:
         self.gui.refresh(self.board.get_board(), tiles_cur, scores_cur)
 
     def send_to_server(self, word, direction, start_pos, used_tiles):
+        print("in send to server")
         word_tuple = [letter.to_tuple() for letter in word]
         used_tiles_tuple = [letter.to_tuple() for letter in used_tiles]
     ## What is this send function?
+        print("about to send message")
+        print("message in send_to_server: {}".format((self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles_tuple)))
         send_message(self.erlangPID, (self.erlangMe, "move", word_tuple, direction, start_pos, used_tiles_tuple))
 
 
     def get_word(self, tile_ray, start_pos):
+        print("in get word")
         word = []
         front = start_pos
         # finds begining of word
@@ -119,6 +123,7 @@ class Player:
             else:
                 word.append(tile_ray[back])
             back += 1
+        print("in get word front: {}, word: {}".format(front,word))
         return word, front
 
 def send_message(dest_pid, message):

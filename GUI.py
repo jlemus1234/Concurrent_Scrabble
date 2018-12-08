@@ -117,6 +117,8 @@ class Gui:
         rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
             rowOrCol = colToArray(self.currPlacedXYs[0][1])
+        print("about to call made_move")
+        print("arguments to made_move {}".format((rowOrCol,self.direction,self.currPlacedXYs[0], self.currPlacedTiles)))
         self.my_player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
         print 'You clicked Submit end'
 
@@ -136,6 +138,7 @@ class Gui:
         #find current x,y
         row = 0
         col = 0
+        
         for row in range(15):
             for col in range(15):
                 if self.grid[row][col] == event.widget:
@@ -312,7 +315,9 @@ class Gui:
 
 
     def refresh(self, board, hand, scores):
+        print("in refresh pre lock")
         with self.lock:
+            print("in refresh post lock")
             self.tileGrid = board
             self.drawTileGrid()#done
 
@@ -330,9 +335,11 @@ class Gui:
             self.currPlacedXYs = []
             self.currPlacedTiles = []
             self.currLetterTile = Tile()
-
+        print("in refresh after giving up lock, about to mainloop")
         self.window.mainloop()
+        print("done with main loop in this thread")
         self.window.update()
+        print("done with update")
 
 
 #main for testing
