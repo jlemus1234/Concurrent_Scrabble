@@ -11,15 +11,10 @@
 % imports
 %%---------------
 %% client
-%send_messages/1
 -export([join_game/1, send_messages/2, get_server_messages/1, printMoveDump/1, send_to_pyclient/2]).
 
 %% External exports
 -export([start_link/0, stop/0]).
-
-%% server_test_functions
--export([gmTest/1]).
--export([broadcastMoveResult/1, printMoveResult/1, gotNewMove/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, terminate/2, handle_info/2]).
@@ -80,7 +75,6 @@ init([]) ->
 %%          {stop, Reason, Reply, State}   | (terminate/2 is called)
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
-%handle_call(Request, From, State) ->
 handle_call({list}, _From, State) ->
 	io:format("~s~n", ["got a list call"]),
 	{reply, gotList, State}.
@@ -93,16 +87,12 @@ handle_call({list}, _From, State) ->
 %%          {noreply, State, Timeout} |
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
-
 handle_cast(stop, State) ->
 	{stop, shutdown, State};
 handle_cast(Anything, PyPid) ->
 	io:format("~s~n", ["Server received some cast"]),
 	python:cast(PyPid, Anything),
-	{noreply, PyPid};
-handle_cast(_X, State) ->
-	io:format("~s~n", ["Got unmatched message"]),
-	{noreply, State}.
+	{noreply, PyPid}.
 
 %%--------------------------------------------------------------------
 %% Function: handle_info/2
@@ -130,57 +120,6 @@ shutdown_msg(Subscriptions) ->
                             Client ! {message, "Game server has gone down"} end,
     lists:foreach(ShutdownAlert, Subscriptions).
 
-broadcastMoveResult(MoveResult) ->
-	io:format("~s~n", ["sending move result"]).
-	%io:format("~p~n", MoveResult).
-	%printMoveResult(MoveResult).
-
-
-receiveMoveResult(MoveResult) ->
-	io:format("~s~n", ["received move result"]).
-
-printMoveResult({Result, Board, Scores, {OldTiles, NewTiles}}) ->
-	io:format("~s~n", ["Printing move result"]),
-	io:format("~p~n", [Result]),
-	io:format("~p~n", [Board]),
-	io:format("~p~n", [Scores]),
-	io:format("~p~n", [OldTiles]),
-	io:format("~p~n", [NewTiles]).
-
-
-
-gmTest(NodeName) ->
-	{ok, Pypid} = python:start([{python_path, "."}]), % Create python node
-	%Receiver = spawn_link(scrabble, get_messages, [Pypid]),
-	python:call(Pypid, pythonClient, register_handler, [self()]),
-	%python:call(Pypid, pythonClient, startServer, []),
-	python:call(Pypid, pythonClient, startServer, [self(), NodeName]),
-	%timer:sleep(1000),
-	python:cast(Pypid, update), % This would be being sent from another erlang process
-	loop(Pypid),
-	io:format("~s~n", ["finished gmTest"]).
-	%python:call(Pypid, pythonClient, updateStateTest, []).
-	%timer:sleep(1000),
-	%python:call(Pypid, pythonClient, updateStateTest, []).
-
-
-loop(Pypid) ->
-        io:format("~s~n", ["looping"]),
-        receive
-                 Something ->
-                         io:format("~s~n", ["got something"]),
-                         io:format("~p~n", [Something])
-         end,
-         io:format("~s~n", ["fin looped"]),
-         python:cast(Pypid, update), % This would be being sent from another erlang proces
-
-         loop(Pypid).
-
-
-% simple test function for sending python data
-gotNewMove()->
-	io:format("~s~n", ["Got new move"]).
-
 %%====================================================================
 %% Client functions
 %%====================================================================
@@ -195,77 +134,34 @@ join_game(NodeName) ->
 %% Set up the python message handler
 	python:call(Pypid, middle_for_player, register_handler, [self()]),
 	python:call(Pypid, middle_for_player, start, [self(), GameServer]),
-%	python:call(Pypid, middle_for_player, start, [Pypid, GameServer]),
 %% Listen to client
-	%get_client_messages(GameServer, Pypid),
 	get_server_messages(Pypid),
 	io:format("~s~n", ["finished gmTest"]).
 
-
-get_client_messages(GameServer, Pypid) ->
-	io:format("~s~n", ["looping"]),
-	receive
-		Something ->
-			io:format("~s~n", ["got something"]),
-			io:format("~p~n", [Something]),
-			%gen_server:cast(GameServer, message)
-			gen_server:cast(GameServer, Something)
-	end,
-	io:format("~s~n", ["fin looped"]),
-	%python:cast(Pypid, update), % This would be being sent from another erlang process
-	get_client_messages(GameServer, Pypid).
-
-
-
+% Await any messages sent from the game server
 get_server_messages(Pypid) ->
-	%receive {message, MessageText} ->
-	%receive Something ->
-	%receive {message, Something} ->
 	receive {r, Message} ->
-			io:format("~s~n", ["atom r"]);
+			io:format("~s~n", [Message]);
 		Something ->
 			io:format("~s~n", ["got something from server"]),
 			io:format("~p~n", [Something]),
-			%Pypid ! Something;
-			python:cast(Pypid, Something);
-		Anything ->
-			io:format("~s~n", ["Wrong format"]),
-			io:format("~p~n", [Anything])
+			python:cast(Pypid, Something)
 	end,
 	get_server_messages(Pypid).
 
-%% might be useful for processing input
-%% Send your shit to this function
-
+% Helps python instances do a gen_server:cast for joining
 send_messages(PID, Message) ->
 	io:format("~s~n", ["Trying to send message"]),
 	gen_server:cast(PID, Message).
 
-
-%	io:format("~s~n", [ServerPID]),
-%	1.
-
-%send_to_pyclient(erlPID, Message) ->
-%	erlPID ! Message.
-
+% Used by game server to send data to clients
 send_to_pyclient(PyPid, Message) ->
 	io:format("~s~n", ["Trying to send message to pyclient"]),
 	io:format("~p~n", [PyPid]),
 	io:format("~p~n", [Message]),
 	PyPid ! Message.
-	%python:cast(PyPid, Message).
 
-
-%send_messages(Anything) ->
-%	io:format("~w~n", ["trying to send with 1 argument"]).
-
-
-%send_messages(ServerPID, MoveDump) ->
-%	io:format("~w~n", [something2]),
-%	io:format("~p~n", [MoveDump]),
-%	printMoveDump(MoveDump).
-
-
+% Convenience function for printing out the elements of a tuple
 printMoveDump({TileArr, Dir, Start_pos}) ->
 	io:format("~s~n", ["printMoveDump"]),
 	io:format("~p~n", [TileArr]),
