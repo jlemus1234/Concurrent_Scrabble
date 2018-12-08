@@ -11,7 +11,7 @@
 % imports
 %%---------------
 %% client
--export([join_game/1, send_messages/2, get_server_messages/1, 
+-export([join_game/1, send_messages/2, get_server_messages/1,
 	printMoveDump/1, send_to_pyclient/2]).
 
 %% External exports
@@ -58,8 +58,6 @@ stop() ->
 %%          {stop, Reason}
 %%--------------------------------------------------------------------
 init([]) ->
-    %process_flag(trap_exit, true),
-    io:format("~s~n", ["calling init"]),
     {ok, Pypid} = python:start([{python_path, "."}]), % Create python node
     python:call(Pypid, middle_for_game, register_handler, [self()]),
     python:call(Pypid, middle_for_game, start, [self()]),
@@ -77,7 +75,6 @@ init([]) ->
 %%          {stop, Reason, State}            (terminate/2 is called)
 %%--------------------------------------------------------------------
 handle_call({list}, _From, State) ->
-	io:format("~s~n", ["got a list call"]),
 	{reply, gotList, State}.
 
 
@@ -91,19 +88,17 @@ handle_call({list}, _From, State) ->
 handle_cast(stop, State) ->
 	{stop, shutdown, State};
 handle_cast(Anything, PyPid) ->
-	io:format("~s~n", ["Server received some cast"]),
 	python:cast(PyPid, Anything),
 	{noreply, PyPid}.
 
 %%--------------------------------------------------------------------
 %% Function: handle_info/2
-%% 
+%%
 %%--------------------------------------------------------------------
 handle_info(Info, PyPid) ->
-	io:format("~s~n", ["Server received some info"]),
 	python:cast(PyPid, Info),
 	{noreply, PyPid}.
-	
+
 %%--------------------------------------------------------------------
 %% Function: terminate/2
 %% Description: Shutdown the server
@@ -138,29 +133,21 @@ join_game(NodeName) ->
 	python:call(Pypid, middle_for_player, start, [self(), GameServer]),
 %% Listen to client
 	get_server_messages(Pypid),
-	io:format("~s~n", ["finished gmTest"]).
 
 % Await any messages sent from the game server
 get_server_messages(Pypid) ->
 	receive {r, Message} ->
-			io:format("~s~n", [Message]);
 		Something ->
-			io:format("~s~n", ["got something from server"]),
-			io:format("~p~n", [Something]),
 			python:cast(Pypid, Something)
 	end,
 	get_server_messages(Pypid).
 
 % Helps python instances do a gen_server:cast for joining
 send_messages(PID, Message) ->
-	io:format("~s~n", ["Trying to send message"]),
 	gen_server:cast(PID, Message).
 
 % Used by game server to send data to clients
 send_to_pyclient(PyPid, Message) ->
-	io:format("~s~n", ["Trying to send message to pyclient"]),
-	io:format("~p~n", [PyPid]),
-	io:format("~p~n", [Message]),
 	PyPid ! Message.
 
 % Convenience function for printing out the elements of a tuple
