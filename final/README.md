@@ -21,6 +21,8 @@ repository
 * This folder contains all files needed to run mttkinter, which is the package
 we chose to use for our GUI
 
+### The remaining files
+
 * bag.py
     * bag.py contains the Bag class which holds on to all the tiles in the game
     that are not in players hands or on the board
