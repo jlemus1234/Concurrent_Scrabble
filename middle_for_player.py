@@ -23,13 +23,15 @@ def start(my_Pid, server_Pid):
 
 
     # start_lock = [threading.Semaphore(0)]
-    gameThread = threading.Thread(target = start_gui)
-    gameThread.start()
+#gameThread = threading.Thread(target = start_gui)
+#gameThread.start()
+    
     # send start message
     #send_message((PID_server, "new player"))
     # start_lock[0].acquire()
     send_message(PID_server, (selfPID(), "new player")) # Sending the python instance's pid right now
     #cast(PID
+    start_gui()
     print("calling player start")
 
 
@@ -58,6 +60,13 @@ def register_handler(dest):
     # no need to hold on to dest (the PID from which the message was sent)
     # because it will stay const and was set in start
     print("setting client handler")
+    t = threading.Thread(target = register_handler_thread)
+    t.start()
+    return Atom("ok")
+    #t.daemon = True
+    #set_message_handler(handler)
+
+def register_handler_thread():
     set_message_handler(handler)
     return Atom("ok")
 
