@@ -34,6 +34,9 @@ def start(my_Pid, server_Pid):
     #cast(PID
     print("calling player start")
 
+def send_message_helper(message):
+    global PID_server
+    send_message(PID_server, message)
 
 def start_gui():
     global player, gui, PID_server, PID_my
