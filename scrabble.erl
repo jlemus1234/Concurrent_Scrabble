@@ -11,7 +11,8 @@
 % imports
 %%---------------
 %% client
--export([join_game/1, send_messages/2, get_server_messages/1, printMoveDump/1, send_to_pyclient/2]).
+-export([join_game/1, send_messages/2, get_server_messages/1, 
+	printMoveDump/1, send_to_pyclient/2]).
 
 %% External exports
 -export([start_link/0, stop/0]).
