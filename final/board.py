@@ -177,7 +177,7 @@ class Board:
     # checks to see if there is a valid word along the row that intersects
     # with (r,c), also adds the score to xtra_score
     def check_and_score_row(self,grid,r,c,multiplier, xtra_score, valid,
-    mutex):
+    is_touching, mutex):
         # checking row so col is changing
         word = [grid[r][c]]
         temp_score = grid[r][c].score
