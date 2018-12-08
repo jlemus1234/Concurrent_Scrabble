@@ -84,7 +84,7 @@ class Player:
         front = start_pos
         # finds begining of word
         while (front >= 0 and front <= 14):
-            if grid[front].is_blank():
+            if tile_ray[front].is_blank():
                 break
             else:
                 word.append(tile_ray[front])
@@ -95,7 +95,7 @@ class Player:
 
         # finds end of word
         while (back >= 0 and back <= 14):
-            if grid[back].is_blank():
+            if tile_ray[back].is_blank():
                 break
             else:
                 word.append(tile_ray[back])
