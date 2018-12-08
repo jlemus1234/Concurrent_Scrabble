@@ -46,7 +46,8 @@ class Player:
             else:
                 start_pos = (start_index, start_pos[1])
 
-            valid, new_grid, new_score = self.board.update(start_pos, word, direction, False)
+            valid, new_grid, new_score = self.board.update(start_pos, word, 
+                                                           direction, False)
             if valid:
                 # send to server
                 self.send_to_server(word, direction, start_pos, used_tiles)

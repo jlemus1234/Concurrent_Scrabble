@@ -118,7 +118,8 @@ terminate(_Reason, State) ->
 %%--------------------------------------------------------------------
 shutdown_msg(Subscriptions) ->
     ShutdownAlert = fun ({_Room, Client, _Name}) ->
-                            Client ! {message, "Game server has gone down"} end,
+                           Client ! {message, "Game server has gone down"} end,
+
     lists:foreach(ShutdownAlert, Subscriptions).
 
 %%====================================================================
