@@ -12,7 +12,7 @@ from board import Board
 from tile import Tile
 import threading
 
-from middle_for_game import send_message
+from middle_for_player import send_message
 
 
 
