@@ -118,7 +118,7 @@ class Gui:
         print 'You clicked Submit'
         rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
-            rowOrCol = colToArray(self.currPlacedXYs[0][1])
+            rowOrCol = self.colToArray(self.currPlacedXYs[0][1])
         print("about to call made_move")
 
         direction_curr = self.direction
