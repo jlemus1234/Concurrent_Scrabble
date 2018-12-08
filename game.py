@@ -38,7 +38,7 @@ class Game:
 
         # check if first move is in center
         if self.first_move:
-            if not over_lap_center(word, starting_positon, direction):
+            if not self.over_lap_center(word, starting_positon, direction):
                 self.send_to_one_player(player_number, False, self.board.get_board(), self.scores, [], [])
                 return
 
