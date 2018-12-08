@@ -11,7 +11,7 @@
 % imports
 %%---------------
 %% client
--export([join_game/1, send_messages/2, get_server_messages/1, 
+-export([join_game/1, send_messages/2, get_server_messages/1,
 	printMoveDump/1, send_to_pyclient/2]).
 
 %% External exports
@@ -58,8 +58,6 @@ stop() ->
 %%          {stop, Reason}
 %%--------------------------------------------------------------------
 init([]) ->
-    %process_flag(trap_exit, true),
-    io:format("~s~n", ["calling init"]),
     {ok, Pypid} = python:start([{python_path, "."}]), % Create python node
     python:call(Pypid, middle_for_game, register_handler, [self()]),
     python:call(Pypid, middle_for_game, start, [self()]),
@@ -95,12 +93,12 @@ handle_cast(Anything, PyPid) ->
 
 %%--------------------------------------------------------------------
 %% Function: handle_info/2
-%% 
+%%
 %%--------------------------------------------------------------------
 handle_info(Info, PyPid) ->
 	python:cast(PyPid, Info),
 	{noreply, PyPid}.
-	
+
 %%--------------------------------------------------------------------
 %% Function: terminate/2
 %% Description: Shutdown the server
