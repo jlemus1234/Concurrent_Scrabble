@@ -52,7 +52,8 @@ class Board:
             if not self.inbounds(row,col):
                 return (False, self.grid, 0)
 
-            # create copy of grid so if the word turns out to not work we have the old list
+            # create copy of grid so if the word turns out to not work we
+            # the old list
             grid = [row_make_temp[:] for row_make_temp in self.grid]
 
             # used to lock cross_score and is_valid
@@ -74,13 +75,20 @@ class Board:
                         word_multipler *= temp_multi[0]
 
                     grid[row][col] = letter
-                    # check to see if a tile is touching thats not in the direction, and if there is make sure thats a word
+                    # check to see if a tile is touching thats not in the
+                    # direction, and if there is make sure thats a word
                     if direction == 'd':
                         # to check row
-                        cur_thread = threading.Thread(target = self.check_and_score_row, args=(grid,row,col,temp_multi,cross_score,is_valid,is_touching,mutex))
+                        cur_thread =
+                            threading.Thread(target = self.check_and_score_row,
+                            args=(grid, row, col, temp_multi, cross_score,
+                                                is_valid, is_touching, mutex))
                     else:
                         # to check col
-                        cur_thread = threading.Thread(target = self.check_and_score_col, args=(grid,row,col,temp_multi,cross_score,is_valid,is_touching,mutex))
+                        cur_thread =
+                            threading.Thread(target = self.check_and_score_col,
+                            args=(grid, row, col, temp_multi, cross_score,
+                                                is_valid, is_touching, mutex))
                     cur_thread.daemon = True
                     cur_thread.start()
                     threads.append(cur_thread)
@@ -246,7 +254,8 @@ class Board:
                     if tile.value != '':
                         to_be_printed = "{} ".format(tile.value)
                     elif tile.multiplier[0] != 1:
-                        to_be_printed = "{}{}".format(tile.multiplier[0],tile.multiplier[1])
+                        to_be_printed = "{}{}".format(tile.multiplier[0],
+                                                            tile.multiplier[1])
                     buffer = buffer + to_be_printed + " "
                 print(buffer)
 
