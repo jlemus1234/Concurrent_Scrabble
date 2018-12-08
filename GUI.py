@@ -127,11 +127,11 @@ class Gui:
         currplacedTiles_curr = self.currPlacedTiles
         print("currLetterTiles: {}".format(currplacedTiles_curr))
 
-      print("about to make thread")
-      thread = threading.Thread(target=self.my_player.made_move, args=((rowOrCol, direction_curr, currplacedXYs_curr, currPlacedTiles_curr)))
-      thread.start()
-      # self.my_player.made_move(rowOrCol, direction_curr, currplacedXYs_cur, currPlacedTiles_curr)
-      print 'You clicked Submit end, thread started'
+        print("about to make thread")
+        thread = threading.Thread(target=self.my_player.made_move,  args=((rowOrCol, direction_curr, currplacedXYs_curr,    currPlacedTiles_curr)))
+        thread.start()
+        # self.my_player.made_move(rowOrCol, direction_curr,    currplacedXYs_cur, currPlacedTiles_curr)
+        print 'You clicked Submit end, thread started'
 
 
     def clickExchange(self):
@@ -145,8 +145,8 @@ class Gui:
 
     # Clicking on the board
     def boardClicked(self, event):
-      print 'before boardClicked lock'
-      # with self.lock:
+        print 'before boardClicked lock'
+        # with self.lock:
         print 'got board lock'
         validMove = True
         #find current x,y
@@ -198,7 +198,7 @@ class Gui:
                         self.currPlacedXYs.append([row ,col])
                         self.tileGrid[row][col] = self.currLetterTile
                         self.currLetterTile = Tile('')
-        print 'release board lock'
+            # print 'release board lock'
 
     def boardRightClicked(self, event):
         print 'we in boardRightClicked'
@@ -285,14 +285,14 @@ class Gui:
                 self.handFrame.place(relx = .60, rely = .5,)
                 scoreFrame.place(relx = 1, rely = 0, anchor = NE)
 
-        #Start the GUI
-        print 'before mainloop'
-        # move loop start to main, in final version the caller will need
-        # to start loop after calling .start()
-        self.window.mainloop()
-        print 'after mainloop'
+            #Start the GUI
+            print 'before mainloop'
+            # move loop start to main, in final version the caller will need
+            # to start loop after calling .start()
+            self.window.mainloop()
+            print 'after mainloop'
 
-        from player import Player
+            from player import Player
 
 
     def drawTileGrid(self):
