@@ -109,7 +109,7 @@ class Board:
                 thread.join()
 
             #  checking to see if it was a valid move
-            if (not is_valid[0]) or (not is_touching):
+            if (not is_valid[0]) or ((not is_touching) and (not is_first)):
                 return (False, self.grid, 0)
 
             self.grid = grid
