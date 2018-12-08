@@ -57,7 +57,7 @@ class Game:
                 # self.first_move = False
                 self.scores[player_number] += score
                 new_tiles = self.bag.take_n_from_bag(len(used_tiles))
-                self.send_to_one_player(player_number, True, [[]], [], used_tiles, new_tiles)
+                self.send_to_one_player("tiles", player_number, True, [[]], [], used_tiles, new_tiles)
                 self.send_to_all_player(True, new_board, self.scores, [], [])
 
     def over_lap_center(self, word, positon, direction):
@@ -121,7 +121,7 @@ class Game:
     def send_to_all_player(self, status, board, scores, old_tiles, new_tiles):
         print("In send to all players of game.py")
         for player_number in range(4):
-            send_to_one_player(player_number, status, board, scores, old_tiles, new_tiles)
+            send_to_one_player("refresh", player_number, status, board, scores, old_tiles, new_tiles)
 
     # not worring about ending game right now
     def end_game(self):
