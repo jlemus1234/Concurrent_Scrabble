@@ -65,20 +65,29 @@ class Player:
             self.gui.refresh(new_grid, self.tiles, self.scores)
 
     def refresh(self, tile_board, scores):
+        print("in refresh in player before lock")
         with self.lock:
+            print("in refresh in player after lock")
             self.board.set_board(tile_board)
             self.scores = scores
             self.board.print_board()
-        self.gui.refresh(tile_board, self.tiles, scores)
+            cur_tiles = self.tiles
+        print("in refresh in player after lock released")
+        self.gui.refresh(tile_board, cur_tiles, scores)
 
     def get_new_tiles(self, old_tiles, new_tiles):
+        print("in get_new_tiles player before lock")
         with self.lock:
+            print("in get_new_tiles player after lock")
             for tile in old_tiles:
                 self.tiles.remove(tile)
             self.tiles.extend(new_tiles)
             for tile in self.tiles:
                 print(tile.to_tuple())
-        self.gui.refresh(self.board.get_board(), self.tiles, self.scores)
+            tiles_cur = self.tiles
+            scores_cur = self.scores
+        print("in get_new_tiles player after lock released")
+        self.gui.refresh(self.board.get_board(), tiles_cur, scores_cur)
 
     def send_to_server(self, word, direction, start_pos, used_tiles):
         word_tuple = [letter.to_tuple() for letter in word]

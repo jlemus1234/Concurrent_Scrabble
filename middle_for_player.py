@@ -105,7 +105,7 @@ def split_message_player_side(message):
 
 def refresh_func(board, scores, old_tiles_tup, new_tiles_tup):
     # board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
-
+    print("in refresh_func middle_for_player")
     global player
     tile_board = [[Tile("","","","",tile_tup) for tile_tup in row] for row in board]
 
@@ -113,6 +113,7 @@ def refresh_func(board, scores, old_tiles_tup, new_tiles_tup):
 
 def new_tiles_func(board, scores, old_tiles_tup, new_tiles_tup):
     # board, scores, old_tiles_tup, new_tiles_tup = split_message_player_side(message)
+    print("in new_tiles_func middle_for_player")
 
     global player
 

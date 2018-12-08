@@ -38,7 +38,7 @@ class Gui:
 
     def __init__(self, grid = '', hand = '', scores = ''):
 
-
+        self.lock = threading.Lock()
 
         # Labels of the board for GUI
         self.grid = [
@@ -233,41 +233,39 @@ class Gui:
 
                 #currTile.bind("<Button-1>", boardClicked)
     def start(self):
-        #Main self.window of an application
-        self.window.title("Scrabble")
-        self.window.geometry("1100x650")
-        self.window.configure(background='grey')
+        with self.lock:
+            #Main self.window of an application
+            self.window.title("Scrabble")
+            self.window.geometry("1100x650")
+            self.window.configure(background='grey')
 
-        #Score Labels
-        scoreFrame = LabelFrame(self.window, text="Scores")
-        for score in self.scores:
-            scoreLabel = Label(scoreFrame, text = '')
-            scoreLabel.pack()
-            self.scoreLabels.append(scoreLabel)
+            #Score Labels
+            scoreFrame = LabelFrame(self.window, text="Scores")
+            for score in self.scores:
+                scoreLabel = Label(scoreFrame, text = '')
+                scoreLabel.pack()
+                self.scoreLabels.append(scoreLabel)
 
-        #Submit Buttons - Submit, Exchange, Pass
-        buttonFrame = Frame(self.window)
-        submitBtn = Button(buttonFrame, text = "Submit",
-            command = self.clickSubmit)
-        exchangeBtn = Button(buttonFrame, text = "Exhange",
-            command = self.clickExchange)
-        passBtn = Button(buttonFrame, text = "Pass",
-            command = self.clickPass)
-        submitBtn.pack(side = LEFT)
-        exchangeBtn.pack(side = LEFT)
-        passBtn.pack(side = LEFT)
+                #Submit Buttons - Submit, Exchange, Pass
+                buttonFrame = Frame(self.window)
+                submitBtn = Button(buttonFrame, text = "Submit", command = self.clickSubmit)
+                exchangeBtn = Button(buttonFrame, text = "Exhange", command = self.clickExchange)
+                passBtn = Button(buttonFrame, text = "Pass", command = self.clickPass)
+                submitBtn.pack(side = LEFT)
+                exchangeBtn.pack(side = LEFT)
+                passBtn.pack(side = LEFT)
 
-        #Tiles in hand
-        for i in range(7):
-            singleTile = self.makeTile('')
-            singleTile.bind("<Button-1>", self.handClicked)
-            singleTile.pack(side = LEFT)
-            self.hand.append(singleTile)
+                #Tiles in hand
+                for i in range(7):
+                    singleTile = self.makeTile('')
+                    singleTile.bind("<Button-1>", self.handClicked)
+                    singleTile.pack(side = LEFT)
+                    self.hand.append(singleTile)
 
-        self.makeBoardGrid()
-        buttonFrame.place(relx = .55, rely = 1, anchor = SW)
-        self.handFrame.place(relx = .60, rely = .5,)
-        scoreFrame.place(relx = 1, rely = 0, anchor = NE)
+                self.makeBoardGrid()
+                buttonFrame.place(relx = .55, rely = 1, anchor = SW)
+                self.handFrame.place(relx = .60, rely = .5,)
+                scoreFrame.place(relx = 1, rely = 0, anchor = NE)
 
         #Start the GUI
         print 'before mainloop'
@@ -314,23 +312,24 @@ class Gui:
 
 
     def refresh(self, board, hand, scores):
-        self.tileGrid = board
-        self.drawTileGrid()#done
+        with self.lock:
+            self.tileGrid = board
+            self.drawTileGrid()#done
 
-        self.tileHand = hand
-        self.drawHandTiles()#done
+            self.tileHand = hand
+            self.drawHandTiles()#done
 
-        self.scores   = scores
-        self.drawScores()#done
+            self.scores   = scores
+            self.drawScores()#done
 
-        #reset everything for this turn
-        self.currPlacedTiles = []
-        self.lastPlacedTile = ''
-        self.direction = ''
-        self.firstTilePlaced = []
-        self.currPlacedXYs = []
-        self.currPlacedTiles = []
-        self.currLetterTile = Tile()
+            #reset everything for this turn
+            self.currPlacedTiles = []
+            self.lastPlacedTile = ''
+            self.direction = ''
+            self.firstTilePlaced = []
+            self.currPlacedXYs = []
+            self.currPlacedTiles = []
+            self.currLetterTile = Tile()
 
         self.window.mainloop()
         self.window.update()
