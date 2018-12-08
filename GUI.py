@@ -16,8 +16,7 @@ from board import Board
 #python 2.712
 
 class Gui:
-
-    #grid shared by all instances of GUI, do not modify!
+    
     initGrid = [
             ['3w','x','x','2l','x','x','x','3w','x','x','x','2l','x','x','3w'],
             ['x','2w','x','x','x','3l','x','x','x','3l','x','x','x','2w','x'],
@@ -93,7 +92,9 @@ class Gui:
             Image.open("./assets/2ls.png"))
         self.centerTileImg     = ImageTk.PhotoImage(
             Image.open("./assets/center.png"))
-
+        self.legendImg         = ImageTk.PhotoImage(
+            Image.open("./assets/legend.png"))
+        
     def setPlayer(self, cur_Player):
         print("setting player")
         self.my_player = cur_Player
@@ -235,7 +236,7 @@ class Gui:
             #Main self.window of an application
             self.window.title("Scrabble")
             self.window.geometry("1100x650")
-            self.window.configure(background='grey')
+            self.window.configure(background='SteelBlue1')
 
             #Score Labels
             scoreFrame = LabelFrame(self.window, text="Scores")
@@ -261,6 +262,12 @@ class Gui:
                         singleTile.pack(side = LEFT)
                         self.hand.append(singleTile)
 
+                #Make legend
+                legendLabel = Label(self.window, image = self.legendImg,
+                    text = '', font = self.helv16, compound = CENTER)
+                legendLabel.place(relx = .90, rely = .4,)
+                
+                
                 self.makeBoardGrid()
                 buttonFrame.place(relx = .55, rely = 1, anchor = SW)
                 self.handFrame.place(relx = .60, rely = .5,)
