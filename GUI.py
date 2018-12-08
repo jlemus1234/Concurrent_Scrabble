@@ -96,8 +96,9 @@ class Gui:
         self.centerTileImg     = ImageTk.PhotoImage(
             Image.open("./assets/center.png"))
 
-    def setPlayer(self, Player):
-        self.player = Player
+    def setPlayer(self, cur_Player):
+        print("setting player")
+        self.my_player = cur_Player
 
     def colToArray(self, colNum):
         arrayToReturn = []
@@ -115,7 +116,7 @@ class Gui:
         rowOrCol = self.tileGrid[self.currPlacedXYs[0][0]]
         if self.direction == 'd':
             rowOrCol = colToArray(self.currPlacedXYs[0][1])
-        player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
+        my_player.made_move(rowOrCol, self.direction, self.currPlacedXYs[0], self.currPlacedTiles)
         print 'You clicked Submit'
 
     def clickExchange(self):
