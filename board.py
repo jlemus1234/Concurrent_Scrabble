@@ -46,8 +46,6 @@ class Board:
                 # print("returning 2")
                 return (False, self.grid, 0)
 
-
-
             # create copy of grid so if the word turns out to not work we have the old list
             grid = [row_make_temp[:] for row_make_temp in self.grid]
             print("grid: {}".format(grid))
@@ -86,12 +84,6 @@ class Board:
 
                 # check to see if tile trying to insert is already there
                 elif grid[row][col] != letter:
-                    # this means trying to overwrite a letter
-                    # print("returning 9")
-                    # print("{} {} {} {}".format(grid[row][col].value,letter.value,grid[row][col].id,letter.id))
-
-                    # TODO: add stuff for starting tile
-
                     return (False, self.grid, 0)
                 else:
                     # this means we are inserting the same tile so we are now overlapping what is there
@@ -110,8 +102,6 @@ class Board:
 
             # outside looping through letters
             if (not has_over_lap) or (not is_valid[0]):
-                # print("returning 10")
-                # print("has_over_lap {}, is_valid[0] {}".format(has_over_lap,is_valid[0]))
                 return (False, self.grid, 0)
             else:
                 self.grid = grid
@@ -208,65 +198,6 @@ class Board:
             xtra_score[0] += temp_score
         return
 
-    # both not needed anymore
-    # def check_word_col(self,row,col,grid):
-    #     # assuming grid[row][col] is non empty
-    #     start_row = row
-    #     word = []
-    #     score = 0
-    #     while self.inbounds(start_row):
-    #         if grid[start_row][col].is_blank():
-    #             break
-    #         else:
-    #             word.append(grid[start_row][col])
-    #             score += grid[start_row][col].score
-    #             start_row -= 1
-    #     start_row += 1
-    #     word.reverse()
-    #
-    #     end_row = row + 1
-    #     while self.inbounds(end_row):
-    #         if grid[end_row][col].is_blank():
-    #             break
-    #         else:
-    #             word.append(grid[end_row][col])
-    #             score += grid[end_row][col].score
-    #             end_row += 1
-    #     end_row -= 1
-    #
-    #     str_word = ""
-    #     for letter in word:
-    #         str_word += letter.value
-    #     return score, twl.check(str_word)
-    # def check_word_row(self,row,col,grid):
-    #     # assuming grid[row][col] is non empty
-    #     start_col = col
-    #     word = []
-    #     score = 0
-    #     while self.inbounds(start_col):
-    #         if grid[row][start_col].is_blank():
-    #             break
-    #         else:
-    #             word.append(grid[row][start_col])
-    #             score += grid[row][start_col].score
-    #             start_col -= 1
-    #     start_col += 1
-    #     word.reverse()
-    #
-    #     end_col = col + 1
-    #     while self.inbounds(end_col):
-    #         if grid[row][end_col].is_blank():
-    #             break
-    #         else:
-    #             word.append(grid[row][end_col])
-    #             score += grid[row][end_col].score
-    #             end_col += 1
-    #     end_col -= 1
-    #
-    #     str_word = ""
-    #     for letter in word:
-    #         str_word += letter.value
-    #     return score, twl.check(str_word)
 
     # untested function
     def to_tuple(self):
@@ -359,90 +290,3 @@ class Board:
 
         grid[7][7] = Tile('',0,(1,'w'),0) # center start tile
         return grid
-
-
-
-
-
-
-
-                    # old code to check for cross words
-
-                    # if direction == 'd':
-                    #     # have to check row
-                    #     checked_row = False
-                    #     if self.inbounds(col-1):
-                    #         if not grid[row][col-1].is_blank():
-                    #             # have to check word
-                    #             checked_row = True
-                    #             added_score, is_word = self.check_word_row(row,col,grid)
-                    #             if not is_word:
-                    #                 print("returning 5")
-                    #                 return (False, self.grid, 0)
-                    #             else:
-                    #                 if temp_multi[1] == 'l':
-                    #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
-                    #                 else:
-                    #                     cross_score += added_score * temp_multi[0]
-                    #     if (not checked_row) and self.inbounds(col+1):
-                    #         if not grid[row][col+1].is_blank():
-                    #             # have to check word
-                    #             checked_row = True
-                    #             added_score, is_word = self.check_word_row(row,col,grid)
-                    #             if not is_word:
-                    #                 print("returning 6")
-                    #                 return (False, self.grid, 0)
-                    #             else:
-                    #                 if temp_multi[1] == 'l':
-                    #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
-                    #                 else:
-                    #                     cross_score += added_score * temp_multi[0]
-                    #
-                    # else:
-                    #     # have to check col
-                    #     checked_col = False
-                    #     if self.inbounds(row-1):
-                    #         if not grid[row-1][col].is_blank():
-                    #             # have to check word
-                    #             checked_col = True
-                    #             added_score, is_word = self.check_word_col(row,col,grid)
-                    #             if not is_word:
-                    #                 print("returning 7")
-                    #                 return (False, self.grid, 0)
-                    #             else:
-                    #                 if temp_multi[1] == 'l':
-                    #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
-                    #                 else:
-                    #                     cross_score += added_score * temp_multi[0]
-                    #     if (not checked_col) and self.inbounds(col+1):
-                    #         if not grid[row+1][col].is_blank():
-                    #             # have to check word
-                    #             added_score, is_word = self.check_word_col(row,col,grid)
-                    #             if not is_word:
-                    #                 print("returning 8")
-                    #                 return (False, self.grid, 0)
-                    #             else:
-                    #                 if temp_multi[1] == 'l':
-                    #                     cross_score += added_score + (temp_multi[0]-1)*letter.score
-                    #                 else:
-                    #                     cross_score += added_score * temp_multi[0]
-
-
-
-########################################################################
-# gotta come up with a solution that allows a user to place a move like this: p
-#                                             set being the new word          i
-#                            should word if only s is played also             e
-#                                                                             s e t
-            # # check if letters to left or up
-            # if self.inbounds(row - 1):
-            #     if not self.grid[row-1][col].is_blank():
-            #         # non-empty tile above
-            #        print("returning 3")
-            #         return (False, self.grid, 0)
-            # if self.inbounds(col - 1):
-            #     if not self.grid[row][col-1].is_blank():
-            #         # non-empty tile left
-            #        print("returning 4")
-            #         return (False, self.grid, 0)
-#########################################################################

@@ -78,7 +78,6 @@ class Player:
             self.tiles.extend(new_tiles)
             for tile in self.tiles:
                 print(tile.to_tuple())
-
         self.gui.refresh(self.board.get_board(), self.tiles, self.scores)
 
     def send_to_server(self, word, direction, start_pos, used_tiles):
@@ -94,6 +93,7 @@ class Player:
         # finds begining of word
         while (front >= 0 and front <= 14):
             if tile_ray[front].is_blank():
+                front += 1
                 break
             else:
                 word.append(tile_ray[front])
@@ -105,6 +105,7 @@ class Player:
         # finds end of word
         while (back >= 0 and back <= 14):
             if tile_ray[back].is_blank():
+                back -= 1
                 break
             else:
                 word.append(tile_ray[back])

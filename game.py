@@ -31,18 +31,20 @@ class Game:
 
 
     # should review exactly what critical section is so can make it run faster
-    def check_move(self, player_number, word, starting_positon, direction, used_tiles):
+    def check_move(self, player_number, word_tuple, starting_positon, direction, used_tiles):
+        print("Inside Check_move game module")
         # not converting used_tiles to Tiles
         # switches tuple form of tiles back to Tile form
-        word = [Tile("","","","",letter) for letter in word]
+        word = [Tile("","","","",letter) for letter in word_tuple]
 
         # check if first move is in center
-        if self.first_move:
-            if not self.over_lap_center(word, starting_positon, direction):
-                self.send_to_one_player("refresh", player_number, False, self.board.get_board(), self.scores, [], [])
-                return
-
+        # if self.first_move:
+        #     if not self.over_lap_center(word, starting_positon, direction):
+        #         self.send_to_one_player("refresh", player_number, False, self.board.get_board(), self.scores, [], [])
+        #         return
+        print("Before lock acquired in check move")
         with self.lock:
+            print("After lock acquired inside check move")
             valid, new_board, score = self.board.update(starting_positon, word, direction)
             if not valid:
                 self.send_to_one_player("refresh", player_number, False, new_board, self.scores, [], [])
