@@ -162,7 +162,7 @@ class Board:
             return
 
         if multiplier[1] == 'l':
-            temp_score += grid[r][c] * (multiplier[0]-1)
+            temp_score += grid[r][c].score * (multiplier[0]-1)
         else:
             temp_score *= multiplier[0]
 
